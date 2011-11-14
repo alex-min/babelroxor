@@ -17,12 +17,15 @@ public:
     void                setLogin(std::string const &login);
     void                setPassword(std::string const &password);
     void                setContact(ContactList *contactList);
+    bool                isConnected() const;
+    void                setConnected(bool connected);
     ~Account();
 
 private:
     std::string _login;
     std::string _password;
     ContactList *_contactList;
+    bool        _connected;
 };
 
 #endif // ACCOUNT_H

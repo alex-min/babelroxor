@@ -6,6 +6,7 @@ Account::Account()
     _login = "";
     _password = "";
     _contactList = new ContactList;
+    _connected = false;
 }
 
 Account::Account(const std::string &login, const std::string &password, ContactList *contactList)
@@ -13,6 +14,18 @@ Account::Account(const std::string &login, const std::string &password, ContactL
     _login = login;
     _password = password;
     _contactList = ((contactList) ? (contactList) : (new ContactList));
+    _connected = false;
+}
+
+
+bool                Account::isConnected() const
+{
+    return (_connected);
+}
+
+void                Account::setConnected(bool connected)
+{
+    _connected = connected;
 }
 
 std::string const & Account::getLogin() const
