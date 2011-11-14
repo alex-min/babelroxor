@@ -9,12 +9,20 @@ Win32Socket::Win32Socket()
     _max_client = 200;
     _client_connected = 0;
     _isServerSock = false;
+    _port = 0;
 }
 
-Win32Socket::Win32Socket(SOCKET sock, SOCKADDR_IN sin)
+Win32Socket::Win32Socket(SOCKET sock, SOCKADDR_IN sin, unsigned short port)
 {
     _sock = sock;
     _sin = sin;
+    _ip.assign(inet_ntoa(_sin.sin_addr));
+    _port = port;
+}
+
+int Win32Socket::Win32GetSocket() const
+{
+    return (this->_sock);
 }
 
 bool Win32Socket::createServerSocket(unsigned int port)
@@ -27,7 +35,7 @@ bool Win32Socket::createServerSocket(unsigned int port)
         std::cout << "[-] Cannot initialize WSAStartup" << std::endl;
         return (false);
     }
-    this->_sock = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, 0);
+    this->_sock = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, NULL);
     if (this->_sock == INVALID_SOCKET)
     {
         std::cout << "[-] Cannot create server socket" << std::endl;
@@ -111,7 +119,7 @@ Win32Socket *Win32Socket::waitForClient()
     SOCKADDR_IN             client_sin;
     int                     client_sin_len;
 
-    client_sin_len = sizeof(SOCKADDR *);
+    client_sin_len = sizeof(client_sin);
     csock = WSAAccept(this->_sock, (SOCKADDR *) &client_sin, &client_sin_len, NULL, NULL);
     if (this->_client_connected >= this->_max_client)
       {
@@ -119,7 +127,7 @@ Win32Socket *Win32Socket::waitForClient()
             return (NULL);
       }
    this->_client_connected++;
-   return (new Win32Socket(csock, client_sin));
+   return (new Win32Socket(csock, client_sin, _port));
 }
 
 void Win32Socket::setMaxClient(unsigned int nb)
@@ -148,14 +156,14 @@ void Win32Socket::send(const char *str, unsigned int len)
     DWORD   SendBytes;
 
     DataBuf.len = len;
-    DataBuf.buf = str;
+    DataBuf.buf = const_cast<char *> (str);
     if (this->_sock != INVALID_SOCKET)
         WSASend(this->_sock, &DataBuf, 1, &SendBytes, 0, 0, NULL);
 }
 
 void Win32Socket::send(IPortableSocket *sock, std::string const & str)
 {
-    Win32Socket::send(sock, str.c_str(), str.length());
+    Win32Socket::send(sock, const_cast<char *> (str.c_str()), str.length());
 }
 
 void Win32Socket::send(IPortableSocket *sock, char *str, unsigned int len)
@@ -166,6 +174,8 @@ void Win32Socket::send(IPortableSocket *sock, char *str, unsigned int len)
     DataBuf.len = len;
     DataBuf.buf = str;
     Win32Socket *convert = reinterpret_cast<Win32Socket *> (sock);
+    if (!convert)
+        return ;
     if (this->_sock != INVALID_SOCKET)
         WSASend(convert->_sock, &DataBuf, 1, &SendBytes, 0, 0, NULL);
 }
@@ -190,8 +200,19 @@ unsigned int Win32Socket::read(IPortableSocket *sock, char *buf, unsigned int si
     DataBuf.buf = buf;
     DataBuf.len = size;
     Win32Socket *convert = reinterpret_cast<Win32Socket *> (sock);
+    if (!convert)
+        return 0;
     return (WSARecv(convert->_sock, &DataBuf, 1, &SendBytes, 0, 0, NULL));
 }
 
-#endif
+std::string const &Win32Socket::getIp() const
+{
+    return (_ip);
+}
 
+unsigned short Win32Socket::getPort() const
+{
+    return (_port);
+}
+
+#endif

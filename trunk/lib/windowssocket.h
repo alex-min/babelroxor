@@ -26,15 +26,20 @@ public:
     virtual void disconnect();
     virtual bool isServerSock() const;
     virtual bool createServerSocket(unsigned int port);
+    std::string const &getIp() const;
+    virtual unsigned short getPort() const;
+    int Win32GetSocket() const;
 
 private:
     bool createClientSocket();
-    Win32Socket(SOCKET sock, SOCKADDR_IN sin);
+    Win32Socket(SOCKET sock, SOCKADDR_IN sin, unsigned short port);
 
 protected:
     SOCKET                      _sock;
     SOCKADDR_IN                 _sin;
     bool                        _isServerSock;
+    std::string                 _ip;
+    char                        _ipbuf[30];
 };
 
 #endif
