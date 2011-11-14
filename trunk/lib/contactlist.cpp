@@ -74,7 +74,7 @@ Account*    ContactList::getContactFromLogin(std::string const &login)
     return (0);
 }
 
-bool    ContactList::removeAccount(Account* account)
+bool    ContactList::removeContact(Account* account)
 {
     std::list<Account*>::iterator it;
 
@@ -90,7 +90,7 @@ bool    ContactList::removeAccount(Account* account)
     return (false);
 }
 
-bool    ContactList::removeAccountFromLogin(std::string const &login)
+bool    ContactList::removeContactFromLogin(std::string const &login)
 {
     std::list<Account*>::iterator it;
 
@@ -108,7 +108,7 @@ bool    ContactList::removeAccountFromLogin(std::string const &login)
     return (false);
 }
 
-bool    ContactList::removeAccountAt(int id)
+bool    ContactList::removeContactAt(int id)
 {
     std::list<Account*>::iterator it;
     int i = 0;

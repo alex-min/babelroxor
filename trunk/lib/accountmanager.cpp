@@ -14,6 +14,130 @@ AccountManager *AccountManager::getInstance()
     return (_instance);
 }
 
+bool    AccountManager::checkIfAccountExist(std::string const &login) const
+{
+    std::list<Account*>::const_iterator it;
+
+    for (it = _accountList.begin(); it != _accountList.end(); ++it)
+        if ((*it)->getLogin() == login)
+            return (true);
+
+    return (false);
+}
+
+bool   AccountManager::createAccount(std::string const &login, std::string const &password)
+{
+    if (checkIfAccountExist(login))
+        return (false);
+
+    Account *account = new Account(login, password);
+
+    _accountList.push_back(account);
+
+    return (true);
+}
+
+Account const*    AccountManager::getAccountAt(int id) const
+{
+    std::list<Account*>::const_iterator it;
+    int i = 0;
+
+    for (it = _accountList.begin(); it != _accountList.end(); ++it)
+        if (i++ == id)
+            return (*it);
+
+    return (0);
+}
+
+
+Account*    AccountManager::getAccountAt(int id)
+{
+    std::list<Account*>::iterator it;
+    int i = 0;
+
+    for (it = _accountList.begin(); it != _accountList.end(); ++it)
+        if (i++ == id)
+            return (*it);
+
+    return (0);
+}
+
+Account const*  AccountManager::getAccountFromLogin(std::string const &login) const
+{
+    std::list<Account*>::const_iterator it;
+
+    for (it = _accountList.begin(); it != _accountList.end(); ++it)
+        if ((*it)->getLogin() == login)
+            return (*it);
+
+    return (0);
+}
+
+Account*    AccountManager::getAccountFromLogin(std::string const &login)
+{
+    std::list<Account*>::iterator it;
+
+    for (it = _accountList.begin(); it != _accountList.end(); ++it)
+        if ((*it)->getLogin() == login)
+            return (*it);
+
+    return (0);
+}
+
+bool    AccountManager::removeAccount(Account* account)
+{
+    std::list<Account*>::iterator it;
+
+    for (it = _accountList.begin(); it != _accountList.end(); ++it)
+        if (*it == account)
+        {
+            it = _accountList.erase(it);
+            delete account;
+
+            return (true);
+        }
+
+    return (false);
+}
+
+bool    AccountManager::removeAccountFromLogin(std::string const &login)
+{
+    std::list<Account*>::iterator it;
+
+    for (it = _accountList.begin(); it != _accountList.end(); ++it)
+        if ((*it)->getLogin() == login)
+        {
+            Account *account = *it;
+
+            it = _accountList.erase(it);
+            delete account;
+
+            return (true);
+        }
+
+    return (false);
+}
+
+bool    AccountManager::removeAccountAt(int id)
+{
+    std::list<Account*>::iterator it;
+    int i = 0;
+
+    for (it = _accountList.begin(); it != _accountList.end(); ++it)
+        if (i++ == id)
+        {
+            Account *account = *it;
+
+            it = _accountList.erase(it);
+            delete account;
+
+            return (true);
+        }
+
+    return (false);
+}
+
+
 void AccountManager::setLoginToNetwork(Network *network, std::string const &login)
 {
      _mapLogin[network] = login;

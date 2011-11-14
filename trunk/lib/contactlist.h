@@ -18,9 +18,9 @@ public:
     Account*            getContactAt(int id);
     Account const*      getContactFromLogin(std::string const &login) const;
     Account*            getContactFromLogin(std::string const &login);
-    bool                removeAccount(Account* account);
-    bool                removeAccountFromLogin(std::string const &login);
-    bool                removeAccountAt(int id);
+    bool                removeContact(Account* account);
+    bool                removeContactFromLogin(std::string const &login);
+    bool                removeContactAt(int id);
     ~ContactList();
 
 private:
