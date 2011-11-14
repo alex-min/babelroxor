@@ -41,7 +41,7 @@ protected:
 };
 
 #ifdef OS_WINDOWS
-#include "win32socket.h"
+#include "windowssocket.h"
 typedef class Win32Socket PortableSocket;
 #elif defined OS_UNIX
 #include "unixsocket.h"

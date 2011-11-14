@@ -22,7 +22,7 @@ int main(void)
  std::cout << Protocol::TEST_CONNECTION << std::endl;
  proto->registerSlot(Protocol::TEST_CONNECTION, TestConnectionSingleton::getInstance());
 
- PortableNetworkManager m;
+ /*PortableNetworkManager m;
 m.setProtocol(proto);
 if (!(server->getSocket()->createServerSocket(4570)))
         return (0);
@@ -30,7 +30,7 @@ m.addNetwork(server);
 while (1)
 {
  m.run();
-}
+}*/
     std::cout << "Exiting" << std::endl;
     return (0);
 }

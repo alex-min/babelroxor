@@ -28,8 +28,13 @@ public:
         void *data;
     };
     enum SlotType {AUDIO, TEXT, STATUS, CONNECTION, REGISTER,
-                   REMOVEACCOUNT, HANGUP, PROXY_FORWARD, PROXY_RECEIVED, PROXY_DIRECT, ERROR,
-                   REQUEST_CONNECTION, CONNECT_TO_ME, TEST_CONNECTION};
+                   REMOVEACCOUNT, HANGUP,
+                   PROXY_FORWARD, PROXY_RECEIVED,
+                   PROXY_DIRECT,
+                   TYPEERROR,
+                   REQUEST_CONNECTION,
+                   CONNECT_TO_ME,
+                   TEST_CONNECTION};
     enum Status {ONLINE, OFFLINE, BUSY, ONCALL,
                  DISCONNECTED, NEED_REGISTRATION, INVALID_PACKET,
                  OK, FAILED, TCP, UDP};

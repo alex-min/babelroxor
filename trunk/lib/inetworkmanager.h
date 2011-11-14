@@ -17,8 +17,9 @@ protected:
 };
 
 #ifdef OS_WINDOWS
-#include "win32networkmanager.h"
-typedef class Win32NetworkManager PortableNetworkManager;
+;
+//#include "win32networkmanager.h"
+//typedef class Win32NetworkManager PortableNetworkManager;
 #elif defined OS_UNIX
 #include "unixnetworkmanager.h"
 typedef class UNIXNetworkManager PortableNetworkManager;
