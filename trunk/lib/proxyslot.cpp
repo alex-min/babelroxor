@@ -10,7 +10,7 @@ void    ProxySlot::onCall(Network *network, std::string const &login, void *data
     if (login == "")
     {
         status = Protocol::NEED_REGISTRATION;
-        Protocol::getInstance()->sendPacket(network, Protocol::ERROR, &status, sizeof(Protocol::Status));
+        Protocol::getInstance()->sendPacket(network, Protocol::TYPEERROR, &status, sizeof(Protocol::Status));
         std::cout << "[proxy] need registration" << std::endl;
         return ;
     }

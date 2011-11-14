@@ -14,7 +14,8 @@ Protocol::Protocol() :
 {
 }
 
-void Protocol::registerPacketId(unsigned short id, const std::string &login, ISlotInterface *slot, SlotCall call)
+void registerPacketId(unsigned short id, std::string const &login,
+                      ISlotInterface *slot, Protocol::SlotCall call, short timeout)
 {
 
 }

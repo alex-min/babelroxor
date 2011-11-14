@@ -24,7 +24,7 @@ int main(void)
 
  /*PortableNetworkManager m;
 m.setProtocol(proto);
-if (!(server->getSocket()->createServerSocket(4570)))
+if (!(server->getSocket()->createServerSocket(4571)))
         return (0);
 m.addNetwork(server);
 while (1)

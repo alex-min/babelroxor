@@ -10,7 +10,7 @@ class NetworkRoute;
 class ISlotInterface;
 class Network;
 
-typedef void (ISlotInterface::*SlotCall)(int);
+
 
 class Protocol
 {
@@ -27,6 +27,10 @@ public:
         } PACKED header;
         void *data;
     };
+    typedef void (ISlotInterface::*SlotCall)(bool timeout, Network *network,
+                                             std::string const &login,
+                                             void *data, unsigned int len,
+                                             Protocol::NetworkPacket::NetworkHeader *header);
     enum SlotType {AUDIO, TEXT, STATUS, CONNECTION, REGISTER,
                    REMOVEACCOUNT, HANGUP,
                    PROXY_FORWARD, PROXY_RECEIVED,
@@ -51,7 +55,8 @@ public:
               unsigned int packetReplyId
               );
     void registerSlot(SlotType type, ISlotInterface *slot);
-    void registerPacketId(unsigned short id, std::string const &login, ISlotInterface *slot, SlotCall call);
+    void registerPacketId(unsigned short id, std::string const &login,
+                          ISlotInterface *slot, SlotCall call, short timeout = -1);
     void defaultGateway(Network *network);
     void readEvent(Network *network);
     void welcomeEvent(Network *network);
