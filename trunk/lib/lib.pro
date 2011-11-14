@@ -25,7 +25,9 @@ SOURCES += main.cpp\
     accountmanager.cpp \
     proxyslot.cpp \
     requestconnectionslot.cpp \
-    testconnection.cpp
+    testconnection.cpp \
+    requestlink.cpp \
+    proxyreceivedslot.cpp
 
 HEADERS  += mainwindow.h \
     iportablesocket.h \
@@ -45,6 +47,8 @@ HEADERS  += mainwindow.h \
     proxyslot.h \
     singleton.h \
     requestconnectionslot.h \
-    testconnection.h
+    testconnection.h \
+    requestlink.h \
+    proxyreceivedslot.h
 
 FORMS    += mainwindow.ui

@@ -26,11 +26,12 @@ void    ProxySlot::onCall(Network *network, std::string const &login, void *data
     std::string login_to = AccountManager::dataTologin(data, len);
     if (login_to != "" && len - login_to.length() > 8)
     {
-       const Protocol::NetworkPacket::NetworkHeader *_header =
-        reinterpret_cast<const Protocol::NetworkPacket::NetworkHeader *> (static_cast<const char *>(data) + login.length());
-        Protocol::getInstance()->sendProxifiedPacket(
+       const Protocol::NetworkPacket::NetworkHeader *header =
+        reinterpret_cast<const Protocol::NetworkPacket::NetworkHeader *> (static_cast<const char *>(data) + login.length() + 1);
+       std::cout << "{{{{{{{{{{" << (int) header->_slotType << std::endl;
+       Protocol::getInstance()->sendProxifiedPacket(
                                       AccountManager::getInstance()->getNetworkFromLogin(login_to),
-                                      static_cast<Protocol::SlotType> (_header->_slotType),
+                                      static_cast<Protocol::SlotType> (header->_slotType),
                     static_cast<const char *> (data)
           + login_to.length() + sizeof(Protocol::NetworkPacket::NetworkHeader) + 1,
                                       len - sizeof(Protocol::NetworkPacket::NetworkHeader)

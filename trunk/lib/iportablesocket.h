@@ -24,6 +24,7 @@ public:
     virtual void disconnect() = 0;
     virtual bool isServerSock() const = 0;
     virtual std::string const &getIp() const = 0;
+    virtual unsigned short getPort() const = 0;
 
 };
 
@@ -36,6 +37,7 @@ protected:
     static int _total_client_connected;
     int _client_connected;
     int _max_client;
+    unsigned short _port;
 };
 
 #ifdef OS_WINDOWS

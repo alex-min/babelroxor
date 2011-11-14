@@ -10,6 +10,7 @@ UNIXSocket::UNIXSocket()
    _max_client = 200;
    _client_connected = 0;
    _isServerSock = false;
+   _port = 0;
 }
 
 bool UNIXSocket::isServerSock() const
@@ -27,6 +28,12 @@ int UNIXSocket::UNIXGetSocket() const
 {
     return (_sock);
 }
+
+unsigned short UNIXSocket::getPort() const
+{
+    return (_port);
+}
+
 
 unsigned int UNIXSocket::read(char *buf, unsigned int size)
 {
@@ -65,11 +72,12 @@ void UNIXSocket::send(std::string const &str)
     UNIXSocket::send(str.c_str(), str.length());
 }
 
-UNIXSocket::UNIXSocket(int sock, struct sockaddr_in sin)
+UNIXSocket::UNIXSocket(int sock, struct sockaddr_in sin, unsigned short port)
 {
     _sock = sock;
     _sin = sin;
     _ip.assign(::inet_ntoa(_sin.sin_addr));
+    _port = port;
 }
 
 void UNIXSocket::send(const char *str, unsigned int len)
@@ -145,7 +153,10 @@ bool UNIXSocket::connect(std::string const & remote, unsigned int port,
      _sin.sin_port = htons(port);
      //_sin.sin_addr.s_addr = INADDR_ANY;
      _type = type;
-    return (UNIXSocket::createClientSock());
+    bool ret = UNIXSocket::createClientSock();
+    if (ret)
+        _port = port;
+    return (ret);
 }
 
 UNIXSocket * UNIXSocket::waitForClient()
@@ -166,7 +177,7 @@ UNIXSocket * UNIXSocket::waitForClient()
              return (NULL);
        }
     _client_connected++;
-    return (new UNIXSocket(csock, client_sin));
+    return (new UNIXSocket(csock, client_sin, _port));
 }
 
 unsigned int UNIXSocket::getNumberConnectedClient() const

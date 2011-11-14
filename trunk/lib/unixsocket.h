@@ -34,12 +34,13 @@ public:
     virtual bool isServerSock() const;
     virtual bool createServerSocket(unsigned int port);
     std::string const &getIp() const;
+    virtual unsigned short getPort() const;
 
  public:
     int UNIXGetSocket() const;
 
 private:
-    UNIXSocket(int sock, struct sockaddr_in sin);
+    UNIXSocket(int sock, struct sockaddr_in sin, unsigned short port);
 
 private:
     bool createClientSock();

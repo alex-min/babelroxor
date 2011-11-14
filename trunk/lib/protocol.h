@@ -10,6 +10,8 @@ class NetworkRoute;
 class ISlotInterface;
 class Network;
 
+typedef void (ISlotInterface::*SlotCall)(int);
+
 class Protocol
 {
 public:
@@ -44,6 +46,7 @@ public:
               unsigned int packetReplyId
               );
     void registerSlot(SlotType type, ISlotInterface *slot);
+    void registerPacketId(unsigned short id, std::string const &login, ISlotInterface *slot, SlotCall call);
     void defaultGateway(Network *network);
     void readEvent(Network *network);
     void welcomeEvent(Network *network);
@@ -55,6 +58,8 @@ public:
                              bool resend = false);
     void sendProxifiedPacket(Network *network, SlotType type, const void *data,
                              unsigned int length, std::string const &login, bool resend = false);
+    void dispatchPacket(Network *network, std::string const &login, void *data, unsigned int len,
+                        Protocol::NetworkPacket::NetworkHeader *header);
 
 private:
     void onReceivePacket(CircularBuffer *buf, Network *n);
