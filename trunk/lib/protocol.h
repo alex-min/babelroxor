@@ -27,7 +27,8 @@ public:
         } PACKED header;
         void *data;
     };
-    typedef void (ISlotInterface::*SlotCall)(bool timeout, Network *network,
+    typedef void (ISlotInterface::*SlotCall)(bool timeout, unsigned int id,
+                                             Network *network,
                                              std::string const &login,
                                              void *data, unsigned int len,
                                              Protocol::NetworkPacket::NetworkHeader *header);
@@ -42,6 +43,7 @@ public:
     enum Status {ONLINE, OFFLINE, BUSY, ONCALL,
                  DISCONNECTED, NEED_REGISTRATION, INVALID_PACKET,
                  OK, FAILED, TCP, UDP};
+    enum {DEFAULT_TIMEOUT = 1000};
     // send to use at outside class
     void send(std::string const &login,
               SlotType type,
@@ -58,6 +60,7 @@ public:
     void registerSlot(SlotType type, ISlotInterface *slot);
     void registerPacketId(unsigned short id, std::string const &login,
                           ISlotInterface *slot, SlotCall call, short timeout = -1);
+    void unregisterPacket(unsigned short id, std::string const &login);
     void defaultGateway(Network *network);
     void readEvent(Network *network);
     void welcomeEvent(Network *network);

@@ -22,7 +22,7 @@ unsigned int Protocol::getCurrentReplyId() const
 void Protocol::registerPacketId(unsigned short id, std::string const &login,
                       ISlotInterface *slot, Protocol::SlotCall call, short timeout)
 {
-
+    (slot->*call)(false, 0, NULL, "hello", NULL, 0, NULL);
 }
 
 void Protocol::send(std::string const &login,

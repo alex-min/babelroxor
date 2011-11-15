@@ -9,6 +9,7 @@
 #include "proxyslot.h"
 #include "testconnection.h"
 #include "proxyreceivedslot.h"
+#include "requestlink.h"
 
 int main(void)
 {
@@ -25,8 +26,14 @@ int main(void)
  proto->registerSlot(Protocol::PROXY_RECEIVED, ProxyReceivedSlotSingleton::getInstance());
 
  PortableNetworkManager m;
+RequestLink *s = RequestLinkSingleton::getInstance();
+
+s->createServerSock("hello world");
+
+
+
 m.setProtocol(proto);
-if (!(server->getSocket()->createServerSocket(IPortableSocket::TCP, 4572)))
+if (!(server->getSocket()->createServerSocket(IPortableSocket::TCP, 4573)))
         return (0);
 m.addNetwork(server);
 while (1)

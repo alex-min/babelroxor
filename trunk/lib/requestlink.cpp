@@ -9,8 +9,11 @@ RequestLink::RequestLink()
 bool RequestLink::createServerSock(std::string const &login)
 {
     _net.getSocket()->createServerSocket(IPortableSocket::TCP, 7534);
-    unsigned int id = Protocol::getInstance()->getCurrentReplyId();
-
+    short unsigned int id = Protocol::getInstance()->getCurrentReplyId();
+    Protocol::getInstance()->registerPacketId(id, login,
+                                              RequestLinkSingleton::getInstance(),
+                                              reinterpret_cast<Protocol::SlotCall> (&RequestLink::testConnection),
+                                              Protocol::DEFAULT_TIMEOUT);
 }
 
 void RequestLink::createNewLink(std::string const &login)
@@ -18,4 +21,19 @@ void RequestLink::createNewLink(std::string const &login)
     if (login == "")
         return ;
 
+}
+
+void RequestLink::testConnection(bool timeout, unsigned int id, Network *network,
+    std::string const &login,
+    void *data, unsigned int len,
+    Protocol::NetworkPacket::NetworkHeader *header)
+{
+    if (timeout)
+        return ;
+
+}
+
+void    RequestLink::onCall(Network *network, std::string const &login, void *data, unsigned int len,
+                       Protocol::NetworkPacket::NetworkHeader *header)
+{
 }
