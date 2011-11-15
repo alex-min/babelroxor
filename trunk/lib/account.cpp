@@ -48,7 +48,7 @@ void                Account::setPassword(std::string const &password)
     _password = password;
 }
 
-ContactList const*        Account::getContacts() const
+ContactList const*  Account::getContacts() const
 {
     return (_contactList);
 }

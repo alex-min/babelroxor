@@ -1,0 +1,111 @@
+QMenuBar#myMenuBar
+{
+    background-color: grey;
+}
+
+QLabel#login
+{
+    color: black;
+    font: bold 14px;
+}
+
+QLabel#avatar
+{
+    border-style: outset;
+    border-width: 3px;
+    border-radius: 10px;
+    border-color: white;
+    font: bold;
+}
+
+QGroupBox#contactList
+{
+    color: black;
+    font: bold 12px;
+}
+
+ QComboBox 
+{
+     border: 1px solid gray;
+     border-radius: 3px;
+     padding: 1px 18px 1px 3px;
+     min-width: 6em;
+}
+ 
+QComboBox:on 
+{
+    padding-top: 3px;
+    padding-left: 4px;
+}
+ 
+QComboBox::drop-down 
+{
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 15px;
+    border-left-width: 1px;
+    border-left-color: darkgray;
+    border-left-style: solid;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+
+QComboBox::down-arrow 
+{
+    image: url(./down_arrow.png);
+}
+ 
+QComboBox::down-arrow:on 
+{
+     top: 1px;
+     left: 1px;
+}
+
+QMainWindow::separator 
+{
+    background: black;
+    width: 3px;
+    height: 3px;
+}
+
+QMainWindow::separator:hover 
+{
+    background: grey;
+}
+
+
+QListWidget 
+{
+    alternate-background-color: yellow;
+}
+
+QListWidget 
+{
+    show-decoration-selected: 1; /* make the selection span the entire width of the view */
+}
+
+QListWidget::item:alternate 
+{
+    background: #EEEEEE;
+}
+
+QListWidget::item:selected 
+{
+    border: 1px solid #6a6ea9;
+}
+
+QListWidget::item:selected:!active 
+{
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ABAFE5, stop: 1 #8588B2);
+}
+
+QListWidget::item:selected:active 
+{
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6a6ea9, stop: 1 #888dd9);
+}
+
+QListWidget::item:hover 
+{
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #FAFBFE, stop: 1 #DCDEF1);
+}

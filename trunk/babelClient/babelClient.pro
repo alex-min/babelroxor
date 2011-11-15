@@ -1,0 +1,30 @@
+#-------------------------------------------------
+#
+# Project created by QtCreator 2011-11-15T12:09:41
+#
+#-------------------------------------------------
+
+QT       += core gui
+
+TARGET = babelClient
+TEMPLATE = app
+
+
+SOURCES += main.cpp\
+        mainwindow.cpp \
+    DockWidgetContent.cpp \
+    CentralWidget.cpp \
+    CustomButton.cpp
+
+HEADERS  += mainwindow.h \
+    DockWidgetContent.h \
+    CentralWidget.h \
+    CustomButton.h
+
+
+
+
+
+
+
+
