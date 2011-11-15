@@ -54,6 +54,7 @@ public:
               unsigned int length,
               unsigned int packetReplyId
               );
+    unsigned int getCurrentReplyId() const;
     void registerSlot(SlotType type, ISlotInterface *slot);
     void registerPacketId(unsigned short id, std::string const &login,
                           ISlotInterface *slot, SlotCall call, short timeout = -1);

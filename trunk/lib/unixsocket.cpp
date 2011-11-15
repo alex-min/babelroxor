@@ -91,13 +91,16 @@ void UNIXSocket::setMaxClient(unsigned int nb)
     _max_client = nb;
 }
 
-bool UNIXSocket::createServerSocket(unsigned int port)
+bool UNIXSocket::createServerSocket(IPortableSocket::SockType type, unsigned int port)
 {
     int         enable;
 
     _isServerSock = true;
     enable = 1;
-    _sock = socket(AF_INET, SOCK_STREAM, 0);
+    if (type == IPortableSocket::UDP && ::getprotobyname("udp"))
+        _sock = socket(AF_INET, SOCK_DGRAM, ::getprotobyname("udp")->p_proto);
+
+        _sock = socket(AF_INET, SOCK_STREAM, 0);
     setsockopt(_sock, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int));
     if (_sock == -1)
       {

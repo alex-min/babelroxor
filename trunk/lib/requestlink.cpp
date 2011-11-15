@@ -6,8 +6,10 @@ RequestLink::RequestLink()
     _serverSockExist = false;
 }
 
-bool RequestLink::createServerSock()
+bool RequestLink::createServerSock(std::string const &login)
 {
+    _net.getSocket()->createServerSocket(IPortableSocket::TCP, 7534);
+    unsigned int id = Protocol::getInstance()->getCurrentReplyId();
 
 }
 

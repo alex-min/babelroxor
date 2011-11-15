@@ -8,6 +8,7 @@
 #include "connectionslot.h"
 #include "proxyslot.h"
 #include "testconnection.h"
+#include "proxyreceivedslot.h"
 
 int main(void)
 {
@@ -21,16 +22,17 @@ int main(void)
  proto->registerSlot(Protocol::PROXY_FORWARD, p);
  std::cout << Protocol::TEST_CONNECTION << std::endl;
  proto->registerSlot(Protocol::TEST_CONNECTION, TestConnectionSingleton::getInstance());
+ proto->registerSlot(Protocol::PROXY_RECEIVED, ProxyReceivedSlotSingleton::getInstance());
 
- /*PortableNetworkManager m;
+ PortableNetworkManager m;
 m.setProtocol(proto);
-if (!(server->getSocket()->createServerSocket(4571)))
+if (!(server->getSocket()->createServerSocket(IPortableSocket::TCP, 4572)))
         return (0);
 m.addNetwork(server);
 while (1)
 {
  m.run();
-}*/
+}
     std::cout << "Exiting" << std::endl;
     return (0);
 }

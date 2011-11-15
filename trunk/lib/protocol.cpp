@@ -14,7 +14,12 @@ Protocol::Protocol() :
 {
 }
 
-void registerPacketId(unsigned short id, std::string const &login,
+unsigned int Protocol::getCurrentReplyId() const
+{
+    return (_packetCount);
+}
+
+void Protocol::registerPacketId(unsigned short id, std::string const &login,
                       ISlotInterface *slot, Protocol::SlotCall call, short timeout)
 {
 
@@ -158,19 +163,24 @@ void Protocol::onReceivePacket(CircularBuffer *buf, Network *net)
         buf->extract(_buffer, 4096);
     }
     std::cout << "header packetid: " << _header._packetId << std::endl;
-    if (_slotManager.find(static_cast<SlotType>(_header._slotType)) != _slotManager.end())
-        _slotManager[static_cast<SlotType>(_header._slotType)]->onCall(net,
-                                                                       AccountManager::getInstance()->getLoginFromNetwork(net),
-                                                                       _buffer + sizeof(Protocol::NetworkPacket::NetworkHeader),
-                                                                       size - sizeof(Protocol::NetworkPacket::NetworkHeader),
-                                                                       &_header);
+
+    Protocol::dispatchPacket(net,
+                             AccountManager::getInstance()->getLoginFromNetwork(net),
+                             _buffer + sizeof(Protocol::NetworkPacket::NetworkHeader),
+                             size - sizeof(Protocol::NetworkPacket::NetworkHeader),
+                             &_header);
     Protocol::readEvent(net);
 }
 
 void Protocol::dispatchPacket(Network *network, const std::string &login, void *data,
                               unsigned int len, Protocol::NetworkPacket::NetworkHeader *header)
 {
-
+    if (_slotManager.find(static_cast<SlotType>(header->_slotType)) != _slotManager.end())
+        _slotManager[static_cast<SlotType>(header->_slotType)]->onCall(network,
+                                                                       login,
+                                                                       data,
+                                                                       len,
+                                                                       header);
 }
 
 Protocol *Protocol::getInstance()

@@ -2,16 +2,19 @@
 #define REQUESTLINK_H
 #include "singleton.h"
 #include "iportablesocket.h"
+#include "protocol.h"
+#include "network.h"
 
-class RequestLink
+class RequestLink : public ISlotInterface
 {
 public:
     RequestLink();
     void createNewLink(std::string const &login);
-    bool createServerSock();
+    bool createServerSock(std::string const &login);
+
 
 protected:
-    PortableSocket _serverSock;
+    Network        _net;
     bool           _testedServerSock;
     bool           _serverSockExist;
 };

@@ -21,6 +21,22 @@ use constant {
     TEST_CONNECTION => 13
 };
 
+my @ids = ('AUDIO',
+	   'TEXT',
+	   'STATUS',
+	   'CONNECTION',
+	   'REGISTER',
+	   'REMOVEACCOUNT',
+	   'HANGUP',
+	   'PROXY_FORWARD',
+	   'PROXY_RECEIVED',
+	   'PROXY_DIRECT',
+	   'TYPEERROR',
+	   'REQUEST_CONNECTION',
+	   'CONNECT_TO_ME',
+	   'TEST_CONNECTION');
+
+
 my @print_h = (
     'ONLINE',
     'OFFLINE',
@@ -61,7 +77,8 @@ sub interpret_command  #[line]
 	case "help" {
 	    print "help:\n";
 	    print "send [slotid = 0] [data = 'lol'] : send data to host\n";
-	    print "sendp [proxy = 'minett_a'] [slotid = 0] [data = 'lol'] : send data to host\n";
+	    print "sendp [proxy = 'minett_a'] [slotid = 0] [data = 'lol'] : send data to host by proxy\n";
+	    print "sendrp [proxy = 'minett_a'] [slotid = 0] [data = 'lol'] : Simulate a PROXY_RECEIVED packet\n";
 	    print "dump [file = 'file'] : dump last packet received to file\n";
 	    print "test [type = 'tcp'] [port = '1337'] : test connection to port\n";
 	    print "\n";
@@ -76,6 +93,24 @@ sub interpret_command  #[line]
 	    $data = "lol" if ($data eq '');	    
 	    print $sock generate_packet($slotid, $data);
 	    print "ok (sent '", $data, "')\n";
+	}
+	case "sendrp" {
+	    my $proxy = $ar[1];
+	    my $slotid = $ar[2];
+	    $" = ' ';
+	    my @f = splice(@ar, 0, 3); 
+	    my $data = "@ar";
+	    $proxy = "minett_a" if ($proxy eq '');
+	    $slotid = 0 if ($slotid eq '');
+	    $data = "lol" if ($data eq '');	    
+	    open(FILE, ">miam"); 
+	    print $slotid, "\n";
+	    print $sock generate_packet(PROXY_RECEIVED, $proxy . "\x00" .
+					generate_packet($slotid, $data));
+	    print FILE generate_packet(PROXY_RECEIVED, $proxy . "\x00" .
+					generate_packet($slotid, $data));
+	    close(FILE);
+	    print "ok (sent by proxy '", $data, "')\n";
 	}
 	case "sendp" {
 	    my $proxy = $ar[1];
@@ -168,9 +203,9 @@ sub parseHeader #pack
     return (false, '') if (length($pack) - 8 < $len);
     print "\n\t Packet received :\n";
     print "\t   Infos : \n";
-    print "\t    - slotType : ", $data[1] ,"\n";
+    print "\t    - slotType : ", $data[1] ,"\t===> ", $ids[$data[1]], "\n";
     print "\t    - packetId : ",  $packetId, "\t(", sprintf("0x%04x", $packetId), ")\n";
-    print "\t    - length : ", $len ,"\n";
+    print "\t    - length : ", $len , "\t(", sprintf("0x%04x", $len), ")\n";
     print "\t    - CRC16 : ", $crc, "\t(", sprintf("0x%04x", $crc), ")\n";
     if (int($data[1]) == PROXY_FORWARD || int($data[1]) == PROXY_RECEIVED)
     {
@@ -192,7 +227,7 @@ sub parseHeader #pack
 	}
 	if (length($dd) == 4) {
 	    my $r = unpack("i", $dd);
-	    print "  =>  Status ", $print_h[int($r)], "";
+	    print "  =>  Status ", $print_h[int($r)], "" if (!($print_h[int($r)] eq undef));
 	}
     }
     print "\n";

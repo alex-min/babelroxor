@@ -8,7 +8,7 @@ class IPortableSocket
 public:
     enum SockType {TCP, UDP};
     virtual bool connect(std::string const & remote, unsigned int port, SockType type = TCP) = 0;
-    virtual bool createServerSocket(unsigned int port) = 0;
+    virtual bool createServerSocket(IPortableSocket::SockType type, unsigned int port) = 0;
     virtual IPortableSocket *waitForClient() = 0;
     virtual void setMaxClient(unsigned int nb) = 0;
     virtual unsigned int getTotalNumberConnectedClient() const = 0;
