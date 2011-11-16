@@ -32,7 +32,8 @@ SOURCES += main.cpp\
     contactlist.cpp \
     timerpool.cpp \
     packet.cpp \
-    time.cpp
+    time.cpp \
+    windowssocket.cpp
 
 HEADERS  += mainwindow.h \
     iportablesocket.h \
@@ -60,6 +61,8 @@ HEADERS  += mainwindow.h \
     timerpool.h \
     packet.h \
     pool.h \
-    time.h
+    time.h \
+    windowssocket.h
+
 
 FORMS    += mainwindow.ui
