@@ -11,15 +11,28 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
     DockWidgetContent.cpp \
     CentralWidget.cpp \
-    CustomButton.cpp
+    CustomButton.cpp \
+    AccountInterface.cpp \
+    MainWindow.cpp \
+    RegisterAccountInterface.cpp
 
-HEADERS  += mainwindow.h \
+HEADERS  += \
     DockWidgetContent.h \
     CentralWidget.h \
-    CustomButton.h
+    CustomButton.h \
+    AccountInterface.h \
+    MainWindow.h \
+    RegisterAccountInterface.h
+
+
+
+
+
+
+
+
 
 
 

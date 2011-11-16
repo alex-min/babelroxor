@@ -39,8 +39,6 @@ DockWidgetContent::DockWidgetContent()
     _removeContactButton.setRadius(8.0, 8.0);
     _addContactButton.setText("Add Contact");
     _removeContactButton.setText("Remove Contact");
-    // _addContactButton.setIcon(QPixmap("./new_contact.png"));
-    //_removeContactButton.setIcon(QPixmap("./remove_contact.png"));
     _addContactButton.setBold(true);
     _removeContactButton.setBold(true);
 
