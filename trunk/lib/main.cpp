@@ -40,7 +40,7 @@ if (!(server->getSocket()->createServerSocket(IPortableSocket::TCP, 4575)))
 m.addNetwork(server);
 while (1)
 {
-    m.run(/*TimerPoolSingleton::getInstance()->getMsNextCall()*/);
+    m.run(TimerPoolSingleton::getInstance()->getMsNextCall());
     TimerPoolSingleton::getInstance()->autocall();
 }
     std::cout << "Exiting" << std::endl;

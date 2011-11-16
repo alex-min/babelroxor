@@ -184,7 +184,14 @@ void Protocol::onReceivePacket(CircularBuffer *buf, Network *net)
 void Protocol::dispatchPacket(Network *network, const std::string &login, void *data,
                               unsigned int len, Protocol::NetworkPacket::NetworkHeader *header)
 {
-    if (_slotManager.find(static_cast<SlotType>(header->_slotType)) != _slotManager.end())
+    if (header && _slotIdManager.find(header->_packetId) != _slotIdManager.end())
+    {
+        Packet *p = _slotIdManager[header->_packetId];
+        if (p->getSlot() && p->getSlotCall())
+            (p->getSlot()->*p->getSlotCall())(false, p);
+        TimerPoolSingleton::getInstance()->removeFromPool(p);
+    }
+    else if (_slotManager.find(static_cast<SlotType>(header->_slotType)) != _slotManager.end())
         _slotManager[static_cast<SlotType>(header->_slotType)]->onCall(network,
                                                                        login,
                                                                        data,
