@@ -9,7 +9,7 @@ void    ProxyReceivedSlot::onCall(Network *network, std::string const &login, vo
     Protocol::NetworkPacket::NetworkHeader *head =
             reinterpret_cast<Protocol::NetworkPacket::NetworkHeader *>(static_cast<char *>(data) + login_to.length() + 1);
     Protocol::getInstance()->dispatchPacket(NULL, login_to,
-                             data + login.length() + sizeof(Protocol::NetworkPacket::NetworkHeader) + 1,
+                             static_cast<char *> (data) + login.length() + sizeof(Protocol::NetworkPacket::NetworkHeader) + 1,
                              len - sizeof(Protocol::NetworkPacket::NetworkHeader) - login.length() - 1,
                              head);
 }

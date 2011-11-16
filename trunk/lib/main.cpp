@@ -10,10 +10,14 @@
 #include "testconnection.h"
 #include "proxyreceivedslot.h"
 #include "requestlink.h"
+#include "pool.h"
+#include "packet.h"
+#include "timerpool.h"
 
 int main(void)
 {
- Network *server = new Network;
+
+    Network *server = new Network;
  Protocol *proto = Protocol::getInstance();
  Audio *a = new Audio;
  ConnectionSlot *c = new ConnectionSlot;
@@ -26,19 +30,18 @@ int main(void)
  proto->registerSlot(Protocol::PROXY_RECEIVED, ProxyReceivedSlotSingleton::getInstance());
 
  PortableNetworkManager m;
-RequestLink *s = RequestLinkSingleton::getInstance();
 
-s->createServerSock("hello world");
 
 
 
 m.setProtocol(proto);
-if (!(server->getSocket()->createServerSocket(IPortableSocket::TCP, 4573)))
+if (!(server->getSocket()->createServerSocket(IPortableSocket::TCP, 4574)))
         return (0);
 m.addNetwork(server);
 while (1)
 {
- m.run();
+    m.run(TimerPoolSingleton::getInstance()->getMsNextCall());
+    TimerPoolSingleton::getInstance()->autocall();
 }
     std::cout << "Exiting" << std::endl;
     return (0);

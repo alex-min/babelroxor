@@ -9,6 +9,7 @@
 class NetworkRoute;
 class ISlotInterface;
 class Network;
+class Packet;
 
 
 
@@ -24,14 +25,13 @@ public:
             unsigned short _packetId;
             unsigned short _len;
             unsigned short _checksum;
-        } PACKED header;
+            unsigned short _checksumData;
+        } PACKED;
         void *data;
     };
-    typedef void (ISlotInterface::*SlotCall)(bool timeout, unsigned int id,
-                                             Network *network,
-                                             std::string const &login,
-                                             void *data, unsigned int len,
-                                             Protocol::NetworkPacket::NetworkHeader *header);
+    typedef void (ISlotInterface::*SlotCall)(bool timeout, Packet *);
+    typedef std::map<unsigned int, Packet *> IdPacketMap;
+
     enum SlotType {AUDIO, TEXT, STATUS, CONNECTION, REGISTER,
                    REMOVEACCOUNT, HANGUP,
                    PROXY_FORWARD, PROXY_RECEIVED,
@@ -82,6 +82,7 @@ private:
 protected:
     Network                             *_defaultGateway;
     std::map<SlotType, ISlotInterface *> _slotManager;
+    IdPacketMap                          _slotIdManager;
     ISlotInterface                       *_slotPacketId[65536];
     NetworkPacket::NetworkHeader                        _header;
     char                                *_buffer;

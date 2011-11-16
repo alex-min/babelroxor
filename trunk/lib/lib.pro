@@ -30,7 +30,8 @@ SOURCES += main.cpp\
     proxyreceivedslot.cpp \
     account.cpp \
     contactlist.cpp \
-    timerpool.cpp
+    timerpool.cpp \
+    packet.cpp
 
 HEADERS  += mainwindow.h \
     iportablesocket.h \
@@ -55,6 +56,8 @@ HEADERS  += mainwindow.h \
     proxyreceivedslot.h \
     account.h \
     contactlist.h \
-    timerpool.h
+    timerpool.h \
+    packet.h \
+    pool.h
 
 FORMS    += mainwindow.ui

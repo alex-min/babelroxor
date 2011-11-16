@@ -3,6 +3,8 @@
 #include "accountmanager.h"
 #include "islotinterface.h"
 #include "network.h"
+#include "timerpool.h"
+#include "pool.h"
 
 
 int Protocol::_packetCount = 0;
@@ -22,7 +24,13 @@ unsigned int Protocol::getCurrentReplyId() const
 void Protocol::registerPacketId(unsigned short id, std::string const &login,
                       ISlotInterface *slot, Protocol::SlotCall call, short timeout)
 {
-    (slot->*call)(false, 0, NULL, "hello", NULL, 0, NULL);
+    Packet *p = Pool(Packet)::getInstance()->generate();
+    p->setLogin(login);
+    p->setTimeout(timeout);
+    p->setSlot(slot);
+    p->setSlotCall(call);
+    _slotIdManager[id] = p;
+    TimerPoolSingleton::getInstance()->addToPool(p, timeout);
 }
 
 void Protocol::send(std::string const &login,
@@ -120,6 +128,7 @@ void Protocol::sendPacket(Network *network, SlotType type, const void *data, uns
     packet._len = length;
     packet._packetId = packetId;
     packet._checksum = 0x4242;
+    packet._checksumData = 0x4242;
     //packet._checksum = CRC::getCRC16(&(packet), length);
     network->getWriteBuffer()->append(reinterpret_cast<char *>(&packet), sizeof(NetworkPacket::NetworkHeader));
     network->getWriteBuffer()->append(data, length);
