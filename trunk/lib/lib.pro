@@ -34,7 +34,8 @@ SOURCES += main.cpp\
     packet.cpp \
     time.cpp \
     windowssocket.cpp \
-    windowsnetworkmanager.cpp
+    windowsnetworkmanager.cpp \
+    unixtime.cpp
 
 HEADERS  += mainwindow.h \
     iportablesocket.h \
@@ -64,6 +65,7 @@ HEADERS  += mainwindow.h \
     pool.h \
     time.h \
     windowssocket.h \
-    windowsnetworkmanager.h
+    windowsnetworkmanager.h \
+    unixtime.h
 
 FORMS    += mainwindow.ui

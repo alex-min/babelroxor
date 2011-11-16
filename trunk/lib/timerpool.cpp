@@ -10,6 +10,7 @@ void TimerPool::addToPool(Packet *pack,
     if (!pack)
         return ;
     unsigned int t = 0;
+
     //unsigned int t = ::time(NULL);
     std::cout << "timeout:" << t << std::endl;
     _pool[pack].first = t + timeout;
@@ -31,13 +32,12 @@ void TimerPool::removeFromPool(Packet *pack)
 void TimerPool::autocall()
 {
     std::cout << "[[[[[[[[ " << std::endl;
-    unsigned int t = 0;
-    //unsigned int t = ::time(NULL);
+    _time.setToMsTimeOfDay();
     PoolMap::iterator it = _pool.begin();
     PoolMap::iterator it2;
     while (it != _pool.end())
     {
-        if (t > it->second.first)
+        if (_time.getMs() > it->second.first)
         {
             if (it->second.second.first)
               (it->second.second.first->*it->second.second.second)(true, it->first);

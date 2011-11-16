@@ -6,6 +6,7 @@
 #include "singleton.h"
 #include "protocol.h"
 #include "packet.h"
+#include "time.h"
 
 class TimerPool
 {
@@ -20,6 +21,7 @@ public:
     void autocall();
 
     PoolMap _pool;
+    PortableTime _time;
 };
 
 typedef Singleton<TimerPool> TimerPoolSingleton;
