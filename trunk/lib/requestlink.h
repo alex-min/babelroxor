@@ -5,6 +5,7 @@
 #include "protocol.h"
 #include "network.h"
 #include "islotinterface.h"
+#include "packet.h"
 #include <string>
 
 class RequestLink : public ISlotInterface
@@ -13,10 +14,7 @@ public:
     RequestLink();
     void createNewLink(std::string const &login);
     bool createServerSock(std::string const &login);
-    virtual void testConnection(bool timeout, unsigned int id, Network *network,
-                                std::string const &login,
-                                void *data, unsigned int len,
-                                Protocol::NetworkPacket::NetworkHeader *header);
+    virtual void testConnection(bool timeout, Packet *);
     virtual void    onCall(Network *network, std::string const &login, void *data, unsigned int len,
                            Protocol::NetworkPacket::NetworkHeader *header);
 

@@ -168,6 +168,7 @@ sub generate_packet # [slotid] [data]
     $str .= pack("S", int($packetId));
     $str .= pack("S", int(length($data)));
     $str .= pack("S", 0x4242);
+    $str .= pack("S", 0x4242);
     foreach (split(//, $data)) {
 	$str .= pack("C", ord($_));
     }
@@ -199,6 +200,7 @@ sub parseHeader #pack
     }
     my $len = unpack("S", substr($pack, 4, 6));
     my $crc = unpack("S", substr($pack, 6, 8));
+    my $crcData = unpack("S", substr($pack, 8, 10));
     my $packetId = unpack("S", substr($pack, 2, 4));
     return (false, '') if (length($pack) - 8 < $len);
     print "\n\t Packet received :\n";
@@ -207,18 +209,19 @@ sub parseHeader #pack
     print "\t    - packetId : ",  $packetId, "\t(", sprintf("0x%04x", $packetId), ")\n";
     print "\t    - length : ", $len , "\t(", sprintf("0x%04x", $len), ")\n";
     print "\t    - CRC16 : ", $crc, "\t(", sprintf("0x%04x", $crc), ")\n";
+    print "\t    - CRC16Data : ", $crcData, "\t(", sprintf("0x%04x", $crc), ")\n";
     if (int($data[1]) == PROXY_FORWARD || int($data[1]) == PROXY_RECEIVED)
     {
-	my @login = split("\x00", substr($pack, 8, $len));
+	my @login = split("\x00", substr($pack, 10, $len));
 	print "\n   PROXY ";
 	print " RECEIVED\n" if (int($data[1]) == PROXY_RECEIVED);
 	print " FORWARD\n" if (int($data[1]) == PROXY_FORWARD);
 	print "      - with login : ", $login[0], "\n";
-	parseHeader(substr($pack, 8 + length($login[0]) + 1, $len), $count + 1);
+	parseHeader(substr($pack, 10 + length($login[0]) + 1, $len), $count + 1);
     }
     else {
 	print "\t   Data : \n";
-	my $dd = substr($pack, 8, $len);
+	my $dd = substr($pack, 10, $len);
 	print $dd;
 	printf "\nIn Hex:\n";
 	splice(@data, 0, 8);
@@ -231,8 +234,8 @@ sub parseHeader #pack
 	}
     }
     print "\n";
-    $lastreceived = substr($pack, 0, 8 + $len);
-    return (true, substr($pack, $len + 8));
+    $lastreceived = substr($pack, 0, 10 + $len);
+    return (true, substr($pack, $len + 10));
 }
 
 

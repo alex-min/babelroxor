@@ -9,7 +9,9 @@ void TimerPool::addToPool(Packet *pack,
 {
     if (!pack)
         return ;
-    unsigned int t = ::time(NULL);
+    unsigned int t = 0;
+    //unsigned int t = ::time(NULL);
+    std::cout << "timeout:" << t << std::endl;
     _pool[pack].first = t + timeout;
     _pool[pack].second = std::pair<ISlotInterface *, Protocol::SlotCall> (pack->getSlot(), pack->getSlotCall());
 }
@@ -28,12 +30,14 @@ void TimerPool::removeFromPool(Packet *pack)
 
 void TimerPool::autocall()
 {
-    unsigned int t = time(NULL);
+    std::cout << "[[[[[[[[ " << std::endl;
+    unsigned int t = 0;
+    //unsigned int t = ::time(NULL);
     PoolMap::iterator it = _pool.begin();
     PoolMap::iterator it2;
     while (it != _pool.end())
     {
-        if (t < it->second.first)
+        if (t > it->second.first)
         {
             if (it->second.second.first)
               (it->second.second.first->*it->second.second.second)(true, it->first);
@@ -50,7 +54,8 @@ void TimerPool::autocall()
 int TimerPool::getMsNextCall()
 {
     int time = -1;
-    unsigned int t = ::time(NULL);
+    unsigned int t = 0;
+    //unsigned int t = ::time(NULL);
     for (PoolMap::iterator it = _pool.begin(); it != _pool.end(); ++it)
     {
         if (it->second.first < static_cast<unsigned int>(time) || time < 0)
@@ -58,7 +63,15 @@ int TimerPool::getMsNextCall()
     }
     if (time == -1)
         return (-1);
-    if (t < static_cast<unsigned int>(time))
-        return (0);
-    return (t - time);
+    std::cout << "time:" << time << "|" << t << std::endl;
+    if (t > static_cast<unsigned int>(time))
+    {
+        TimerPool::autocall();
+        return (TimerPool::getMsNextCall());
+    }
+    if (static_cast<unsigned int>(time) - t == 0)
+        return (-1);
+    std::cout << "miam (" << t  << " " <<  static_cast<unsigned int>(time) << std::endl;
+    std::cout << "miam (" << static_cast<int> (t - static_cast<unsigned int>(time)) << std::endl;
+    return (static_cast<unsigned int>(time) - t);
 }

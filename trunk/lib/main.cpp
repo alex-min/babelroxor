@@ -31,16 +31,16 @@ int main(void)
 
  PortableNetworkManager m;
 
-
+    RequestLinkSingleton::getInstance()->createServerSock("fff");
 
 
 m.setProtocol(proto);
-if (!(server->getSocket()->createServerSocket(IPortableSocket::TCP, 4574)))
+if (!(server->getSocket()->createServerSocket(IPortableSocket::TCP, 4575)))
         return (0);
 m.addNetwork(server);
 while (1)
 {
-    m.run(TimerPoolSingleton::getInstance()->getMsNextCall());
+    m.run(/*TimerPoolSingleton::getInstance()->getMsNextCall()*/);
     TimerPoolSingleton::getInstance()->autocall();
 }
     std::cout << "Exiting" << std::endl;

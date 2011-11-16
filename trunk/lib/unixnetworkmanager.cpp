@@ -50,10 +50,11 @@ void UNIXNetworkManager::run(long uTimeout)
 {
     struct timeval timeout;
     timeout.tv_sec = 0;
-    timeout.tv_usec = uTimeout;
+    timeout.tv_usec = uTimeout  *1000;
     UNIXNetworkManager::generateWriteFs();
     unsigned int size;
 
+        std::cout << uTimeout << std::endl;
     ::memcpy(&_readfscpy, &_readfs, sizeof(fd_set));
     if (::select(_maxfd + 1, &_readfscpy, (_hasWriteFs == true) ? &_writefs : NULL, NULL,
                  (uTimeout == -1) ? NULL : &timeout) == -1)
