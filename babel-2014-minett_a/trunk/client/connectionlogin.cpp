@@ -19,7 +19,7 @@ void ConnectionLogin::connect(const std::string &login, const std::string &passw
 }
 
 
-void    registerAccount(std::string const &login, std::string const &password)
+void    ConnectionLogin::registerAccount(std::string const &login, std::string const &password)
 {
     if (login == "" || password == "")
         return ;
