@@ -1,4 +1,6 @@
 #include "unixtime.h"
+#include <iostream>
+
 #ifdef OS_UNIX
 
 UNIXTime::UNIXTime()

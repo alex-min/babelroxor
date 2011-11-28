@@ -32,6 +32,7 @@ void TimerPool::removeFromPool(Packet *pack)
 void TimerPool::autocall()
 {
     _time.setToMsTimeOfDay();
+
     PoolMap::iterator it = _pool.begin();
     PoolMap::iterator it2;
     while (it != _pool.end())
@@ -59,6 +60,7 @@ int TimerPool::getMsNextCall()
     int time = -1;
 
     _time.setToMsTimeOfDay();
+
     for (PoolMap::iterator it = _pool.begin(); it != _pool.end(); ++it)
     {
         if (it->second.first < static_cast<unsigned int>(time) || time < 0)

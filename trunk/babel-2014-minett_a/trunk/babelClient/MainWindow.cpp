@@ -6,6 +6,11 @@ namespace Graphic
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+
+}
+
+void    MainWindow::init()
+{
     QMenuBar *myMenuBar = menuBar();
     QMenu *fileMenu = myMenuBar->addMenu("File");
     QMenu *EditionMenu = myMenuBar->addMenu("Edition");
@@ -16,31 +21,38 @@ MainWindow::MainWindow(QWidget *parent)
     EditionMenu->setObjectName("myEditionMenu");
     helpMenu->setObjectName("myHelpMenu");
 
-    _dockWidget.setFeatures(QDockWidget::NoDockWidgetFeatures | QDockWidget::DockWidgetMovable);
-    addDockWidget(Qt::LeftDockWidgetArea, &_dockWidget);
+    _dockWidget = new QDockWidget;
 
-    //_dockWidget.setVisible(false);
+    _dockWidget->setFeatures(QDockWidget::NoDockWidgetFeatures | QDockWidget::DockWidgetMovable);
 
-    _stackedWidget = new QStackedWidget(this);
+    _dockWidget->setVisible(false);
+
+    _stackedWidget = new QStackedWidget;
 
     _accountInterface = AccountSingleton::getInstance();
     _centralWidget = CentralWidgetSingleton::getInstance();
     _dockWidgetContent = DockWidgetContentSingleton::getInstance();
 
+    _stackedWidget->addWidget(_accountInterface);
     _stackedWidget->addWidget(_centralWidget);
-
-  //   _stackedWidget->addWidget(_accountInterface);
-
 
     setCentralWidget(_stackedWidget);
 
+    _dockWidget->setWidget(_dockWidgetContent);
 
-    _dockWidget.setMinimumSize(400, 600);
+    _dockWidget->setMinimumSize(400, 600);
 
-    _dockWidget.setWidget(_dockWidgetContent);
+    addDockWidget(Qt::LeftDockWidgetArea, _dockWidget, Qt::Vertical);
 
-    setWindowTitle("Babel client");
+    setWindowTitle("Babel Client");
     setMinimumSize(800, 600);
+
+}
+
+void    MainWindow::switchOnConnectedState()
+{
+    _dockWidget->setVisible(true);
+    _stackedWidget->setCurrentWidget(_centralWidget);
 }
 
 MainWindow::~MainWindow()
@@ -48,6 +60,8 @@ MainWindow::~MainWindow()
     AccountSingleton::deleteInstance();
     CentralWidgetSingleton::deleteInstance();
     DockWidgetContentSingleton::deleteInstance();
+
+    delete _dockWidget;
 
     if (_stackedWidget)
         delete _stackedWidget;

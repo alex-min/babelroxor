@@ -1,5 +1,5 @@
-#ifndef CONNECTIONLOGIN_H
-#define CONNECTIONLOGIN_H
+#ifndef CONNECTIONLOGINE___H
+#define CONNECTIONLOGINE___H
 #include <string>
 #include "protocol.h"
 #include "singleton.h"
@@ -16,7 +16,6 @@ public:
                              std::string const &password);
 };
 
-
-typedef Singleton<ConnectionLogin> ConnectionLoginSingle;
+typedef Singleton<ConnectionLogin> ConnectionLoginSingleton;
 
 #endif // CONNECTIONLOGIN_H

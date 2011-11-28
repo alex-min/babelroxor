@@ -1,4 +1,6 @@
 #include "RegisterAccount.h"
+#include "connectionlogin.h"
+#include "CallAnswer.h"
 #include <QDebug>
 
 namespace Graphic
@@ -97,15 +99,16 @@ void    RegisterAccount::validAccount(int status)
         }
         else
         {
-            qDebug() << _loginLineEdit.text();
-            qDebug() << _passwordLineEdit.text();
+            //            qDebug() << _loginLineEdit.text();
+            //            qDebug() << _passwordLineEdit.text();
 
-            Q_UNUSED(login);
-            Q_UNUSED(password);
+            //            Q_UNUSED(login);
+            //            Q_UNUSED(password);
 
-            //we have to send a request to the server to ask him if we can create an account with this login and password
+            CallAnswerSingleton::getInstance()->getLogin();
+            // ConnectionLoginSingleton::getInstance()->registerAccount(login, password);
 
-            close();
+            RegisterAccount::close();
 
         }
     }
