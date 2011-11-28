@@ -12,7 +12,7 @@ public:
            unsigned int len = 0,
            Protocol::NetworkPacket::NetworkHeader *head = NULL,
            int msTimeout = -1,
-           ISlotInterface *interface = NULL,
+           ISlotInterface *interfacef = NULL,
            Protocol::SlotCall call = NULL);
     void setTimeout(int msTimeout);
     void setNetwork(Network *net);
@@ -20,7 +20,7 @@ public:
     void setData(void *data);
     void setLen(unsigned int len);
     void setHeader(Protocol::NetworkPacket::NetworkHeader *head);
-    void setSlot(ISlotInterface *interface);
+    void setSlot(ISlotInterface *interfacef);
     void setSlotCall(Protocol::SlotCall call);
     void setId(unsigned int id);
 

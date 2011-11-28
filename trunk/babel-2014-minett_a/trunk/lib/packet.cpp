@@ -15,7 +15,7 @@ Packet::Packet(unsigned int id,
                unsigned int len,
                Protocol::NetworkPacket::NetworkHeader *head,
                int msTimeout,
-               ISlotInterface *interface,
+               ISlotInterface *interfacef,
                Protocol::SlotCall call) :
     _timeout(msTimeout),
     _id(id),
@@ -24,7 +24,7 @@ Packet::Packet(unsigned int id,
     _data(data),
     _len(len),
     _head(head),
-    _interface(interface),
+    _interface(interfacef),
     _call(call)
 {
 }
@@ -72,9 +72,9 @@ void Packet::setHeader(Protocol::NetworkPacket::NetworkHeader *head)
     _head = head;
 }
 
-void Packet::setSlot(ISlotInterface *interface)
+void Packet::setSlot(ISlotInterface *interfacef)
 {
-    _interface = interface;
+    _interface = interfacef;
 }
 
 void Packet::setSlotCall(Protocol::SlotCall call)

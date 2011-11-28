@@ -13,7 +13,7 @@ public:
 
 #ifdef OS_WINDOWS
 #include "windowstime.h"
-typedef class WindowsTime PortableTime;
+typedef class Win32Time PortableTime;
 #elif defined OS_UNIX
 #include "unixtime.h"
 typedef class UNIXTime PortableTime;

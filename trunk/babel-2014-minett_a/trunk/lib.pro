@@ -9,7 +9,6 @@ QT       += core gui
 TARGET = lib
 TEMPLATE = app
 
-
 SOURCES += ./lib/mainwindow.cpp \
     ./lib/iportablesocket.cpp \
     ./lib/unixsocket.cpp \
@@ -33,6 +32,7 @@ SOURCES += ./lib/mainwindow.cpp \
     ./lib/time.cpp \
     ./lib/windowssocket.cpp \
     ./lib/windowsnetworkmanager.cpp \
+    ./lib/windowstime.cpp \
     ./lib/unixtime.cpp \
     ./lib/ScopedLock.cpp \
     ./lib/PThreadThread.cpp \
@@ -66,6 +66,7 @@ HEADERS  += ./lib/mainwindow.h \
     ./lib/time.h \
     ./lib/windowssocket.h \
     ./lib/windowsnetworkmanager.h \
+    ./lib/windowstime.h \
     ./lib/unixtime.h \
     lib/islot.h \
     ./lib/PThreadMutex.h \
