@@ -18,9 +18,9 @@ private:
     void generateWriteFs();
 
 private:
-    FD_SET  _readfs;
-    FD_SET  _writefs;
-    FD_SET  _readfscpy;
+    fd_set  _readfs;
+    fd_set  _writefs;
+    fd_set  _readfscpy;
     std::list<Network *> _network;
     int     _maxfd;
     bool    _hasWriteFs;

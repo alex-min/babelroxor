@@ -30,38 +30,33 @@ void Win32NetworkManager::run(long uTimeout)
     Win32NetworkManager::generateWriteFs();
     unsigned int size;
 
-    ::memcpy(&_readfscpy, &_readfs, sizeof(fd_set));
-    if (::select(_maxfd + 1, &_readfscpy, (_hasWriteFs == true) ? &_writefs : NULL, NULL,
-                 (uTimeout == -1) ? NULL : &timeout) == -1)
-    {
+    memcpy(&_readfscpy, &_readfs, sizeof(fd_set));
+    if (select(this->_maxfd + 1, &_readfscpy, NULL, NULL, NULL) == SOCKET_ERROR)
         throw std::string("select function failed");
-    }
     for (std::list<Network *>::iterator it = _network.begin(); it != _network.end()
          ; ++it)
     {
         if (FD_ISSET((*it)->getSocket()->Win32GetSocket(), &_readfscpy))
         {
-            if ((*it)->getSocket()->isServerSock())
+            if ((*it)->getSocket()->isServerSock() && (*it)->getSocket()->getType() == IPortableSocket::TCP)
             {
               Network *n = new Network((*it)->getSocket()->waitForClient());
               Win32NetworkManager::addNetwork(n);
-              _protocol->welcomeEvent(n);
+              Protocol::getInstance()->welcomeEvent(n);
               return ;
             }
-            size = (*it)->getSocket()->read(_mainBuffer, 512);
             if (size == 0)
-            {
+                {
                 (*it)->getSocket()->disconnect();
                 _network.erase(it);
                 Win32NetworkManager::generateReadFs();
                 return ;
-            }
+                }
             else
-               {
-                   std::cout << size << std::endl;
+                {
                 (*it)->getReadBuffer()->append(_mainBuffer, size);
-                _protocol->readEvent(*it);
-               }
+                Protocol::getInstance()->readEvent(*it);
+                }
         }
         else if (FD_ISSET((*it)->getSocket()->Win32GetSocket(), &_writefs))
         {

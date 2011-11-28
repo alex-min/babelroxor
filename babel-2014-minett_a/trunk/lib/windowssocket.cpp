@@ -25,7 +25,7 @@ int Win32Socket::Win32GetSocket() const
     return (this->_sock);
 }
 
-bool Win32Socket::createServerSocket(unsigned int port)
+bool Win32Socket::createServerSocket(IPortableSocket::SockType type, unsigned int port)
 {
     WSADATA wsaData = {0};
 
@@ -35,21 +35,25 @@ bool Win32Socket::createServerSocket(unsigned int port)
         std::cout << "[-] Cannot initialize WSAStartup" << std::endl;
         return (false);
     }
-    this->_sock = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, NULL);
+    this->_type = type;
+    if (type == TCP)
+        this->_sock = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
+    else if (type == UDP)
+        this->_sock = WSASocket(AF_INET, SOCK_DGRAM, IPPROTO_UDP, NULL, 0, WSA_FLAG_OVERLAPPED);
     if (this->_sock == INVALID_SOCKET)
     {
         std::cout << "[-] Cannot create server socket" << std::endl;
         return (false);
     }
     this->_sin.sin_family = AF_INET;
-    WSAHtonl(this->_sock, INADDR_ANY, &this->_sin.sin_addr.s_addr);
-    WSAHtons(this->_sock, port, &this->_sin.sin_port);
+    this->_sin.sin_addr.s_addr = htonl(INADDR_ANY);
+    this->_sin.sin_port = htons((unsigned short)port);
     if (bind(this->_sock, (SOCKADDR *) &this->_sin, sizeof(SOCKADDR_IN)) == SOCKET_ERROR)
     {
         std::cout << "[-] Cannot create server socket" << std::endl;
         return (false);
     }
-    if (listen(this->_sock, 42) == SOCKET_ERROR)
+    if (type != UDP && listen(this->_sock, 42) == SOCKET_ERROR)
     {
         std::cout << "[-] Cannot create server socket" << std::endl;
         return (false);
@@ -69,7 +73,10 @@ bool Win32Socket::createClientSocket()
         std::cout << "[-] Cannot initialize WSAStartup" << std::endl;
         return (false);
     }
-    this-> _sock = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, 0);
+    if (_type == TCP)
+        this->_sock = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
+    else if (_type == UDP)
+        this->_sock = WSASocket(AF_INET, SOCK_DGRAM, IPPROTO_UDP, NULL, 0, WSA_FLAG_OVERLAPPED);
     if (this->_sock == INVALID_SOCKET)
         return (false);
     std::cout << "[+] Connecting..." << std::endl;
@@ -98,7 +105,7 @@ void Win32Socket::disconnect()
 
 bool Win32Socket::connect(std::string const & remote, unsigned int port, SockType type)
 {
-    struct hostent * record = gethostbyname(remote.c_str());
+    struct hostent * record = gethostbyaddr(remote.c_str(), 4, AF_INET);
     if (!record)
         return (false);
     in_addr * address = (in_addr * )record->h_addr;
@@ -157,8 +164,10 @@ void Win32Socket::send(const char *str, unsigned int len)
 
     DataBuf.len = len;
     DataBuf.buf = const_cast<char *> (str);
-    if (this->_sock != INVALID_SOCKET)
+    if (this->_sock != INVALID_SOCKET && this->_type == TCP)
         WSASend(this->_sock, &DataBuf, 1, &SendBytes, 0, 0, NULL);
+    else if (this->_sock != INVALID_SOCKET && this->_type == UDP)
+        WSASendTo(this->_sock, &DataBuf, 1, &SendBytes, 0, (SOCKADDR *) &this->_sin, sizeof(this->_sin), NULL, NULL);
 }
 
 void Win32Socket::send(IPortableSocket *sock, std::string const & str)
@@ -176,24 +185,40 @@ void Win32Socket::send(IPortableSocket *sock, char *str, unsigned int len)
     Win32Socket *convert = reinterpret_cast<Win32Socket *> (sock);
     if (!convert)
         return ;
-    if (this->_sock != INVALID_SOCKET)
+    if (convert->_sock != INVALID_SOCKET && this->_type == TCP)
         WSASend(convert->_sock, &DataBuf, 1, &SendBytes, 0, 0, NULL);
+    else if (convert->_sock != INVALID_SOCKET && this->_type == UDP)
+        WSASendTo(convert->_sock, &DataBuf, 1, &SendBytes, 0, (SOCKADDR *) &this->_sin, sizeof(this->_sin), NULL, NULL);
 }
 
 // return : size of byte written in buf
 unsigned int Win32Socket::read(char *buf, unsigned int size)
 {
+    int     ret;
     WSABUF  DataBuf;
     DWORD   SendBytes;
 
     DataBuf.buf = buf;
     DataBuf.len = size;
-    return (WSARecv(this->_sock, &DataBuf, 1, &SendBytes, 0, 0, NULL));
+    if (this->_type == TCP)
+        ret = WSARecv(this->_sock, &DataBuf, 1, &SendBytes, 0, 0, NULL);
+    else if (this->_type == UDP)
+    {
+        SOCKADDR_IN sender;
+        int tmp = sizeof(SOCKADDR_IN);
+        DWORD flags = 0;
+        ret = WSARecvFrom(this->_sock, &DataBuf, 1, &SendBytes, &flags, (SOCKADDR *) &sender, &tmp, NULL, NULL);
+    }
+    if (ret == SOCKET_ERROR)
+        return (0);
+    std::cout << buf << std::endl;
+    return (SendBytes);
 }
 
 // return : size of byte written in buf
 unsigned int Win32Socket::read(IPortableSocket *sock, char *buf, unsigned int size)
 {
+    int     ret;
     WSABUF  DataBuf;
     DWORD   SendBytes;
 
@@ -202,7 +227,18 @@ unsigned int Win32Socket::read(IPortableSocket *sock, char *buf, unsigned int si
     Win32Socket *convert = reinterpret_cast<Win32Socket *> (sock);
     if (!convert)
         return 0;
-    return (WSARecv(convert->_sock, &DataBuf, 1, &SendBytes, 0, 0, NULL));
+    if (this->_type == TCP)
+        ret = WSARecv(convert->_sock, &DataBuf, 1, &SendBytes, 0, 0, NULL);
+    else if (this->_type == UDP)
+    {
+        SOCKADDR_IN sender;
+        int tmp = sizeof(SOCKADDR_IN);
+        DWORD flags = 0;
+        ret = WSARecvFrom(convert->_sock, &DataBuf, 1, &SendBytes, &flags, (SOCKADDR *) &sender, &tmp, NULL, NULL);
+    }
+    if (ret == SOCKET_ERROR)
+        return (0);
+    return (SendBytes);
 }
 
 std::string const &Win32Socket::getIp() const
@@ -213,6 +249,11 @@ std::string const &Win32Socket::getIp() const
 unsigned short Win32Socket::getPort() const
 {
     return (_port);
+}
+
+IPortableSocket::SockType    Win32Socket::getType() const
+{
+    return (_type);
 }
 
 #endif

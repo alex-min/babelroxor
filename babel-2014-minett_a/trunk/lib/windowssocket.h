@@ -25,10 +25,11 @@ public:
     virtual unsigned int read(IPortableSocket *sock, char *buf, unsigned int size);
     virtual void disconnect();
     virtual bool isServerSock() const;
-    virtual bool createServerSocket(unsigned int port);
+    virtual bool createServerSocket(IPortableSocket::SockType type, unsigned int port);
     std::string const &getIp() const;
     virtual unsigned short getPort() const;
     int Win32GetSocket() const;
+    SockType    getType() const;
 
 private:
     bool createClientSocket();
