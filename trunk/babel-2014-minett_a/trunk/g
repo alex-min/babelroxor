@@ -1,0 +1,13 @@
+M trunk/client/connecttome.cpp
+M trunk/client/connecttome.h
+M trunk/client/main.cpp
+M trunk/connection.pl
+M trunk/file
+M trunk/lib/circularbuffer.cpp
+M trunk/lib/inetworkmanager.h
+M trunk/lib/networkroute.cpp
+M trunk/lib/networkroute.h
+M trunk/lib/protocol.cpp
+M trunk/lib/unixnetworkmanager.cpp
+? trunk/server.pl
+? trunk/server.pl~
