@@ -1,6 +1,6 @@
 #include "windowstime.h"
-#include <Windows.h>
 #ifdef OS_WINDOWS
+#include <windows.h>
 
 Win32Time::Win32Time()
 {

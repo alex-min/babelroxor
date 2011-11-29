@@ -9,8 +9,7 @@ QT       += core gui
 TARGET = lib
 TEMPLATE = app
 
-SOURCES += ./lib/mainwindow.cpp \
-    ./lib/iportablesocket.cpp \
+SOURCES += ./lib/iportablesocket.cpp \
     ./lib/unixsocket.cpp \
     ./lib/circularbuffer.cpp \
     ./lib/network.cpp \
@@ -38,8 +37,7 @@ SOURCES += ./lib/mainwindow.cpp \
     ./lib/PThreadThread.cpp \
     ./lib/PThreadMutex.cpp
 
-HEADERS  += ./lib/mainwindow.h \
-    ./lib/iportablesocket.h \
+HEADERS  += ./lib/iportablesocket.h \
     ./lib/portablelibrary.h \
     ./lib/unixsocket.h \
     ./lib/circularbuffer.h \
@@ -75,8 +73,7 @@ HEADERS  += ./lib/mainwindow.h \
     ./lib/IMutex.h \
     ./lib/Singleton.h \
     ./lib/ScopedLock.h \
-    ./lib/PThreadThread.h \   
+    ./lib/PThreadThread.h \
+    ./lib/Thread.h \
     lib/mutex.h
-
-FORMS    += ./lib/mainwindow.ui
 
