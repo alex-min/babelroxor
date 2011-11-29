@@ -24,6 +24,7 @@ int main(int ac, char **av)
 {
     QApplication app(ac, av);
     Graphic::MainWindow *win = MainWindowSingleton::getInstance();
+    ListenServerSingleton::getInstance()->start();
 
     win->init();
 
@@ -34,9 +35,6 @@ int main(int ac, char **av)
         app.setStyleSheet(fileStyle.readAll());
         fileStyle.close();
     }
-
-    ListenServer l;
-    l.start();
 
 
     win->show();

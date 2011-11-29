@@ -1,5 +1,6 @@
 #include "ListenServer.h"
 #include "audiothread.h"
+#include <QCoreApplication>
 
 ListenServer::ListenServer()
 {
@@ -13,7 +14,7 @@ ListenServer::ListenServer()
     proto->registerSlot(Protocol::TEST_CONNECTION, TestConnectionSingleton::getInstance());
     proto->registerSlot(Protocol::PROXY_RECEIVED, ProxyReceivedSlotSingleton::getInstance());
     Protocol::getInstance()->registerSlot(Protocol::STATUS, StatusAnswerSingleton::getInstance());
-//    Protocol::getInstance()->registerSlot(Protocol::CALL, CallAnswerSingleton::getInstance());
+    //    Protocol::getInstance()->registerSlot(Protocol::CALL, CallAnswerSingleton::getInstance());
 
 
     if (!net->getSocket()->connect("127.0.0.1", 4646))
@@ -27,15 +28,30 @@ ListenServer::ListenServer()
 
 void    ListenServer::run(void)
 {
-    _t.run();
-    if (_connection)
-        while (1)
-        {
-            _networkManager.run(TimerPoolSingleton::getInstance()->getMsNextCall());
-            TimerPoolSingleton::getInstance()->autocall();
-        }
+    //    AudioThread t;
+    //  t.start();
+
+    if (!_connection)
+        return;
+
+    while (1)
+    {
+        QCoreApplication::processEvents();
+        _networkManager.run(TimerPoolSingleton::getInstance()->getMsNextCall());
+        TimerPoolSingleton::getInstance()->autocall();
+    }
 
     std::cout << "Exiting" << std::endl;
+}
+void    ListenServer::emitConnectionPopUpWarning(std::string const &title, std::string const &text)
+{
+    std::cout << "Rintintin" << std::endl;
+    emit connectionPopUpWarning(QString(title.c_str()), QString(text.c_str()));
+}
+
+void    ListenServer::emitConnected()
+{
+    emit connected();
 }
 
 ListenServer::~ListenServer()

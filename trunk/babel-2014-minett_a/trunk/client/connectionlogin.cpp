@@ -18,7 +18,6 @@ void ConnectionLogin::connect(const std::string &login, const std::string &passw
                                               Protocol::DEFAULT_TIMEOUT);
 }
 
-
 void    ConnectionLogin::registerAccount(std::string const &login, std::string const &password)
 {
     if (login == "" || password == "")
