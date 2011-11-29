@@ -9,6 +9,7 @@ SUBDIRS += babelClient
 
 include(lib.pro)
 include(babelClient.pro)
+include(portaudio.pro)
 
 INCLUDEPATH += ./lib
 INCLUDEPATH += ./babelClient

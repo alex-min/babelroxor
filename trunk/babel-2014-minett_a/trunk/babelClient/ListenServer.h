@@ -20,6 +20,7 @@
 #include "connectionlogin.h"
 #include "protocolinterfaceslot.h"
 #include "StatusAnswer.h"
+#include "audiothread.h"
 
 class ListenServer : public Thread
 {
@@ -30,6 +31,8 @@ public:
 private:
     PortableNetworkManager _networkManager;
     bool                   _connection;
+    AudioThread _t;
+
 };
 
 typedef Singleton<ListenServer> ListenServerSingleton;

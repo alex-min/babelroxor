@@ -38,7 +38,7 @@ void    MainWindow::init()
 
     setCentralWidget(_stackedWidget);
 
-    _dockWidget->setWidget(_dockWidgetContent);
+   // _dockWidget->setWidget(_dockWidgetContent);
 
     _dockWidget->setMinimumSize(400, 600);
 
