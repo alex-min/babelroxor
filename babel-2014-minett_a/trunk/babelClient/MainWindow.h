@@ -20,9 +20,12 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = 0);
-    void    switchOnConnectedState();
     void    init();
     ~MainWindow();
+
+public slots:
+    void    showConnectionPopUpWarning(QString const &title, QString const &text);
+    void    switchOnConnectedState();
 
 private:
     QDockWidget *_dockWidget;

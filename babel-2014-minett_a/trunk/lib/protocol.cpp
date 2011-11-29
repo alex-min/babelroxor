@@ -273,7 +273,7 @@ void Protocol::dispatchPacket(Network *network, const std::string &login, void *
         ProxyReceivedSlotSingleton::getInstance()->onCall(network, login, data, len, header);
         return ;
     }
-
+    ScopedLock pd(&_m);
 
     Packet *p = 0;
     if (header)

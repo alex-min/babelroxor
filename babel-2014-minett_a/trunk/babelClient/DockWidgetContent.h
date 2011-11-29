@@ -32,6 +32,7 @@ public:
     void    fillContactList();
     virtual std::string const &    getCurrentContactLogin();
     virtual std::string const &    getLogin();
+    virtual void                   setLogin(std::string const &login);
     virtual void    updateClientAvatar(std::string const &filename);
     virtual void    showCallPopUp();
     virtual void    updateClientStatus(int status);

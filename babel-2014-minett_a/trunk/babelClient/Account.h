@@ -25,6 +25,7 @@ public:
     Account();
     virtual void    createAccount(std::string login, std::string password);
     virtual void    logInAccount(std::string const &login, std::string const &password);
+    virtual std::string const &getLogin();
     ~Account();
 
 public slots:
@@ -43,6 +44,7 @@ private:
     QLabel      _info;
     QLabel      _createAccount;
     QPushButton _connectionButton;
+    std::string _connectLogin;
 };
 }
 

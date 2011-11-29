@@ -1,6 +1,8 @@
 #ifndef LISTENSERVER_H
 #define LISTENSERVER_H
 
+#include <QThread>
+
 #include "singleton.h"
 #include "Thread.h"
 #include "iportablesocket.h"
@@ -22,11 +24,19 @@
 #include "StatusAnswer.h"
 #include "audiothread.h"
 
-class ListenServer : public Thread
+class ListenServer : public QThread
 {
+    Q_OBJECT
+
+signals:
+    void    connected();
+    void    connectionPopUpWarning(QString const&, QString const&);
+
 public:
     ListenServer();
-    virtual void    run(void);
+    void    run();
+    void    emitConnected();
+    void    emitConnectionPopUpWarning(std::string const &title, std::string const &text);
     virtual ~ListenServer();
 private:
     PortableNetworkManager _networkManager;

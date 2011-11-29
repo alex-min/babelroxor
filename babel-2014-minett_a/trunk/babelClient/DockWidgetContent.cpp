@@ -62,6 +62,12 @@ DockWidgetContent::DockWidgetContent()
     connect(&_avatarButton, SIGNAL(clicked()), this, SLOT(chooseAvatar()));
 }
 
+void    DockWidgetContent::setLogin(const std::string &login)
+{
+    _loginLabel.setText(QString(login.c_str()));
+    _login = login;
+}
+
 void    DockWidgetContent::showCallPopUp()
 {
     QtPopUpMessage *popUp = QtPopUpMessage::createPopUp(QtPopUpMessage::INFORMATION,

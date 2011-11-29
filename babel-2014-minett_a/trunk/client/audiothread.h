@@ -11,7 +11,7 @@ public:
     AudioThread();
     virtual void run();
 private:
-    portAudio _pa;
+    //portAudio _pa;
 };
 
 #endif // AUDIOTHREAD_H

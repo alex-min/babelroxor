@@ -5,7 +5,6 @@
 #include "singleton.h"
 #include "islotinterface.h"
 #include "packet.h"
-#include "QtPopupMessage.h"
 
 class _ProtocolInterfaceSlot : public ISlotInterface
 {
