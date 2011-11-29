@@ -77,17 +77,17 @@ void    DockWidgetContent::showCallPopUp()
 
 void    DockWidgetContent::manageCall(int status)
 {
-    QtPopUpMessage *popup = qobject_cast<QtPopUpMessage*>(sender());
-    Status *stat =  StatusSingleton::getInstance();
+//    QtPopUpMessage *popup = qobject_cast<QtPopUpMessage*>(sender());
+//    Status *stat =  StatusSingleton::getInstance();
 
-    if (status == YES)
-        stat->sendCallStatus(CallAnswerSingleton::getInstance()->getLogin(), 1);
-    else if (status == NO)
-        stat->sendCallStatus(CallAnswerSingleton::getInstance()->getLogin(), 0);
+//    if (status == YES)
+//        stat->sendCallStatus(CallAnswerSingleton::getInstance()->getLogin(), 1);
+//    else if (status == NO)
+//        stat->sendCallStatus(CallAnswerSingleton::getInstance()->getLogin(), 0);
 
-    CallAnswerSingleton::getInstance()->resetLogin();
+//    CallAnswerSingleton::getInstance()->resetLogin();
 
-    popup->deleteLater();
+//    popup->deleteLater();
 }
 
 std::string const &    DockWidgetContent::getLogin()
@@ -104,27 +104,27 @@ void    DockWidgetContent::updateClientAvatar(std::string const &filename)
 
 void    DockWidgetContent::updateClientStatus(int status)
 {
-    StatusSingleton::getInstance()->updateStatus(_login, status);
+  //  StatusSingleton::getInstance()->updateStatus(_login, status);
 }
 
 void    DockWidgetContent::updateContactStatus(std::string const &login, Protocol::Status status)
 {
-    foreach (QListWidgetItem *item, _contactItemList)
-    {
-        QString log = QString(login.c_str());
+//    foreach (QListWidgetItem *item, _contactItemList)
+//    {
+//        QString log = QString(login.c_str());
 
-        if (item->text() == log)
-        {
-            QIcon ico;
-            int st = Status::getClientStatusFromProtocolStatus(status);
+//        if (item->text() == log)
+//        {
+//            QIcon ico;
+//            int st = Status::getClientStatusFromProtocolStatus(status);
 
-            if (st == -1)
-                return ;
+//            if (st == -1)
+//                return ;
 
-            ico = _statusComboBox.itemIcon(st);
-            item->setIcon(ico);
-        }
-    }
+//            ico = _statusComboBox.itemIcon(st);
+//            item->setIcon(ico);
+//        }
+//    }
 }
 
 void    DockWidgetContent::addClientContact(std::string const &login)

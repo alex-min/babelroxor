@@ -10,7 +10,7 @@ void    CallAnswer::onCall(Network *network, const std::string &login, void *dat
     if (!network || login == "" || !data || len < 0 || !header)
         return ;
 
-    DockWidgetContentSingleton::getInstance()->showCallPopUp();
+ //   DockWidgetContentSingleton::getInstance()->showCallPopUp();
 }
 
 std::string const &CallAnswer::getLogin()

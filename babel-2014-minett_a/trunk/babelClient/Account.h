@@ -24,7 +24,7 @@ class Account : public QWidget, public InterfaceAccount
 public:
     Account();
     virtual void    createAccount(std::string login, std::string password);
-    virtual void    logInAccount();
+    virtual void    logInAccount(std::string const &login, std::string const &password);
     ~Account();
 
 public slots:

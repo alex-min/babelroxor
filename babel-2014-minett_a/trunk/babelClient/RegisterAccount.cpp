@@ -1,6 +1,4 @@
 #include "RegisterAccount.h"
-#include "connectionlogin.h"
-#include "CallAnswer.h"
 #include <QDebug>
 
 namespace Graphic
@@ -105,8 +103,7 @@ void    RegisterAccount::validAccount(int status)
             //            Q_UNUSED(login);
             //            Q_UNUSED(password);
 
-            CallAnswerSingleton::getInstance()->getLogin();
-            // ConnectionLoginSingleton::getInstance()->registerAccount(login, password);
+            ConnectionLoginSingleton::getInstance()->registerAccount(login, password);
 
             RegisterAccount::close();
 
