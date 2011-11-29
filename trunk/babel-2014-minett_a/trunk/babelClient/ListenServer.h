@@ -2,7 +2,7 @@
 #define LISTENSERVER_H
 
 #include "singleton.h"
-#include "babelClient/Thread.h"
+#include "Thread.h"
 #include "iportablesocket.h"
 #include "network.h"
 #include "inetworkmanager.h"
