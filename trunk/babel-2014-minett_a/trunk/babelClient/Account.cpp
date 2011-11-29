@@ -48,14 +48,26 @@ Account::Account()
     connect(&_connectionButton, SIGNAL(clicked()), this, SLOT(logIn()));
 }
 
-void    Account::logInAccount()
+void    Account::logInAccount(std::string const &login, std::string const &password)
 {
-    //send a request to the server to logIn the account
+    ConnectionLoginSingleton::getInstance()->connect(login, password);
 }
 
 void    Account::logIn()
 {
-    logInAccount();
+    std::string login = _loginLineEdit.text().toStdString();
+    std::string password = _passwordLineEdit.text().toStdString();
+
+    if (login != "" && password != "")
+        logInAccount(login, password);
+    else
+    {
+        QtPopUpMessage *popUp = QtPopUpMessage::createPopUp(QtPopUpMessage::WARNING, "Warning", "You must fill all the fields to connect you to an account");
+
+        popUp->show();
+
+        connect(popUp, SIGNAL(finished(int)), popUp, SLOT(deleteLater()));
+    }
 }
 
 void    Account::createAccount(std::string login, std::string password)

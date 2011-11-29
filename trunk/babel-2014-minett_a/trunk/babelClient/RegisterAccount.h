@@ -12,6 +12,7 @@
 #include "CustomButton.h"
 #include "InterfaceRegisterAccount.h"
 #include "QtPopupMessage.h"
+#include "connectionlogin.h"
 
 namespace Graphic
 {

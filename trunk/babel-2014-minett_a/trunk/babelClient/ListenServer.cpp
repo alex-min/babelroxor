@@ -27,8 +27,8 @@ ListenServer::ListenServer()
 
 void    ListenServer::run(void)
 {
-    AudioThread t;
-    t.start();
+//    AudioThread t;
+  //  t.start();
 
     if (_connection)
         while (1)

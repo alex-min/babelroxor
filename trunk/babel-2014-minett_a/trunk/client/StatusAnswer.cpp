@@ -13,5 +13,5 @@ void    StatusAnswer::onCall(Network *network, std::string const & login, void *
 
     Protocol::Status *stat = static_cast<Protocol::Status *>(data);
 
-    DockWidgetContentSingleton::getInstance()->updateContactStatus(login, *stat);
+ //   DockWidgetContentSingleton::getInstance()->updateContactStatus(login, *stat);
 }
