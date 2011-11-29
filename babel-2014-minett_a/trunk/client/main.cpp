@@ -18,6 +18,7 @@
 #include "connecttome.h"
 #include "ListenServer.h"
 #include "MainWindow.h"
+#include "portaudio.h"
 
 int main(int ac, char **av)
 {
@@ -36,6 +37,7 @@ int main(int ac, char **av)
 
     ListenServer l;
     l.start();
+
 
     win->show();
 

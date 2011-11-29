@@ -2,6 +2,7 @@
 #define AUDIOSLOT_H
 #include "islotinterface.h"
 #include "singleton.h"
+#include "portaudio.h"
 
 class AudioSlot : public ISlotInterface
 {
