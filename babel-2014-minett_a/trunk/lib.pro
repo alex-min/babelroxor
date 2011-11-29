@@ -24,7 +24,7 @@ SOURCES += ./lib/iportablesocket.cpp \
     ./lib/requestconnectionslot.cpp \
     ./lib/testconnection.cpp \
     ./lib/proxyreceivedslot.cpp \
-    ./lib/account.cpp \
+    ./lib/account2.cpp \
     ./lib/contactlist.cpp \
     ./lib/timerpool.cpp \
     ./lib/packet.cpp \
@@ -56,7 +56,7 @@ HEADERS  += ./lib/iportablesocket.h \
     ./lib/requestconnectionslot.h \
     ./lib/testconnection.h \
     ./lib/proxyreceivedslot.h \
-    ./lib/account.h \
+    ./lib/account2.h \
     ./lib/contactlist.h \
     ./lib/timerpool.h \
     ./lib/packet.h \
