@@ -31,7 +31,8 @@ void Win32NetworkManager::run(long uTimeout)
     unsigned int size;
 
     memcpy(&_readfscpy, &_readfs, sizeof(fd_set));
-    if (select(this->_maxfd + 1, &_readfscpy, NULL, NULL, NULL) == SOCKET_ERROR)
+    if (select(this->_maxfd + 1, &_readfscpy, (_hasWriteFs == true) ? &_writefs : NULL, NULL,
+               (uTimeout == -1) ? NULL : &timeout) == SOCKET_ERROR)
         throw std::string("select function failed");
     for (std::list<Network *>::iterator it = _network.begin(); it != _network.end()
          ; ++it)
