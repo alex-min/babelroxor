@@ -12,7 +12,7 @@ void _ConnectToMe::sendConnnectToMe(std::string const &login, IPortableSocket::S
     ::memcpy(_buf + sizeof(Protocol::Status), &ip, sizeof(unsigned long));
     ::memcpy(_buf + sizeof(Protocol::Status) + sizeof(unsigned long), &port, sizeof(unsigned long));
     Protocol::getInstance()->send(login, Protocol::CONNECT_TO_ME,
-                                  _buf, sizeof(Protocol::Status) + (sizeof(unsigned long) * 2));
+                                  _buf, sizeof(Protocol::Status) + (sizeof(unsigned long) * 2), false);
 }
 
 void _ConnectToMe::onCall(Network *network, const std::string &login,

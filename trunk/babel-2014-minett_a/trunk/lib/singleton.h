@@ -19,8 +19,8 @@ public:
               _instance = new T();
             }
             _createInstanceMut.unlock();
-            return (_instance);
         }
+        return (_instance);
     }
 
     static void deleteInstance()

@@ -53,14 +53,14 @@ public:
     void send(std::string const &login,
               SlotType type,
               const void *data,
-              unsigned int length
-              );
+              unsigned int length,
+              bool mutex = false);
     void send(std::string const &login,
               SlotType type,
               const void *data,
               unsigned int length,
-              unsigned int packetReplyId
-              );
+              unsigned int packetReplyId,
+              bool mutex = false);
     static Protocol::Status sockTypeToStatus(IPortableSocket::SockType const & type);
     Packet *getPacket(unsigned int id, std::string const & login, Network *net);
     unsigned int getCurrentReplyId() const;
@@ -73,13 +73,13 @@ public:
     void readEvent(Network *network);
     void welcomeEvent(Network *network);
     static Protocol *getInstance();
-    void sendPacket(Network *network, SlotType type, const void *data, unsigned int length);
-    void sendPacket(Network *network, SlotType type, const void *data, unsigned int length, unsigned int packetId);
+    void sendPacket(Network *network, SlotType type, const void *data, unsigned int length, bool mutex = false);
+    void sendPacket(Network *network, SlotType type, const void *data, unsigned int length, unsigned int packetId,  bool mutex = false);
     void sendProxifiedPacket(Network *network, SlotType type, const void *data,
                              unsigned int length, std::string const &login, unsigned int packetId,
-                             bool resend = false);
+                             bool resend = false, bool mutex = false);
     void sendProxifiedPacket(Network *network, SlotType type, const void *data,
-                             unsigned int length, std::string const &login, bool resend = false);
+                             unsigned int length, std::string const &login, bool resend = false, bool mutex = false);
     void dispatchPacket(Network *network, std::string const &login, void *data, unsigned int len,
                         Protocol::NetworkPacket::NetworkHeader *header);
 
