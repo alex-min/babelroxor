@@ -12,7 +12,7 @@
 #include "CustomButton.h"
 #include "InterfaceRegisterAccount.h"
 #include "QtPopupMessage.h"
-#include "connectionlogin.h"
+#include "connectionlogine.h"
 
 namespace Graphic
 {
@@ -46,5 +46,7 @@ private:
     std::string _password;
 };
 }
+
+//typedef Singleton<Graphic::RegisterAccount>   ConnectionLoginSingleton;
 
 #endif // RegisterAccount_H

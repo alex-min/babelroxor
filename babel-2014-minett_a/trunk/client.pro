@@ -22,24 +22,28 @@ TEMPLATE = app
 
 SOURCES += ./client/main.cpp \
     client/audioslot.cpp \
-    client/connectionlogin.cpp \
     client/protocolinterfaceslot.cpp \
     client/requestlink.cpp \
     client/status.cpp \
     client/StatusAnswer.cpp \
     client/connecttome.cpp \
     client/CallAnswer.cpp \
-    client/audiothread.cpp
+    client/audiothread.cpp \
+    client/connectionlogine.cpp
 
 #HEADERS  +=
 
 HEADERS += \
     client/audioslot.h \
-    client/connectionlogin.h \
     client/protocolinterfaceslot.h \
     client/requestlink.h \
     client/status.h \
     client/StatusAnswer.h \
     client/connecttome.h \
     client/CallAnswer.h \
-    client/audiothread.h
+    client/audiothread.h \
+    client/connectionlogine.h
+
+
+
+

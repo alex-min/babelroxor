@@ -39,7 +39,6 @@ INPUT(
 ./release\portaudio.o
 ./release\main.o
 ./release\audioslot.o
-./release\connectionlogin.o
 ./release\protocolinterfaceslot.o
 ./release\requestlink.o
 ./release\status.o
@@ -47,6 +46,7 @@ INPUT(
 ./release\connecttome.o
 ./release\CallAnswer.o
 ./release\audiothread.o
+./release\connectionlogine.o
 ./release\moc_DockWidgetContent.o
 ./release\moc_CentralWidget.o
 ./release\moc_CustomButton.o
@@ -55,5 +55,6 @@ INPUT(
 ./release\moc_RegisterAccount.o
 ./release\moc_TalkWindow.o
 ./release\moc_QtPopupMessage.o
+./release\moc_ListenServer.o
 ./release\moc_TalkWindowManager.o
 );
