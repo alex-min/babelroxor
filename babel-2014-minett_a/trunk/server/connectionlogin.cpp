@@ -14,7 +14,7 @@ void ConnectionLogin::onCall(Network *network, const std::string &login,
     std::string lg = AccountManager::dataTologin(data, len);
     std::cout << "CALLING CONNECTION with login " << lg << " and network=" << network << std::endl;
 
-    Protocol::getInstance()->sendPacket(network, Protocol::STATUS, &_s, sizeof(Protocol::Status), header->_packetId);
+    Protocol::getInstance()->sendPacket(network, Protocol::STATUS, &_s, sizeof(Protocol::Status), header->_packetId, true);
     NetworkRouteSingleton::getInstance()->registerRoute(lg, network, false);
     AccountManager::getInstance()->setLoginToNetwork(network, lg);
 }

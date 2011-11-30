@@ -16,8 +16,8 @@ ListenServer::ListenServer()
     Protocol::getInstance()->registerSlot(Protocol::STATUS, StatusAnswerSingleton::getInstance());
     //    Protocol::getInstance()->registerSlot(Protocol::CALL, CallAnswerSingleton::getInstance());
 
-
-    if (!net->getSocket()->connect("127.0.0.1", 4646))
+    std::cout << "Connecting {{---}}" << std::endl;
+    if (!net->getSocket()->connect("10.18.207.136", 4646))
         _connection = false;
     else
         _connection = true;

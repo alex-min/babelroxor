@@ -5,13 +5,13 @@
 #include "portaudio.h"
 #include <QThread>
 
-class AudioThread// : public QThread
+class AudioThread : public QThread
 {
 public:
     AudioThread();
     virtual void run();
 private:
-    //portAudio _pa;
+    portAudio _pa;
 };
 
 #endif // AUDIOTHREAD_H
