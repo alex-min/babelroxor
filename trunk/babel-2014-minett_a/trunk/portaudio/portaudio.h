@@ -17,11 +17,16 @@
 
 /* Select sample format. */
 #if 1
-#define PA_SAMPLE_TYPE  paFloat32
-typedef float SAMPLE;
+#define PA_SAMPLE_TYPE  paInt16
+typedef short SAMPLE;
+#define SAMPLE_SILENCE  (0)
+#define PRINTF_S_FORMAT "%d"
+#elif 1
+/*#define PA_SAMPLE_TYPE  paFloat32
+typedef short SAMPLE;
 #define SAMPLE_SILENCE  (0.0f)
 #define PRINTF_S_FORMAT "%.8f"
-#elif 1
+#elif 1*/
 #define PA_SAMPLE_TYPE  paInt16
 typedef short SAMPLE;
 #define SAMPLE_SILENCE  (0)
@@ -55,7 +60,7 @@ public:
     int     play();
     int     record(bool writeToFile = false);
     void    delAll();
-    void    init(int sec = 200);
+    void    init(int sec = 500);
     void    setInput();
     void    setOutput();
     void    setFrames(SAMPLE *datas);

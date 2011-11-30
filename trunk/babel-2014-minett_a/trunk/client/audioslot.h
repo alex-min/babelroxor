@@ -9,6 +9,9 @@ class AudioSlot : public ISlotInterface
 public:
     virtual void onCall(Network *network, const std::string &login, void *data, unsigned int len, Protocol::NetworkPacket::NetworkHeader *header);
     AudioSlot();
+
+private:
+    portAudio _pa;
 };
 
 typedef Singleton<AudioSlot> AudioSlotSingle;
