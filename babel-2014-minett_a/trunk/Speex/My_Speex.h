@@ -66,32 +66,36 @@ namespace My_Speex
             public:
              Encode();
              ~Encode();
-            char * encode(short *b);
+            int encode(short *b);
 
             SpeexBits ebits;
             /*Holds bits so they can be read and written to by the Speex routines*/
             SpeexBits bits_enc;
+            int rate;
             float input[FRAME_SIZE];
-            char cbits[200];
+            char *cbits;
             int nbBytes;
             /*Holds the state of the encoder*/
             void *enc_state;
             int quality;
+            int frame_size;
         };
     class Decode
         {
             public:
              Decode();
              ~Decode();
-            SAMPLE * decode(char *decode, int size);
+            short * decode(char *decode, int size);
 
             SpeexBits bits_dec;
+            int rate;
             void *dec_state;
             /*Holds the audio that will be written to file (16 bits per sample)*/
-            short out[FRAME_SIZE];
+            short *out;
             /*Speex handle samples as float, so we need an array of floats*/
             float output[FRAME_SIZE];
             char cbits[200];
+             int frame_size;
             int nbBytes;
             /*Holds the state of the decoder*/
             SpeexBits bits;
