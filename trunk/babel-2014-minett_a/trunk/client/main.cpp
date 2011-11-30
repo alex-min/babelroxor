@@ -31,9 +31,7 @@ int main(int ac, char **av)
     QApplication app(ac, av);
     Graphic::MainWindow *win = MainWindowSingleton::getInstance();
 
-    std::cout << "BEFORE" << std::endl;
     ListenServerSingleton::getInstance()->start();
-    std::cout << "END" << std::endl;
 
     win->init();
 
@@ -44,9 +42,6 @@ int main(int ac, char **av)
         app.setStyleSheet(fileStyle.readAll());
         fileStyle.close();
     }
-
-    std::cout << "1" << std::endl;
-    std::cout << "2" << std::endl;
 
     win->show();
 

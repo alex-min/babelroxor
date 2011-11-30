@@ -6,6 +6,7 @@ CircularBuffer::CircularBuffer(unsigned int size)
     _len = size;
     _readPtr = 0;
     _writePtr = 0;
+    _m.create();
 }
 
 CircularBuffer::~CircularBuffer()
@@ -15,6 +16,8 @@ CircularBuffer::~CircularBuffer()
 
 unsigned int CircularBuffer::getReadSize() const
 {
+    ScopedLock s(const_cast<Mutex *>(&_m));
+
      if (_writePtr < _readPtr)
        return (_len - _readPtr + _writePtr);
      return (_writePtr - _readPtr);
@@ -22,6 +25,8 @@ unsigned int CircularBuffer::getReadSize() const
 
 void CircularBuffer::append(const void *ptr, unsigned int size)
 {
+    ScopedLock s(&_m);
+
     if (!ptr)
         return ;
     for (unsigned i = 0; i < size; ++i)
@@ -40,7 +45,9 @@ void CircularBuffer::append(const void *ptr, unsigned int size)
 
 bool CircularBuffer::hasCharacter(const char c) const
 {
-   int i;
+    ScopedLock s(const_cast<Mutex *>(&_m));
+
+    int i;
 
     for (i = _readPtr; i != _writePtr; ++i, i %= _len)
     {
@@ -52,6 +59,8 @@ bool CircularBuffer::hasCharacter(const char c) const
 
 unsigned int CircularBuffer::extract(void *buffer, unsigned int maxSize, const char delim)
 {
+    ScopedLock s(&_m);
+
     unsigned int i;
 
     if (!buffer)
@@ -73,6 +82,8 @@ unsigned int CircularBuffer::extract(void *buffer, unsigned int maxSize, const c
 
 char CircularBuffer::getByte()
 {
+    ScopedLock s(&_m);
+
     char  c;
 
     if (_writePtr == _readPtr)
@@ -85,6 +96,8 @@ char CircularBuffer::getByte()
 
 bool CircularBuffer::isEmpty() const
 {
+    ScopedLock s(const_cast<Mutex *>(&_m));
+
     if (_readPtr == _writePtr)
        return (1);
      return (0);
@@ -107,6 +120,8 @@ unsigned int CircularBuffer::dropBack(unsigned int size)
 
 unsigned int CircularBuffer::extractKeep(void *buffer, unsigned int maxSize, const char delim)
 {
+    ScopedLock s(&_m);
+
     unsigned int i;
     int buf_read_bak;
 
@@ -130,6 +145,8 @@ unsigned int CircularBuffer::extractKeep(void *buffer, unsigned int maxSize, con
 
 unsigned int CircularBuffer::restore(unsigned int size)
 {
+    ScopedLock s(&_m);
+
      int i;
 
      size %= _len;
@@ -139,6 +156,8 @@ unsigned int CircularBuffer::restore(unsigned int size)
 
 unsigned int CircularBuffer::drop(unsigned int size)
 {
+    ScopedLock s(&_m);
+
      unsigned int i;
      int j;
 

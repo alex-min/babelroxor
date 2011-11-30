@@ -30,10 +30,10 @@ void    ListenServer::run(void)
 {
     //    AudioThread t;
     //  t.start();
-
     if (!_connection)
         return;
 
+    AudioThreadSingleton::getInstance()->start();
     while (1)
     {
         QCoreApplication::processEvents();
@@ -51,6 +51,8 @@ void    ListenServer::emitConnectionPopUpWarning(std::string const &title, std::
 
 void    ListenServer::emitConnected()
 {
+    std::cout << "C'est bon !!" << std::endl;
+    AudioThreadSingleton::getInstance()->addLogin("lol");
     emit connected();
 }
 

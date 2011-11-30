@@ -101,22 +101,25 @@ void Protocol::send(std::string const &login,
             NetworkRouteSingleton::getInstance()->getRouteFromLogin(login);
     std::cout << "Protocol::Send : Route found from login : " << route << std::endl;
 
-    if (route)
+    if (route && login != "")
     {
         if (route->second._slotType == PROXY_DIRECT)
             Protocol::sendPacket(route->first, type, data, length, packetReplyId, mutex);
         else
-           Protocol::sendProxifiedPacket(route->first, type, data, length, login, packetReplyId, mutex);
+           Protocol::sendProxifiedPacket(route->first, type, data, length, login, packetReplyId, false, mutex);
     }
     else if (_defaultGateway)
     {
         if (login == "")
         {
+            std::cout << "Send by gateway" << std::endl;
             Protocol::sendPacket(_defaultGateway, type, data, length, packetReplyId, mutex);
         }
         else
         {
-            Protocol::sendProxifiedPacket(_defaultGateway, type, data, length, login, packetReplyId, mutex);
+            std::cout << "Send by PROXY (type=" << type << ") data=(" << data << ") length=(" << length << std::endl;
+            std::cout << "login=" << login << " mutex="  << mutex << std::endl;
+            Protocol::sendProxifiedPacket(_defaultGateway, type, data, length, login, packetReplyId, false, mutex);
             NetworkRouteSingleton::getInstance()->registerRoute(login, _defaultGateway, true);
         }
     }
@@ -144,12 +147,16 @@ void Protocol::sendProxifiedPacket(Network *network, SlotType type, const void *
 {
     NetworkPacket::NetworkHeader packetProxyHeader;
     NetworkPacket::NetworkHeader packet;
-    if (!mutex)
+    std::cout << mutex << std::endl;
+    std::cout << "1" << std::endl;
      ScopedLock s(&_m);
+    std::cout << "2" << std::endl;
 
 
     if (!network || !data)
           return ;
+    std::cout << "3" << std::endl;
+
     ::memset(&packet, 0, sizeof(NetworkPacket::NetworkHeader));
     packetProxyHeader._begin = 0x7;
     if (!resend)
@@ -181,7 +188,7 @@ void Protocol::sendProxifiedPacket(Network *network, SlotType type, const void *
 void Protocol::sendPacket(Network *network, SlotType type, const void *data, unsigned int length, unsigned int packetId, bool mutex)
 {
     NetworkPacket::NetworkHeader packet;
-    if (!mutex)
+    std::cout << "Protocol::sendPacket() : net:" << network << std::endl;
     ScopedLock s(&_m);
     if (!network)
           return ;
@@ -213,10 +220,9 @@ void Protocol::registerSlot(SlotType type, ISlotInterface *slot)
 
 void Protocol::readEvent(Network *network)
 {
-
     if (!network)
         return ;
-    std::cout << "Protocol::readEvent();" << std::endl;
+    std::cout << "Protocol::readEvent() (" <<  network->getReadBuffer()->getReadSize() << std::endl;
     // not enough for the network header
     if (network->getReadBuffer()->getReadSize() < sizeof(Protocol::NetworkPacket::NetworkHeader))
         return ;
@@ -228,6 +234,7 @@ void Protocol::readEvent(Network *network)
 }
 void Protocol::onReceivePacket(CircularBuffer *buf, Network *net)
 {
+
     unsigned int size;
 
     std::cout << "Protocol::onReceivePacket()" << std::endl;
@@ -276,8 +283,6 @@ void Protocol::dispatchPacket(Network *network, const std::string &login, void *
         ProxyReceivedSlotSingleton::getInstance()->onCall(network, login, data, len, header);
         return ;
     }
-    ScopedLock pd(&_m);
-
     Packet *p = 0;
 
     if (header)

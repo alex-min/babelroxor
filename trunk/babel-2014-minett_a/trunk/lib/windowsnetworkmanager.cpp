@@ -26,15 +26,16 @@ void Win32NetworkManager::run(long uTimeout)
     struct timeval timeout;
 
     timeout.tv_sec = 0;
-    timeout.tv_usec = uTimeout;
+    timeout.tv_usec = uTimeout * 1000;
     Win32NetworkManager::generateWriteFs();
     unsigned int size;
 
     memcpy(&_readfscpy, &_readfs, sizeof(fd_set));
+    //std::cout << "Select timeout " << uTimeout << std::endl;
     if (select(this->_maxfd + 1, &_readfscpy, (_hasWriteFs == true) ? &_writefs : NULL, NULL,
                (uTimeout == -1) ? NULL : &timeout) == SOCKET_ERROR)
-        throw std::string("select function failed");
-    for (std::list<Network *>::iterator it = _network.begin(); it != _network.end()
+            return ;
+     for (std::list<Network *>::iterator it = _network.begin(); it != _network.end()
          ; ++it)
     {
         if (FD_ISSET((*it)->getSocket()->Win32GetSocket(), &_readfscpy))
@@ -46,6 +47,7 @@ void Win32NetworkManager::run(long uTimeout)
               Protocol::getInstance()->welcomeEvent(n);
               return ;
             }
+            size = (*it)->getSocket()->read(_mainBuffer, 512);
             if (size == 0)
                 {
                 (*it)->getSocket()->disconnect();

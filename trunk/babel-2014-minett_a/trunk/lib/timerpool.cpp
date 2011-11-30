@@ -75,5 +75,7 @@ int TimerPool::getMsNextCall()
     }
     if (static_cast<unsigned int>(time) - _time.getMs() == 0)
         return (TimerPool::DEFAULT_TIMEOUT);
+    if (static_cast<unsigned int>(time) - _time.getMs() > TimerPool::DEFAULT_TIMEOUT)
+    return (TimerPool::DEFAULT_TIMEOUT);
     return (static_cast<unsigned int>(time) - _time.getMs());
 }

@@ -1,5 +1,7 @@
 #ifndef CIRCULARBUFFER_H
 #define CIRCULARBUFFER_H
+#include "mutex.h"
+#include "ScopedLock.h"
 
 class CircularBuffer
 {
@@ -21,7 +23,7 @@ protected:
     int     _readPtr;
     int     _writePtr;
     int     _len;
-
+    Mutex _m;
 };
 
 #endif // CIRCULARBUFFER_H
