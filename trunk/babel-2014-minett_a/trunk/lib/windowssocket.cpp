@@ -208,10 +208,16 @@ unsigned int Win32Socket::read(char *buf, unsigned int size)
     WSABUF  DataBuf;
     DWORD   SendBytes;
 
+    Win32Socket::WSAInit();
     DataBuf.buf = buf;
     DataBuf.len = size;
     if (this->_type == TCP)
-        ret = WSARecv(this->_sock, &DataBuf, 1, &SendBytes, 0, 0, NULL);
+    {
+        ret = ::recv(this->_sock, buf, size, 0);
+        SendBytes = ret;
+        // don't work at all
+     //   ret = WSARecv(this->_sock, &DataBuf, 1, &SendBytes, 0, 0, NULL);
+    }
     else if (this->_type == UDP)
     {
         SOCKADDR_IN sender;

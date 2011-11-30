@@ -9,7 +9,7 @@ void    portAudio::init(int msec)
 {
     _err = paNoError;
 
-    _data.maxFrameIndex = _totalFrames = ((msec / 1000) + 1) * SAMPLE_RATE;
+    _data.maxFrameIndex = _totalFrames = ((msec + 1 / 1000)) * SAMPLE_RATE;
     _data.frameIndex = 0;
     _numSamples = _totalFrames * NUM_CHANNELS;
     _numBytes = _numSamples * sizeof(SAMPLE);
@@ -74,7 +74,7 @@ int portAudio::record(bool writeToFile)
     if (writeToFile)
     {
         FILE  *fid;
-        fid = fopen("recorded.raw", "wb");
+        fid = fopen("toto4242.raw", "wb");
         if( fid == NULL )
         {
             printf("Could not open file.");
