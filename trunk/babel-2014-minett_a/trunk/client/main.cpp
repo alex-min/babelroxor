@@ -31,7 +31,9 @@ int main(int ac, char **av)
     QApplication app(ac, av);
     Graphic::MainWindow *win = MainWindowSingleton::getInstance();
 
+    std::cout << "BEFORE" << std::endl;
     ListenServerSingleton::getInstance()->start();
+    std::cout << "END" << std::endl;
 
     win->init();
 

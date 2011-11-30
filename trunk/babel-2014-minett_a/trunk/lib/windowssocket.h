@@ -30,6 +30,8 @@ public:
     virtual unsigned short getPort() const;
     int Win32GetSocket() const;
     SockType    getType() const;
+private:
+    void WSAInit();
 
 private:
     bool createClientSocket();
@@ -41,6 +43,8 @@ protected:
     bool                        _isServerSock;
     std::string                 _ip;
     char                        _ipbuf[30];
+    static WSADATA _wsaData;
+    static bool _init;
 };
 
 #endif

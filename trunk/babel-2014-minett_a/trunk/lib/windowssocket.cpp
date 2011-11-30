@@ -1,6 +1,8 @@
 #include "windowssocket.h"
 #ifdef OS_WINDOWS
 
+WSADATA Win32Socket::_wsaData = {0};
+bool Win32Socket::_init = false;
 int APortableSocket::_total_client_connected = 0;
 
 Win32Socket::Win32Socket()
@@ -27,14 +29,10 @@ int Win32Socket::Win32GetSocket() const
 
 bool Win32Socket::createServerSocket(IPortableSocket::SockType type, unsigned int port)
 {
-    WSADATA wsaData = {0};
 
     this->_isServerSock = true;
-    if ((WSAStartup(MAKEWORD(2, 2), &wsaData)) != 0)
-    {
-        std::cout << "[-] Cannot initialize WSAStartup" << std::endl;
-        return (false);
-    }
+    Win32Socket::WSAInit();
+
     this->_type = type;
     if (type == TCP)
         this->_sock = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
@@ -63,16 +61,11 @@ bool Win32Socket::createServerSocket(IPortableSocket::SockType type, unsigned in
 
 bool Win32Socket::createClientSocket()
 {
-    WSADATA wsaData = {0};
-
+    Win32Socket::WSAInit();
     this->_isServerSock = false;
     if (this->_sock != INVALID_SOCKET)
         closesocket(this->_sock);
-    if ((WSAStartup(MAKEWORD(2, 2), &wsaData)) != 0)
-    {
-        std::cout << "[-] Cannot initialize WSAStartup" << std::endl;
-        return (false);
-    }
+    Win32Socket::WSAInit();
     if (_type == TCP)
         this->_sock = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
     else if (_type == UDP)
@@ -80,6 +73,7 @@ bool Win32Socket::createClientSocket()
     if (this->_sock == INVALID_SOCKET)
         return (false);
     std::cout << "[+] Connecting..." << std::endl;
+    std::cout << this->_sock << std::endl;
     if (WSAConnect(this->_sock, (SOCKADDR *) &this->_sin, sizeof(this->_sin), NULL, NULL, NULL, NULL) == SOCKET_ERROR)
     {
         std::cout << "[-] Connection failed" << std::endl;
@@ -103,11 +97,26 @@ void Win32Socket::disconnect()
     }
 }
 
+void Win32Socket::WSAInit()
+{
+    if (_init == false)
+    {
+        if ((WSAStartup(MAKEWORD(2, 2), &_wsaData)) != 0)
+        {
+            std::cout << "[-] Cannot initialize WSAStartup" << std::endl;
+        }
+        _init = true;
+    }
+}
+
 bool Win32Socket::connect(std::string const & remote, unsigned int port, SockType type)
 {
-    struct hostent * record = gethostbyaddr(remote.c_str(), 4, AF_INET);
+    Win32Socket::WSAInit();
+    struct hostent * record = ::gethostbyname(remote.c_str());
+    std::cout << "Connecting... to " << remote << " at " << port <<  std::endl;
     if (!record)
         return (false);
+    std::cout << "HERE" << std::endl;
     in_addr * address = (in_addr * )record->h_addr;
     char * ip_address = inet_ntoa(* address);
 
@@ -115,7 +124,9 @@ bool Win32Socket::connect(std::string const & remote, unsigned int port, SockTyp
 
     this->_sin.sin_addr.s_addr = inet_addr(ip_address);
     this->_sin.sin_family = AF_INET;
-    WSAHtons(this->_sock, port, &this->_sin.sin_port);
+    this->_sin.sin_port = ::htons(port);
+    // Because WSAHTons don't work at all...
+    // WSAHtons(this->_sock, static_cast<short>(port), &(this->_sin.sin_port));
     this->_type = type;
     return (Win32Socket::createClientSocket());
 }
