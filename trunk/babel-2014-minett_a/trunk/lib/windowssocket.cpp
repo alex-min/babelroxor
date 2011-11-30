@@ -73,8 +73,7 @@ bool Win32Socket::createClientSocket()
     if (this->_sock == INVALID_SOCKET)
         return (false);
     std::cout << "[+] Connecting..." << std::endl;
-    std::cout << this->_sock << std::endl;
-    if (WSAConnect(this->_sock, (SOCKADDR *) &this->_sin, sizeof(this->_sin), NULL, NULL, NULL, NULL) == SOCKET_ERROR)
+    if (_type == TCP && WSAConnect(this->_sock, (SOCKADDR *) &this->_sin, sizeof(this->_sin), NULL, NULL, NULL, NULL) == SOCKET_ERROR)
     {
         std::cout << "[-] Connection failed" << std::endl;
         return (false);
