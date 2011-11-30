@@ -13,12 +13,18 @@
 #include "packet.h"
 #include "timerpool.h"
 #include "audioslot.h"
-#include "connectionlogin.h"
+#include "connectionlogine.h"
 #include "protocolinterfaceslot.h"
 #include "connecttome.h"
 #include "ListenServer.h"
 #include "MainWindow.h"
 #include "portaudio.h"
+
+#ifdef OS_WINDOWS
+#define start_entry qMain
+#else
+#define start_entry main
+#endif
 
 int main(int ac, char **av)
 {

@@ -39,7 +39,6 @@ INPUT(
 ./debug\portaudio.o
 ./debug\main.o
 ./debug\audioslot.o
-./debug\connectionlogin.o
 ./debug\protocolinterfaceslot.o
 ./debug\requestlink.o
 ./debug\status.o
@@ -47,6 +46,7 @@ INPUT(
 ./debug\connecttome.o
 ./debug\CallAnswer.o
 ./debug\audiothread.o
+./debug\connectionlogine.o
 ./debug\moc_DockWidgetContent.o
 ./debug\moc_CentralWidget.o
 ./debug\moc_CustomButton.o
@@ -55,5 +55,6 @@ INPUT(
 ./debug\moc_RegisterAccount.o
 ./debug\moc_TalkWindow.o
 ./debug\moc_QtPopupMessage.o
+./debug\moc_ListenServer.o
 ./debug\moc_TalkWindowManager.o
 );

@@ -19,7 +19,7 @@
 #include "packet.h"
 #include "timerpool.h"
 #include "audioslot.h"
-#include "connectionlogin.h"
+#include "connectionlogine.h"
 #include "protocolinterfaceslot.h"
 #include "StatusAnswer.h"
 #include "audiothread.h"
