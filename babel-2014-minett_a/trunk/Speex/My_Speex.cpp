@@ -44,7 +44,7 @@ My_Speex::Decode::~Decode()
 
 
 
-char * My_Speex::Encode::encode(short *b)
+int My_Speex::Encode::encode(short *b)
 {
 
     std::cout << frame_size << std::endl;
@@ -55,13 +55,13 @@ char * My_Speex::Encode::encode(short *b)
 //    int size = speex_bits_nbytes(&ebits);
     cbits = new char[(frame_size + 1) * sizeof(char)];
     nbBytes = speex_bits_write(&bits_enc, cbits, frame_size);
-    printf("%s\n", cbits);
+    //printf("%s\n", cbits);
     return (nbBytes);
 }
 
-SAMPLE * My_Speex::Decode::decode(char *decode, int size)
+short * My_Speex::Decode::decode(char *decode, int size)
 {
-    memset(out, 0, framesize + 1);
+    memset(out, 0, frame_size + 1);
     speex_bits_read_from(&bits_dec, decode, (int)strlen(decode));
      if (speex_decode_int(dec_state, &bits_dec, out) == -2)
      {
