@@ -14,6 +14,7 @@ void UNIXTime::setToMsTimeOfDay()
 
     ::gettimeofday(&t, NULL);
     _timems = t.tv_sec * 1000 + t.tv_usec / 100;
+    //std::cout << "Timems : " << t.tv_sec << " " << t.tv_usec << std::endl;
 }
 
 ITime &UNIXTime::operator- (ITime const &c) const

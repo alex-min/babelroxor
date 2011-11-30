@@ -3,11 +3,11 @@
 
 AudioThread::AudioThread()
 {
+    _m.create();
 }
 
 void AudioThread::addLogin(std::string const & login)
 {
-    ScopedLock s(&_m);
     _loginCall.push_back(login);
 }
 
@@ -19,6 +19,7 @@ std::list<std::string> & AudioThread::getLoginList()
 
 void AudioThread::run()
 {
+    _m.unlock();
     _pa.init(1);
     _pa.setInput();
     while (1)
