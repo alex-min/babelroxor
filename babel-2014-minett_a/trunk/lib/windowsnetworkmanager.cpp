@@ -35,6 +35,7 @@ void Win32NetworkManager::run(long uTimeout)
     if (select(this->_maxfd + 1, &_readfscpy, (_hasWriteFs == true) ? &_writefs : NULL, NULL,
                (uTimeout == -1) ? NULL : &timeout) == SOCKET_ERROR)
             return ;
+
      for (std::list<Network *>::iterator it = _network.begin(); it != _network.end()
          ; ++it)
     {
@@ -50,6 +51,7 @@ void Win32NetworkManager::run(long uTimeout)
             size = (*it)->getSocket()->read(_mainBuffer, 512);
             if (size == 0)
                 {
+                std::cout << "Disconnect ---" << std::endl;
                 (*it)->getSocket()->disconnect();
                 _network.erase(it);
                 Win32NetworkManager::generateReadFs();

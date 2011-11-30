@@ -19,7 +19,6 @@ std::list<std::string> & AudioThread::getLoginList()
 
 void AudioThread::run()
 {
-    while (1) { ::usleep(50000); }
     _pa.init(1);
     _pa.setInput();
     while (1)
@@ -27,9 +26,11 @@ void AudioThread::run()
         if (AudioThread::getLoginList().size() != 0)
         {
             std::cout << "On a du monde" << std::endl;
-            _pa.record();
+            _pa.record(1);
             SAMPLE *s = _pa.getFrames();
+            std::cout << "Size:" << (int)_pa.getFrameSize() << std::endl;
             Protocol::getInstance()->send("lol", Protocol::AUDIO, s, 200, 333, true);
+            exit(1);
         }
         else {
             usleep(50000);

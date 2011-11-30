@@ -148,14 +148,11 @@ void Protocol::sendProxifiedPacket(Network *network, SlotType type, const void *
     NetworkPacket::NetworkHeader packetProxyHeader;
     NetworkPacket::NetworkHeader packet;
     std::cout << mutex << std::endl;
-    std::cout << "1" << std::endl;
-     ScopedLock s(&_m);
-    std::cout << "2" << std::endl;
+    ScopedLock s(&_m);
 
 
     if (!network || !data)
           return ;
-    std::cout << "3" << std::endl;
 
     ::memset(&packet, 0, sizeof(NetworkPacket::NetworkHeader));
     packetProxyHeader._begin = 0x7;
