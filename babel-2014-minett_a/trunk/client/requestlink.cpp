@@ -14,7 +14,7 @@ bool RequestLink::createServerSock(std::string const &login)
     _port = 7536;
     short unsigned int id = Protocol::getInstance()->getCurrentReplyId();
     std::cout << "RequestLink::createServerSock() : id = " << id << std::endl;
-    TestConnectionSingleton::getInstance()->send(login, IPortableSocket::TCP, 7536);
+    TestConnectionSingleton::getInstance()->send(login, IPortableSocket::TCP, 7536, false);
     Protocol::getInstance()->registerPacketId(id, login, Protocol::getInstance()->getDefaultGetaway(),
                                               RequestLinkSingleton::getInstance(),
                                               reinterpret_cast<Protocol::SlotCall> (&RequestLink::testConnection),

@@ -10,5 +10,5 @@ void    Audio::onCall(Network *network, std::string const & login, void *data, u
     std::cout << "Length : " << len << std::endl;
     std::cout << "Audio Packet received : " << std::string((char *) data, len) << std::endl;
     std::cout << "from " << login << std::endl;
-    Protocol::getInstance()->send(login, Protocol::AUDIO, "test", 4, 4);
+    Protocol::getInstance()->send(login, Protocol::AUDIO, "test", 4, 4, true);
 }

@@ -76,22 +76,23 @@ void Protocol::unregisterPacket(unsigned short id, std::string const &login)
    }
 }
 
+
 void Protocol::send(std::string const &login,
-          SlotType type,
+           SlotType type,
           const void *data,
-          unsigned int length
-          )
+          unsigned int length,
+          bool mutex)
 {
 
-    Protocol::send(login, type, data, length, _packetCount);
+    Protocol::send(login, type, data, length, _packetCount, mutex);
 }
 
 void Protocol::send(std::string const &login,
            SlotType type,
           const void *data,
           unsigned int length,
-          unsigned int packetReplyId
-          )
+          unsigned int packetReplyId,
+          bool mutex)
 {
 
     if (!data)
@@ -103,19 +104,19 @@ void Protocol::send(std::string const &login,
     if (route)
     {
         if (route->second._slotType == PROXY_DIRECT)
-            Protocol::sendPacket(route->first, type, data, length, packetReplyId);
+            Protocol::sendPacket(route->first, type, data, length, packetReplyId, mutex);
         else
-           Protocol::sendProxifiedPacket(route->first, type, data, length, login, packetReplyId);
+           Protocol::sendProxifiedPacket(route->first, type, data, length, login, packetReplyId, mutex);
     }
     else if (_defaultGateway)
     {
         if (login == "")
         {
-            Protocol::sendPacket(_defaultGateway, type, data, length, packetReplyId);
+            Protocol::sendPacket(_defaultGateway, type, data, length, packetReplyId, mutex);
         }
         else
         {
-            Protocol::sendProxifiedPacket(_defaultGateway, type, data, length, login, packetReplyId);
+            Protocol::sendProxifiedPacket(_defaultGateway, type, data, length, login, packetReplyId, mutex);
             NetworkRouteSingleton::getInstance()->registerRoute(login, _defaultGateway, true);
         }
     }
@@ -133,17 +134,18 @@ void Protocol::defaultGateway(Network *network)
 }
 
 void Protocol::sendProxifiedPacket(Network *network, SlotType type, const void *data, unsigned int length,
-                                   std::string const &login, bool resend)
+                                   std::string const &login, bool resend, bool mutex)
 {
-    Protocol::sendProxifiedPacket(network, type, data, length, login, _packetCount, resend);
+    Protocol::sendProxifiedPacket(network, type, data, length, login, _packetCount, resend, mutex);
 }
 
 void Protocol::sendProxifiedPacket(Network *network, SlotType type, const void *data, unsigned int length,
-                                   std::string const &login, unsigned int packetId, bool resend)
+                                   std::string const &login, unsigned int packetId, bool resend,  bool mutex)
 {
     NetworkPacket::NetworkHeader packetProxyHeader;
     NetworkPacket::NetworkHeader packet;
-    ScopedLock s(&_m);
+    if (!mutex)
+     ScopedLock s(&_m);
 
 
     if (!network || !data)
@@ -176,9 +178,10 @@ void Protocol::sendProxifiedPacket(Network *network, SlotType type, const void *
 
 
 
-void Protocol::sendPacket(Network *network, SlotType type, const void *data, unsigned int length, unsigned int packetId)
+void Protocol::sendPacket(Network *network, SlotType type, const void *data, unsigned int length, unsigned int packetId, bool mutex)
 {
     NetworkPacket::NetworkHeader packet;
+    if (!mutex)
     ScopedLock s(&_m);
     if (!network)
           return ;
@@ -196,9 +199,9 @@ void Protocol::sendPacket(Network *network, SlotType type, const void *data, uns
     //PortableSocket::send(reinterpret_cast<char *>(&packet), length);
 }
 
-void Protocol::sendPacket(Network *network, SlotType type, const void *data, unsigned int length)
+void Protocol::sendPacket(Network *network, SlotType type, const void *data, unsigned int length, bool mutex)
 {
-    Protocol::sendPacket(network, type, data, length, _packetCount);
+    Protocol::sendPacket(network, type, data, length, _packetCount, mutex);
 }
 
 void Protocol::registerSlot(SlotType type, ISlotInterface *slot)
@@ -276,6 +279,7 @@ void Protocol::dispatchPacket(Network *network, const std::string &login, void *
     ScopedLock pd(&_m);
 
     Packet *p = 0;
+
     if (header)
     p = Protocol::getInstance()->getPacket(header->_packetId, login, network);
     if (header && p)

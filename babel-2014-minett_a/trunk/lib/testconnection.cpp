@@ -47,7 +47,7 @@ void    TestConnection::onCall(Network *network, std::string const &login, void 
         default:
         sendStatus = Protocol::FAILED;
         Protocol::getInstance()->send(login, Protocol::TEST_CONNECTION, &sendStatus, sizeof(Protocol::Status),
-                                      header->_packetId);
+                                      header->_packetId, true);
         return ;
         break;
     }
@@ -60,5 +60,5 @@ void    TestConnection::onCall(Network *network, std::string const &login, void 
     {
         sendStatus = Protocol::FAILED;
     }
-   Protocol::getInstance()->send(login, Protocol::TEST_CONNECTION, &sendStatus, sizeof(Protocol::Status), header->_packetId);
+   Protocol::getInstance()->send(login, Protocol::TEST_CONNECTION, &sendStatus, sizeof(Protocol::Status), header->_packetId, true);
 }

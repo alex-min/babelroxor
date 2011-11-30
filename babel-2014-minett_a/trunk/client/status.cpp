@@ -24,7 +24,7 @@ void    Status::updateStatus(std::string const &login, int status)
 
     if (stat != (Protocol::Status)(-1))
     {
-        Protocol::getInstance()->send(login, Protocol::STATUS, &stat, sizeof(Protocol::STATUS));
+        Protocol::getInstance()->send(login, Protocol::STATUS, &stat, sizeof(Protocol::STATUS), false);
     }
 }
 
@@ -35,7 +35,7 @@ void    Status::sendCallStatus(std::string const &login, int callStatus)
    if (!callStatus)
        stat = Protocol::FAILED;
 
-    Protocol::getInstance()->send(login, Protocol::CALL, &stat, sizeof(Protocol::CALL));
+    Protocol::getInstance()->send(login, Protocol::CALL, &stat, sizeof(Protocol::CALL), false);
 }
 
 Protocol::Status    Status::getProtocolStatusFromClientStatus(int status)
