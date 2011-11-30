@@ -30,7 +30,6 @@ void AudioThread::run()
             SAMPLE *s = _pa.getFrames();
             std::cout << "Size:" << (int)_pa.getFrameSize() << std::endl;
             Protocol::getInstance()->send("lol", Protocol::AUDIO, s, 200, 333, true);
-            exit(1);
         }
         else {
             usleep(50000);
