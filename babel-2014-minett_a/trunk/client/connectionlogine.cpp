@@ -11,7 +11,7 @@ void ConnectionLogin::connect(const std::string &login, const std::string &passw
     short unsigned int id = Protocol::getInstance()->getCurrentReplyId();
 
     Protocol::getInstance()->send("", Protocol::CONNECTION, std::string(login + std::string("\0", 1) + password).c_str(),
-                   login.length() + password.length() + 1, id, true);
+                   login.length() + password.length() + 1, id, false);
     Protocol::getInstance()->registerPacketId(id, login, Protocol::getInstance()->getDefaultGetaway(),
                                               ProtocolInterfaceSlot::getInstance(),
                                               reinterpret_cast<Protocol::SlotCall> (&_ProtocolInterfaceSlot::loginSlot),
@@ -26,7 +26,7 @@ void    ConnectionLogin::registerAccount(std::string const &login, std::string c
     short unsigned int id = Protocol::getInstance()->getCurrentReplyId();
 
     Protocol::getInstance()->send("", Protocol::REGISTER, std::string(login + std::string("\0", 1) + password).c_str(),
-                   login.length() + password.length() + 1, id, true);
+                   login.length() + password.length() + 1, id, false);
 
     Protocol::getInstance()->registerPacketId(id, login, Protocol::getInstance()->getDefaultGetaway(),
                                               ProtocolInterfaceSlot::getInstance(),

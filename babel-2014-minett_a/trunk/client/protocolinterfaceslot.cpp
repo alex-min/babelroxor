@@ -18,7 +18,6 @@ void _ProtocolInterfaceSlot::loginSlot(bool timeout, Packet *p)
     }
 
     std::cout << "[ok] Connection success to server" << std::endl;
-    RequestLinkSingleton::getInstance()->createNewLink("oo");
 
     ListenServerSingleton::getInstance()->emitConnected();
 }

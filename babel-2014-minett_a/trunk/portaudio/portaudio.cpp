@@ -5,11 +5,11 @@ portAudio::portAudio()
 
 }
 
-void    portAudio::init(int sec)
+void    portAudio::init(int msec)
 {
     _err = paNoError;
 
-    _data.maxFrameIndex = _totalFrames = sec * SAMPLE_RATE;
+    _data.maxFrameIndex = _totalFrames = ((msec / 1000) + 1) * SAMPLE_RATE;
     _data.frameIndex = 0;
     _numSamples = _totalFrames * NUM_CHANNELS;
     _numBytes = _numSamples * sizeof(SAMPLE);

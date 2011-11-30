@@ -55,7 +55,7 @@ public:
     int     play();
     int     record(bool writeToFile = false);
     void    delAll();
-    void    init(int sec = 5);
+    void    init(int sec = 200);
     void    setInput();
     void    setOutput();
     void    setFrames(SAMPLE *datas);
