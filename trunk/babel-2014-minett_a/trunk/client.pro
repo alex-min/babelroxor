@@ -10,6 +10,7 @@ SUBDIRS += babelClient
 include(lib.pro)
 include(babelClient.pro)
 include(portaudio.pro)
+include(Speex.pro)
 
 INCLUDEPATH += ./lib
 INCLUDEPATH += ./babelClient
@@ -43,6 +44,9 @@ HEADERS += \
     client/CallAnswer.h \
     client/audiothread.h \
     client/connectionlogine.h
+
+
+
 
 
 

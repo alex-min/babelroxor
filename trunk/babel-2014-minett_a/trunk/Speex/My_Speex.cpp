@@ -4,10 +4,15 @@
 
 My_Speex::Encode::Encode()
 {
-    quality = 8;
+    frame_size = 0;
+    quality = 5;
+    rate = 8000;
     speex_bits_init(&bits_enc);
-    enc_state = speex_encoder_init(speex_lib_get_mode(SPEEX_MODEID_NB));
+    enc_state = speex_encoder_init(speex_lib_get_mode(SPEEX_MODEID_WB));
     speex_encoder_ctl(enc_state, SPEEX_SET_QUALITY, &quality);
+    speex_encoder_ctl(enc_state, SPEEX_GET_FRAME_SIZE, &frame_size);
+    speex_encoder_ctl(enc_state, SPEEX_SET_SAMPLING_RATE, &rate);
+    //speex_encoder_ctl(enc_state, SPEEX_SET_VAD, &on);
 }
 
 My_Speex::Encode::~Encode()
@@ -19,11 +24,16 @@ My_Speex::Encode::~Encode()
 
 My_Speex::Decode::Decode()
 {
-    dec_state = speex_decoder_init(speex_lib_get_mode(SPEEX_MODEID_NB));
+    frame_size = 0;
+     rate = 8000;
+    dec_state = speex_decoder_init(speex_lib_get_mode(SPEEX_MODEID_WB));
      /*Set the perceptual enhancement on*/
-    tmp=1;
-    speex_decoder_ctl(dec_state, SPEEX_SET_ENH, &tmp);
+ //   tmp=1;
+  //  speex_decoder_ctl(dec_state, SPEEX_SET_ENH, &tmp);
     speex_bits_init(&bits_dec);
+    speex_decoder_ctl(dec_state, SPEEX_GET_FRAME_SIZE, &frame_size);
+    speex_decoder_ctl(dec_state, SPEEX_SET_SAMPLING_RATE, &rate);
+    out = new short[(frame_size + 1) * sizeof(short)];
 }
 
 My_Speex::Decode::~Decode()
@@ -36,33 +46,42 @@ My_Speex::Decode::~Decode()
 
 char * My_Speex::Encode::encode(short *b)
 {
-    int i;
 
-    for (i=0;i<FRAME_SIZE;i++)
-        input[i]=b[i];
-
+    std::cout << frame_size << std::endl;
     speex_bits_reset(&bits_enc);
-    speex_encode(enc_state, input, &bits_enc);
+    speex_encode_int(enc_state, b, &bits_enc);
+  //  speex_encode(enc_state, input, &bits_enc);
 
 //    int size = speex_bits_nbytes(&ebits);
-
-    nbBytes = speex_bits_write(&bits_enc, cbits, 200);
-    return (cbits);
+    cbits = new char[(frame_size + 1) * sizeof(char)];
+    nbBytes = speex_bits_write(&bits_enc, cbits, frame_size);
+    printf("%s\n", cbits);
+    return (nbBytes);
 }
 
 SAMPLE * My_Speex::Decode::decode(char *decode, int size)
 {
-    int i;
-    std::cout << size << std::endl;
-    speex_bits_read_from(&bits_dec, cbits, size);
-    std::cout << "eeeee" << std::endl;
-    int frame_size = 0;
-    speex_decoder_ctl(dec_state, SPEEX_GET_FRAME_SIZE, &frame_size);
+    memset(out, 0, framesize + 1);
+    speex_bits_read_from(&bits_dec, decode, (int)strlen(decode));
+     if (speex_decode_int(dec_state, &bits_dec, out) == -2)
+     {
+         std::cout << "decode fail chuck" << std::endl;
+     }
 
-    speex_decode(dec_state, &bits_dec, output);
-    for (i=0;i<FRAME_SIZE;i++)
-     out[i]=output[i];
-    return (SAMPLE *)out;
+ //    int i;
+ //    std::cout << size << std::endl;
+ //    speex_bits_read_from(&bits_dec, cbits, size);
+ //    std::cout << "eeeee" << std::endl;
+ //    int frame_size = 0;
+ //    speex_decoder_ctl(dec_state, SPEEX_GET_FRAME_SIZE, &frame_size);
+
+  //   speex_decode(dec_state, &bits_dec, output);
+ //    for (i=0;i<FRAME_SIZE;i++)
+ //     out[i]=output[i];
+ //    int i;
+ //           for (i=0;i<20;i++)
+ //              printf("%hu:", out[i]);
+     return out;
 }
 
 
