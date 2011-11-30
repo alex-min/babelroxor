@@ -22,6 +22,12 @@
 
 int	MAIN(int ac, char **av)
 {
+    PortableTime pr;
+
+//    while (1) {
+  //   pr.setToMsTimeOfDay();
+
+    //}
     PortableTime *test = new PortableTime();
     test->setToMsTimeOfDay();
 

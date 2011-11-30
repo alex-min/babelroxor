@@ -8,6 +8,7 @@
 #include "packet.h"
 #include "testconnection.h"
 #include "networkroute.h"
+#include "inetworkmanager.h"
 #include <string>
 
 class RequestLink : public ISlotInterface
@@ -19,6 +20,7 @@ public:
     virtual void testConnection(bool timeout, Packet *);
     virtual void    onCall(Network *network, std::string const &login, void *data, unsigned int len,
                            Protocol::NetworkPacket::NetworkHeader *header);
+    virtual void calling(bool timeout, Packet *);
 
 protected:
     Network        _net;

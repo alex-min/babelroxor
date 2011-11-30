@@ -25,6 +25,7 @@ HEADERS += ./portaudio/portaudio.h \
 
 
 win32: LIBS += -L./portaudio/ -lportaudio_x86
+unix: LIBS += -L./usr/local/lib/ -lportaudio
 
 INCLUDEPATH += ./portaudio/
 DEPENDPATH += ./portaudio/

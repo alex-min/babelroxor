@@ -28,6 +28,7 @@
 
 int main(int ac, char **av)
 {
+
     QApplication app(ac, av);
     Graphic::MainWindow *win = MainWindowSingleton::getInstance();
 

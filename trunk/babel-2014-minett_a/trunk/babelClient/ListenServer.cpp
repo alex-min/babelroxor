@@ -53,6 +53,7 @@ void    ListenServer::emitConnected()
 {
     std::cout << "C'est bon !!" << std::endl;
     AudioThreadSingleton::getInstance()->addLogin("lol");
+    std::cout << "C'est bon !!" << std::endl;
     emit connected();
 }
 

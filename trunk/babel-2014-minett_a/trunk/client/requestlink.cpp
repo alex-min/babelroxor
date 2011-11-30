@@ -19,23 +19,25 @@ bool RequestLink::createServerSock(std::string const &login)
                                               RequestLinkSingleton::getInstance(),
                                               reinterpret_cast<Protocol::SlotCall> (&RequestLink::testConnection),
                                               Protocol::DEFAULT_TIMEOUT);
+
+}
+
+void RequestLink::calling(bool timeout, Packet *)
+{
+    if (timeout)
+    {
+
+    }
 }
 
 void RequestLink::createNewLink(std::string const &login)
 {
     if (login == "")
         return ;
-   std::pair<Network *, Protocol::NetworkPacket::NetworkHeader> *p =
-           NetworkRouteSingleton::getInstance()->getRouteFromLogin(login);
-   if (!p)
-   {
-        RequestLink::createServerSock(login);
-   }
-   else
-   {
-
-       std::cout << "RequestLink::createNewLink(): route already created" << std::endl;
-   }
+    if (!_serverSockExist)
+     RequestLink::createServerSock(login);
+    else
+     RequestLink::calling(false, NULL);
 }
 
 void RequestLink::testConnection(bool timeout, Packet *p)
@@ -46,6 +48,7 @@ void RequestLink::testConnection(bool timeout, Packet *p)
         Protocol::getInstance()->send(p->getLogin(), Protocol::REQUEST_CONNECTION, NULL, 0);
         return ;
     }
+    _serverSockExist = true;
     std::cout << "here:RequestLink::testConnection();" << std::endl;
     if (p->getData() != NULL && p->getLen() >= sizeof(Protocol::Status) + 4)
     {
@@ -56,6 +59,7 @@ void RequestLink::testConnection(bool timeout, Packet *p)
                                                      _type,
                                                      NetworkRouteSingleton::getInstance()->getuIp(),
                                                      _port);
+        PortableNetworkManagerSingle::getInstance()->addNetwork(&_net);
     }
 
 }
