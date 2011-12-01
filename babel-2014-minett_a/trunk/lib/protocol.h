@@ -44,7 +44,7 @@ public:
                    REQUEST_CONNECTION,
                    CONNECT_TO_ME,
                    TEST_CONNECTION,
-                   CONNECTION_STATUS, CALL, PING};
+                   CONNECTION_STATUS, CALL, PING, REQUEST_STATUS};
     enum Status {ONLINE, OFFLINE, BUSY, ONCALL,
                  DISCONNECTED, NEED_REGISTRATION, INVALID_PACKET,
                  OK, FAILED, TCP, UDP, PONG};

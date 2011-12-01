@@ -1,4 +1,5 @@
 #include "DockWidgetContent.h"
+#include "ListenServer.h"
 #include <QDebug>
 
 namespace Graphic
@@ -62,6 +63,11 @@ DockWidgetContent::DockWidgetContent()
     connect(&_avatarButton, SIGNAL(clicked()), this, SLOT(chooseAvatar()));
 }
 
+void    DockWidgetContent::updateStatusForContact(const QString &login, int status)
+{
+        updateContactStatus(login.toStdString(), status);
+}
+
 void    DockWidgetContent::setLogin(const std::string &login)
 {
     _loginLabel.setText(QString(login.c_str()));
@@ -110,36 +116,31 @@ void    DockWidgetContent::updateClientAvatar(std::string const &filename)
 
 void    DockWidgetContent::updateClientStatus(int status)
 {
-  //  StatusSingleton::getInstance()->updateStatus(_login, status);
+    emit clientStatus(QString(_login.c_str()), status);
 }
 
-void    DockWidgetContent::updateContactStatus(std::string const &login, Protocol::Status status)
+void    DockWidgetContent::updateContactStatus(std::string const &login, int status)
 {
-//    foreach (QListWidgetItem *item, _contactItemList)
-//    {
-//        QString log = QString(login.c_str());
+    foreach (QListWidgetItem *item, _contactItemList)
+    {
+        QString log = QString(login.c_str());
 
-//        if (item->text() == log)
-//        {
-//            QIcon ico;
-//            int st = Status::getClientStatusFromProtocolStatus(status);
+        if (item->text() == log)
+        {
+            QIcon ico;
 
-//            if (st == -1)
-//                return ;
+            if (status == -1)
+                return ;
 
-//            ico = _statusComboBox.itemIcon(st);
-//            item->setIcon(ico);
-//        }
-//    }
+            ico = _statusComboBox.itemIcon(status);
+            item->setIcon(ico);
+        }
+    }
 }
 
 void    DockWidgetContent::addClientContact(std::string const &login)
 {
-    Q_UNUSED(login);
-
-    // request to server to ask if we can add the Contact
-    // if yes, so we add the contact in the list
-    // what is his status so that we can set the icon to the QListWidgetItem to show it
+    emit newClient(QString(login.c_str()));
 }
 
 void    DockWidgetContent::removeCurrentClientContact(std::string const &login)

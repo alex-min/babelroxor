@@ -1,6 +1,7 @@
 #include "CentralWidget.h"
 #include "requestlink.h"
 #include <QDebug>
+#include <requestlink.h>
 
 namespace Graphic
 {
@@ -67,7 +68,7 @@ void    CentralWidget::call()
         w->setContactLogin(currentContactLogin);
         _windowManager->addContact(w, QIcon("../trunk/images/onCall.png"));
 
-       // w->show();
+        // w->show();
     }
 
     callClient(currentContactLogin);

@@ -16,9 +16,15 @@ TEMPLATE = app
 
 
 SOURCES += ./server/main.cpp \
-    server/connectionlogin.cpp
+    server/connectionlogin.cpp \
+    server/registeraccount.cpp
 
 #HEADERS  += 
 
 HEADERS += \
-    server/connectionlogin.h
+    server/connectionlogin.h \
+    server/registeraccount.h
+
+
+
+

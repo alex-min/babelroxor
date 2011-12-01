@@ -70,10 +70,10 @@ void UNIXNetworkManager::run(long uTimeout)
             if ((*it)->getSocket()->isServerSock())
             {
                 std::cout << "Waiting for client" << std::endl;
-              Network *n = new Network((*it)->getSocket()->waitForClient());
-              UNIXNetworkManager::addNetwork(n);
-              Protocol::getInstance()->welcomeEvent(n);
-              return ;
+                Network *n = new Network((*it)->getSocket()->waitForClient());
+                UNIXNetworkManager::addNetwork(n);
+                Protocol::getInstance()->welcomeEvent(n);
+                return ;
             }
             size = (*it)->getSocket()->read(_mainBuffer, 512);
             if (size == 0)
@@ -81,18 +81,18 @@ void UNIXNetworkManager::run(long uTimeout)
                 std::cout << "client disconnected" << std::endl;
                 (*it)->getSocket()->disconnect();
                 NetworkRouteSingleton::getInstance()->eraseRoute(
-                            AccountManager::getInstance()->getLoginFromNetwork(*it));
-                AccountManager::getInstance()->removeNetwork(*it);
+                            AccountManagerSingleton::getInstance()->getLoginFromNetwork(*it));
+                AccountManagerSingleton::getInstance()->removeNetwork(*it);
                 _network.erase(it);
                 std::cout << _network.size() << " sockets remaining..." << std::endl;
                 UNIXNetworkManager::generateReadFs();
                 return ;
             }
             else
-               {
+            {
                 (*it)->getReadBuffer()->append(_mainBuffer, size);
                 Protocol::getInstance()->readEvent(*it);
-               }
+            }
         }
         else if (FD_ISSET((*it)->getSocket()->UNIXGetSocket(), &_writefs))
         {

@@ -11,7 +11,7 @@ void _ProtocolInterfaceSlot::loginSlot(bool timeout, Packet *p)
 {
     if (timeout || !p || p->getStatus() == Protocol::FAILED)
     {
-        ListenServerSingleton::getInstance()->emitConnectionPopUpWarning("Log-in", "Your login or password is wrong.");
+        ListenServerSingleton::getInstance()->emitWarningPopUp("Log-in", "Your login or password is wrong.");
 
         std::cerr << "[err] Cannot login to host : " << timeout << std::endl;
         return ;
@@ -26,10 +26,7 @@ void _ProtocolInterfaceSlot::registerSlot(bool timeout, Packet *p)
 {
     if (timeout || !p || p->getStatus() == Protocol::FAILED)
     {
-        //        Graphic::QtPopUpMessage *popup = Graphic::QtPopUpMessage::createPopUp(Graphic::QtPopUpMessage::WARNING,
-        //                                                                              "Validation account", "Your account cannot be created.");
-
-        //        QObject::connect(popup, SIGNAL(finished(int)), popup, SLOT(deleteLater()));
+        ListenServerSingleton::getInstance()->emitWarningPopUp("Validation account", "This account already exist.");
 
         std::cerr << "[err] Cannot register account to host : " << timeout << std::endl;
         return ;
@@ -37,8 +34,5 @@ void _ProtocolInterfaceSlot::registerSlot(bool timeout, Packet *p)
 
     std::cout << "[ok] Register success" << std::endl;
 
-    //    Graphic::QtPopUpMessage *popup = Graphic::QtPopUpMessage::createPopUp(Graphic::QtPopUpMessage::INFORMATION,
-    //                                                                          "Validation account", "Your account is successfully created.");
-
-    //    QObject::connect(popup, SIGNAL(finished(int)), popup, SLOT(deleteLater()));
+    ListenServerSingleton::getInstance()->emitSuccessPopUp("Validation account", "Your account is successfully created.");
 }

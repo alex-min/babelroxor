@@ -13,6 +13,7 @@
 #include "packet.h"
 #include "timerpool.h"
 #include "connectionlogin.h"
+#include "registeraccount.h"
 
 #ifdef OS_UNIX
 #define MAIN    main
@@ -31,21 +32,15 @@ int	MAIN(int ac, char **av)
     PortableTime *test = new PortableTime();
     test->setToMsTimeOfDay();
 
-    //    std::cout << "ok" << std::endl;
     Network *net = new Network;
-    //    std::cout << "ok" << std::endl;
     Protocol *proto = Protocol::getInstance();
-    // std::cout << "ok" << std::endl;
-     ProxySlot *p = new ProxySlot;
-    // std::cout << "ok" << std::endl;
+    ProxySlot *p = new ProxySlot;
+
     proto->registerSlot(Protocol::CONNECTION, ConnectionLoginSlot::getInstance());
-    // std::cout << "ok" << std::endl;
+    proto->registerSlot(Protocol::REGISTER, RegisterAccountSingleton::getInstance());
     proto->registerSlot(Protocol::PROXY_FORWARD, p);
-    // std::cout << "ok" << std::endl;
     proto->registerSlot(Protocol::TEST_CONNECTION, TestConnectionSingleton::getInstance());
-    // std::cout << "ok" << std::endl;
     proto->registerSlot(Protocol::PROXY_RECEIVED, ProxyReceivedSlotSingleton::getInstance());
-    // std::cout << "ok" << std::endl;
 
     PortableNetworkManager m;
 

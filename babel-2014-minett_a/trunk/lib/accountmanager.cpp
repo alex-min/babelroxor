@@ -1,20 +1,23 @@
 #include "accountmanager.h"
 
-AccountManager *AccountManager::_instance = NULL;
 
 AccountManager::AccountManager()
 {
     _mapLogin[NULL] = "";
 }
 
-AccountManager *AccountManager::getInstance()
+bool    AccountManager::checkIfAccountExist(std::string const &login, std::string const &password) const
 {
-    if (_instance == NULL)
-        _instance = new AccountManager;
-    return (_instance);
+    std::list<Account*>::const_iterator it;
+
+    for (it = _accountList.begin(); it != _accountList.end(); ++it)
+        if ((*it)->getLogin() == login && (*it)->getPassword() == password)
+            return (true);
+
+    return (false);
 }
 
-bool    AccountManager::checkIfAccountExist(std::string const &login) const
+bool    AccountManager::checkIfLoginExist(std::string const &login) const
 {
     std::list<Account*>::const_iterator it;
 
@@ -27,7 +30,7 @@ bool    AccountManager::checkIfAccountExist(std::string const &login) const
 
 bool   AccountManager::createAccount(std::string const &login, std::string const &password)
 {
-    if (checkIfAccountExist(login))
+    if (checkIfAccountExist(login, password))
         return (false);
 
     Account *account = new Account(login, password);

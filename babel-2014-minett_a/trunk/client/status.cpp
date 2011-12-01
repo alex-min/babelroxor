@@ -16,8 +16,19 @@ Status::Status()
 
 }
 
+void    Status::requestStatus(std::string const &login)
+{
+    std::cout << "requestStatus to add loginContact: " << login << std::endl;
+    std::cout << "this method is not implemented yet" << std::endl;
+
+    //Protocol::getInstance()->send(login, );
+}
+
 void    Status::updateStatus(std::string const &login, int status)
 {
+    std::cout << std::endl << std::endl;
+    std::cout << "update status of " << login << std::endl;
+    std::cout << std::endl << std::endl;
     Protocol::Status stat = Protocol::NEED_REGISTRATION;
 
     stat = Status::getProtocolStatusFromClientStatus(status);

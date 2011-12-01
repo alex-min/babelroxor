@@ -22,7 +22,7 @@ public:
     static int                 getClientStatusFromProtocolStatus(Protocol::Status status);
     void    updateStatus(std::string const &login, int status);
     void    sendCallStatus(std::string const &login, int callStatus);
-
+    void    requestStatus(std::string const &login);
     ~Status();
 
 private:

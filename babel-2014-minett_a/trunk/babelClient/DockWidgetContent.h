@@ -27,6 +27,10 @@ class DockWidgetContent : public QWidget, public InterfaceDockWidgetContent
 {
     Q_OBJECT
 
+signals:
+    void    newClient(QString const &);
+    void clientStatus(QString const &, int);
+
 public:
     DockWidgetContent();
     void    fillContactList();
@@ -36,7 +40,7 @@ public:
     virtual void    updateClientAvatar(std::string const &filename);
     virtual void    showCallPopUp();
     virtual void    updateClientStatus(int status);
-    virtual void    updateContactStatus(std::string const &login, Protocol::Status status);
+    virtual void    updateContactStatus(std::string const &login, int status);
     virtual void    addClientContact(std::string const &login);
     virtual void    removeCurrentClientContact(std::string const &login);
     ~DockWidgetContent();
@@ -49,6 +53,7 @@ public slots:
     void    chooseAvatar();
     void    updateAvatar(QString name);
     void    manageCall(int status);
+    void    updateStatusForContact(QString const &login, int status);
 
 private:
     bool    isContactAlreadyAdd(QString const &login);
