@@ -53,4 +53,5 @@ namespace My_Speex
                 int nbBytes;
         };
 }
+
 #endif // MYSPEEX_H
