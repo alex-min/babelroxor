@@ -8,6 +8,7 @@
 #endif
 
 #define PACKED __attribute__((packed))
+#define _UN_ __attribute__((unused))
 
 
 #endif // PORTABLELIBRARY_H

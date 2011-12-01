@@ -1,5 +1,7 @@
 #include "networkroute.h"
 
+std::string NetworkRoute::_tmpString = "";
+
 
 void NetworkRoute::registerRoute(std::string const &login, Network *network, bool proxy)
 {
@@ -52,7 +54,8 @@ std::string const &NetworkRoute::getIpFromLong(unsigned long ip)
     s << static_cast<int>((reinterpret_cast<unsigned char *>(&ip)[1])) << ".";
     s << static_cast<int>((reinterpret_cast<unsigned char *>(&ip)[2])) << ".";
     s << static_cast<int>((reinterpret_cast<unsigned char *>(&ip)[3]));
-    return (s.str());
+    _tmpString = s.str();
+    return (_tmpString);
 }
 
 void NetworkRoute::setIp(unsigned long ip)

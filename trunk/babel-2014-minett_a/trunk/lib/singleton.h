@@ -11,26 +11,30 @@ public:
     static T *getInstance()
     {
         //ScopedLock  scopedLock(&_createInstanceMut);
+        _createInstanceMut.lock();
         if (!_instance)
         {
-            _createInstanceMut.lock();
             if (!_instance)
             {
               _instance = new T();
             }
-            _createInstanceMut.unlock();
         }
+        _createInstanceMut.unlock();
         return (_instance);
     }
 
     static void deleteInstance()
     {
       //  ScopedLock  scopedLock(&_deleteInstanceMut);
-
+      if (_instance)
+      {
+          _createInstanceMut.lock();
         if (_instance)
             delete _instance;
         _instance = 0;
-    }
+        _createInstanceMut.unlock();
+       }
+     }
     static T *_instance;
 
 private:

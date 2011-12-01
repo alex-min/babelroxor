@@ -21,6 +21,9 @@ class CentralWidget : public QWidget, InterfaceCentralWidget
 {
     Q_OBJECT
 
+signals:
+    void newLink(QString const &);
+
 public:
 
     CentralWidget();

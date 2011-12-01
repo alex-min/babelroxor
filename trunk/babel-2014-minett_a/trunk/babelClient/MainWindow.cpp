@@ -80,7 +80,7 @@ MainWindow::~MainWindow()
 
     delete _dockWidget;
 
-    if (_stackedWidget)
-        delete _stackedWidget;
+    //if (_stackedWidget)
+      //  delete _stackedWidget;
 }
 }

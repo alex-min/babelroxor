@@ -110,7 +110,7 @@ bool UNIXSocket::createServerSocket(IPortableSocket::SockType type, unsigned int
     _sin.sin_family = AF_INET;
     _sin.sin_port = htons(port);
     _sin.sin_addr.s_addr = INADDR_ANY;
-    if (bind(_sock, (struct sockaddr*) &_sin, sizeof(_sin)) == -1
+    if (bind(_sock, (struct sockaddr*) &_sin, sizeof(struct sockaddr_in)) == -1
         || listen(_sock, 42) == -1)
       {
          std::cout << "[-] Cannot create server socket" << std::endl;

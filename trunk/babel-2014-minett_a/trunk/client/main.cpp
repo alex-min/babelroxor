@@ -31,7 +31,7 @@ int main(int ac, char **av)
 
     QApplication app(ac, av);
     Graphic::MainWindow *win = MainWindowSingleton::getInstance();
-
+  //  RequestLinkSingleton::getInstance();
     ListenServerSingleton::getInstance()->start();
 
     win->init();

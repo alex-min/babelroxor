@@ -15,19 +15,21 @@ class RequestLink : public ISlotInterface
 {
 public:
     RequestLink();
-    void createNewLink(std::string const &login);
-    bool createServerSock(std::string const &login);
+    bool createNewLink(std::string const &login);
+    bool createServerSockMiam(std::string const &login);
     virtual void testConnection(bool timeout, Packet *);
     virtual void    onCall(Network *network, std::string const &login, void *data, unsigned int len,
                            Protocol::NetworkPacket::NetworkHeader *header);
     virtual void calling(bool timeout, Packet *);
 
 protected:
-    Network        _net;
+    char _____[50];
+    Network        *_net;
     bool           _testedServerSock;
     bool           _serverSockExist;
     IPortableSocket::SockType _type;
     unsigned int   _port;
+    char ____[50];
 };
 
 typedef Singleton<RequestLink> RequestLinkSingleton;
