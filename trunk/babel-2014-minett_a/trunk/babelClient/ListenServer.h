@@ -21,7 +21,6 @@
 #include "audioslot.h"
 #include "connectionlogine.h"
 #include "protocolinterfaceslot.h"
-#include "StatusAnswer.h"
 #include "audiothread.h"
 
 class ListenServer : public QThread
@@ -30,16 +29,25 @@ class ListenServer : public QThread
 
 signals:
     void    connected();
-    void    connectionPopUpWarning(QString const&, QString const&);
+    void    warningPopUp(QString const&, QString const&);
+    void    contactStatusChanged(QString const &, int);
+    void    successPopUp(QString const &, QString const &);
 
 public:
     ListenServer();
     void    run();
     void    emitConnected();
-    void    emitConnectionPopUpWarning(std::string const &title, std::string const &text);
+    void    emitWarningPopUp(std::string const &title, std::string const &text);
+    void    emitSuccessPopUp(std::string const &title, std::string const &text);
+    void    emitContactStatusChanged(std::string const &login, int status);
     virtual ~ListenServer();
+
 public slots:
+    void    addNewClient(QString const &login);
+    void    updateClientStatus(QString const &login, int status);
+    void    createAccount(QString const &login, QString const &password);
     void    createNewLink(QString const &login);
+
 private:
     PortableNetworkManager _networkManager;
     bool                   _connection;

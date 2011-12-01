@@ -1,5 +1,6 @@
 #include "requestlink.h"
 #include "connecttome.h"
+#include "accountmanager.h"
 
 RequestLink::RequestLink()
 {
@@ -44,6 +45,7 @@ bool RequestLink::createNewLink(std::string const &login)
 {
     if (login == "")
         return (false);
+
     if (!_serverSockExist)
      return (RequestLink::createServerSockMiam(login));
     else

@@ -247,7 +247,7 @@ void Protocol::onReceivePacket(CircularBuffer *buf, Network *net)
     }
 
     Protocol::dispatchPacket(net,
-                             AccountManager::getInstance()->getLoginFromNetwork(net),
+                             AccountManagerSingleton::getInstance()->getLoginFromNetwork(net),
                              _buffer + sizeof(Protocol::NetworkPacket::NetworkHeader),
                              _header._len,
                              &_header);

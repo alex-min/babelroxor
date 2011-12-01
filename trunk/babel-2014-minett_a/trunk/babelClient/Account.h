@@ -21,11 +21,15 @@ class Account : public QWidget, public InterfaceAccount
 {
     Q_OBJECT
 
+signals:
+    void accountCreation(QString const&, QString const&);
+
 public:
     Account();
     virtual void    createAccount(std::string login, std::string password);
     virtual void    logInAccount(std::string const &login, std::string const &password);
     virtual std::string const &getLogin();
+    void            resetFields();
     ~Account();
 
 public slots:

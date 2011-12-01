@@ -24,7 +24,8 @@ public:
     ~MainWindow();
 
 public slots:
-    void    showConnectionPopUpWarning(QString const &title, QString const &text);
+    void    showWarningPopUp(QString const &title, QString const &text);
+    void    showSuccessPopUp(QString const &title, QString const &text);
     void    switchOnConnectedState();
 
 private:

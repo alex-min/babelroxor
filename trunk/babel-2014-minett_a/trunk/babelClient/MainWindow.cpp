@@ -47,22 +47,38 @@ void    MainWindow::init()
     addDockWidget(Qt::LeftDockWidgetArea, _dockWidget, Qt::Vertical);
 
     setWindowTitle("Babel Client");
-    setMinimumSize(800, 600);
+    setMinimumSize(800, 700);
 
     connect(ListenServerSingleton::getInstance(), SIGNAL(connected()), this, SLOT(switchOnConnectedState()));
-
-    connect(ListenServerSingleton::getInstance(), SIGNAL(connectionPopUpWarning(QString const&,QString const&)),
-            this, SLOT(showConnectionPopUpWarning(QString const&,QString const&)));
+    connect(ListenServerSingleton::getInstance(), SIGNAL(warningPopUp(QString const&,QString const&)),
+            this, SLOT(showWarningPopUp(QString const&,QString const&)));
+    connect(ListenServerSingleton::getInstance(), SIGNAL(successPopUp(QString const&,QString const&)),
+            this, SLOT(showSuccessPopUp(QString const&,QString const&)));
+    connect(ListenServerSingleton::getInstance(), SIGNAL(contactStatusChanged(QString,int)), _dockWidgetContent, SLOT(updateStatusForContact(QString,int)));
 }
 
-void    MainWindow::showConnectionPopUpWarning(QString const &title, QString const &text)
+void    MainWindow::showWarningPopUp(QString const &title, QString const &text)
 {
     Graphic::QtPopUpMessage *popup = Graphic::QtPopUpMessage::createPopUp(Graphic::QtPopUpMessage::WARNING,
-                                                                               title.toStdString(), text.toStdString());
+                                                                          title.toStdString(), text.toStdString());
+    popup->setIconPixmap(QPixmap("../trunk/images/warning.png"));
+    _accountInterface->resetFields();
 
     popup->show();
 
-  QObject::connect(popup, SIGNAL(finished(int)), popup, SLOT(deleteLater()));
+    QObject::connect(popup, SIGNAL(finished(int)), popup, SLOT(deleteLater()));
+}
+
+void    MainWindow::showSuccessPopUp(QString const &title, QString const &text)
+{
+    Graphic::QtPopUpMessage *popup = Graphic::QtPopUpMessage::createPopUp(Graphic::QtPopUpMessage::INFORMATION,
+                                                                          title.toStdString(), text.toStdString());
+    popup->setIconPixmap(QPixmap("../trunk/images/success.png"));
+    _accountInterface->resetFields();
+
+    popup->show();
+
+    QObject::connect(popup, SIGNAL(finished(int)), popup, SLOT(deleteLater()));
 }
 
 void    MainWindow::switchOnConnectedState()

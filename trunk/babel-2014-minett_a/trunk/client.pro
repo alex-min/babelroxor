@@ -10,7 +10,6 @@ SUBDIRS += babelClient
 include(lib.pro)
 include(babelClient.pro)
 include(portaudio.pro)
-#include(Speex.pro)
 
 INCLUDEPATH += ./lib
 INCLUDEPATH += ./babelClient

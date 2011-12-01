@@ -91,23 +91,11 @@ void    RegisterAccount::validAccount(int status)
         {
             QtPopUpMessage *popUp = QtPopUpMessage::createPopUp(QtPopUpMessage::WARNING, "Warning", "You must fill all the fields to create an account");
 
+            popUp->setIconPixmap(QPixmap("../trunk/images/warning.png"));
             popUp->show();
-
-            connect(popUp, SIGNAL(finished(int)), popUp, SLOT(deleteLater()));
         }
         else
-        {
-            //            qDebug() << _loginLineEdit.text();
-            //            qDebug() << _passwordLineEdit.text();
-
-            //            Q_UNUSED(login);
-            //            Q_UNUSED(password);
-
-            ConnectionLoginSingleton::getInstance()->registerAccount(login, password);
-
-            RegisterAccount::close();
-
-        }
+            accept();
     }
     else
         close();

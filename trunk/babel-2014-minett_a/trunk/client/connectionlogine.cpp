@@ -23,6 +23,8 @@ void    ConnectionLogin::registerAccount(std::string const &login, std::string c
     if (login == "" || password == "")
         return ;
 
+    std::cout << "REQUEST TO REGISTER AN ACCOUNT" << std::endl;
+
     short unsigned int id = Protocol::getInstance()->getCurrentReplyId();
 
     Protocol::getInstance()->send("", Protocol::REGISTER, std::string(login + std::string("\0", 1) + password).c_str(),
@@ -33,4 +35,3 @@ void    ConnectionLogin::registerAccount(std::string const &login, std::string c
                                               reinterpret_cast<Protocol::SlotCall> (&_ProtocolInterfaceSlot::registerSlot),
                                               Protocol::DEFAULT_TIMEOUT);
 }
-

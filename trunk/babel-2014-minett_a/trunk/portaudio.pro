@@ -22,10 +22,11 @@ SOURCES += ./portaudio/portaudio.cpp
 HEADERS += ./portaudio/portaudio.h \
     ./portaudio/portaudio2.h
 
-
+LIBS += -L./portaudio/ -lportaudio
 
 win32: LIBS += -L./portaudio/ -lportaudio_x86
 unix: LIBS += -L./usr/local/lib/ -lportaudio
+
 
 INCLUDEPATH += ./portaudio/
 DEPENDPATH += ./portaudio/

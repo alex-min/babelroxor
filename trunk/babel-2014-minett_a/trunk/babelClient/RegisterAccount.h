@@ -47,6 +47,4 @@ private:
 };
 }
 
-//typedef Singleton<Graphic::RegisterAccount>   ConnectionLoginSingleton;
-
 #endif // RegisterAccount_H

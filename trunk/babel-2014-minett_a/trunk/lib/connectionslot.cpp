@@ -11,7 +11,7 @@ void    ConnectionSlot::onCall(Network *network, std::string const & login, void
     std::string from_login = AccountManager::dataTologin(data, len);
 
     std::cout << "connection requested from : " << from_login << std::endl;
-    AccountManager::getInstance()->setLoginToNetwork(network, from_login);
+    AccountManagerSingleton::getInstance()->setLoginToNetwork(network, from_login);
     NetworkRouteSingleton::getInstance()->registerRoute(from_login, network, false);
   //  RequestLinkSingleton::getInstance()->createServerSock("fff");
 }

@@ -61,6 +61,13 @@ std::string const &Account::getLogin()
     return (_connectLogin);
 }
 
+void    Account::resetFields()
+{
+    _loginLineEdit.clear();
+    _passwordLineEdit.clear();
+    _connectLogin = "";
+}
+
 void    Account::logIn()
 {
     std::string login = _loginLineEdit.text().toStdString();
@@ -72,6 +79,7 @@ void    Account::logIn()
     {
         QtPopUpMessage *popUp = QtPopUpMessage::createPopUp(QtPopUpMessage::WARNING, "Warning", "You must fill all the fields to connect you to an account");
 
+        popUp->setIconPixmap(QPixmap("../trunk/images/warning.png"));
         popUp->show();
 
         connect(popUp, SIGNAL(finished(int)), popUp, SLOT(deleteLater()));
@@ -80,10 +88,7 @@ void    Account::logIn()
 
 void    Account::createAccount(std::string login, std::string password)
 {
-    Q_UNUSED(login);
-    Q_UNUSED(password);
-
-    //send a request to the server
+    emit accountCreation(QString(login.c_str()), QString(password.c_str()));
 }
 
 void    Account::createFormAccount(QString)
