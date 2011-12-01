@@ -5,21 +5,31 @@ RequestLink::RequestLink()
 {
     _testedServerSock = false;
     _serverSockExist = false;
+    _net = new Network;
 }
 
-bool RequestLink::createServerSock(std::string const &login)
+bool RequestLink::createServerSockMiam(std::string const &login)
 {
-    _net.getSocket()->createServerSocket(IPortableSocket::TCP, 7536);
-    _type = IPortableSocket::TCP;
-    _port = 7536;
-    short unsigned int id = Protocol::getInstance()->getCurrentReplyId();
-    std::cout << "RequestLink::createServerSock() : id = " << id << std::endl;
-    TestConnectionSingleton::getInstance()->send(login, IPortableSocket::TCP, 7536, false);
-    Protocol::getInstance()->registerPacketId(id, login, Protocol::getInstance()->getDefaultGetaway(),
+  // std::pair<Network *, Protocol::NetworkPacket::NetworkHeader> *route =
+    //        NetworkRouteSingleton::getInstance()->getRouteFromLogin(login);
+    if (1)
+    {
+      _net->getSocket()->createServerSocket(IPortableSocket::TCP, 7536);
+     _type = IPortableSocket::TCP;
+     _port = 7536;
+      short unsigned int id = Protocol::getInstance()->getCurrentReplyId();
+     std::cout << "RequestLink::createServerSock() : id = " << id << std::endl;
+     TestConnectionSingleton::getInstance()->send(login, IPortableSocket::TCP, 7536, false);
+     std::cout << "RequestLink::createServerSock() :: registring packet..." << std::endl;
+     Protocol::getInstance()->registerPacketId(id, login, Protocol::getInstance()->getDefaultGetaway(),
                                               RequestLinkSingleton::getInstance(),
                                               reinterpret_cast<Protocol::SlotCall> (&RequestLink::testConnection),
                                               Protocol::DEFAULT_TIMEOUT);
+     std::cout << "RequestLink::createServerSock() :: DONE..." << std::endl;
+return (false);
+    }
 
+    return (true);
 }
 
 void RequestLink::calling(bool timeout, Packet *)
@@ -30,14 +40,18 @@ void RequestLink::calling(bool timeout, Packet *)
     }
 }
 
-void RequestLink::createNewLink(std::string const &login)
+bool RequestLink::createNewLink(std::string const &login)
 {
     if (login == "")
-        return ;
+        return (false);
     if (!_serverSockExist)
-     RequestLink::createServerSock(login);
+     return (RequestLink::createServerSockMiam(login));
     else
-     RequestLink::calling(false, NULL);
+     {
+       RequestLink::calling(false, NULL);
+       return (false);
+     }
+  return (false);
 }
 
 void RequestLink::testConnection(bool timeout, Packet *p)
@@ -59,7 +73,7 @@ void RequestLink::testConnection(bool timeout, Packet *p)
                                                      _type,
                                                      NetworkRouteSingleton::getInstance()->getuIp(),
                                                      _port);
-        PortableNetworkManagerSingle::getInstance()->addNetwork(&_net);
+        PortableNetworkManagerSingle::getInstance()->addNetwork(_net);
     }
 
 }

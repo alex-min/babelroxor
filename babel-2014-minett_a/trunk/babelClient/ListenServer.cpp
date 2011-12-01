@@ -1,5 +1,7 @@
 #include "ListenServer.h"
 #include "audiothread.h"
+#include "CentralWidget.h"
+#include "requestlink.h"
 #include <QCoreApplication>
 
 ListenServer::ListenServer()
@@ -24,6 +26,20 @@ ListenServer::ListenServer()
 
     Protocol::getInstance()->defaultGateway(net);
     _networkManager.addNetwork(net);
+
+    connect(CentralWidgetSingleton::getInstance(), SIGNAL(newLink(QString const&)), this, SLOT(createNewLink(QString const&)));
+}
+
+void    ListenServer::createNewLink(QString const &login)
+{
+ //   std::cout << "ListenServer::createNewLink(); from" << login.toStdString() << std::endl;
+  /*  NetworkRouteSingleton::getInstance()->eraseRoute("logogog");
+    NetworkRouteSingleton::getInstance()->eraseRoute("logogog");
+    NetworkRouteSingleton::getInstance()->eraseRoute("logogog");
+    NetworkRouteSingleton::getInstance()->eraseRoute("logogog");
+    NetworkRouteSingleton::getInstance()->eraseRoute("logogog");
+    NetworkRouteSingleton::getInstance()->eraseRoute("logogog"); */
+    RequestLinkSingleton::getInstance()->createNewLink("Rintintin");
 }
 
 void    ListenServer::run(void)
@@ -52,8 +68,7 @@ void    ListenServer::emitConnectionPopUpWarning(std::string const &title, std::
 void    ListenServer::emitConnected()
 {
     std::cout << "C'est bon !!" << std::endl;
-    AudioThreadSingleton::getInstance()->addLogin("lol");
-    std::cout << "C'est bon !!" << std::endl;
+   //std::cout << "C'est bon !!" << std::endl;
     emit connected();
 }
 

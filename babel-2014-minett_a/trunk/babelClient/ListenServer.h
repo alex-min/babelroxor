@@ -38,6 +38,8 @@ public:
     void    emitConnected();
     void    emitConnectionPopUpWarning(std::string const &title, std::string const &text);
     virtual ~ListenServer();
+public slots:
+    void    createNewLink(QString const &login);
 private:
     PortableNetworkManager _networkManager;
     bool                   _connection;

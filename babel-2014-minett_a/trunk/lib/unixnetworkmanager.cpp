@@ -99,7 +99,9 @@ void UNIXNetworkManager::run(long uTimeout)
             std::cout << "UNIXNetworkManager::writing..." << std::endl;
 
             size = (*it)->getWriteBuffer()->extract(_mainBuffer, 512);
-            (*it)->getSocket()->send(_mainBuffer, size);
+            std::cout << "UNIXNetworkManager::after_extract" << std::endl;
+             (*it)->getSocket()->send(_mainBuffer, size);
+            std::cout << "UNIXNetworkManager::after_send" << std::endl;
         }
     }
 }

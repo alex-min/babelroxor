@@ -2,17 +2,20 @@
 #define POOL_H
 #include <map>
 #include "singleton.h"
+#include "mutex.h"
 
 template <class T> class PoolFactory {
 
 public:
     PoolFactory()
     {
+        _createInstanceMut.create();
         _num_active = 0;
     }
 
     T *generate()
     {
+        ScopedLock s(&_createInstanceMut);
         if (_num_active == 0)
         {
             T *a = new T();
@@ -38,11 +41,14 @@ public:
 
     void invalidate(T *a)
     {
+        ScopedLock s(&_createInstanceMut);
+
         _active[a] = true;
         _num_active++;
     }
 
 protected:
+    Mutex   _createInstanceMut;
     std::map<T *, bool> _active;
     int _num_active;
 };

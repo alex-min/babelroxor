@@ -22,9 +22,9 @@ void _ConnectToMe::onCall(Network *network, const std::string &login,
             len < sizeof(Protocol::Status) + (sizeof(unsigned long) * 2) || !header)
         return ;
     Protocol::Status s = *reinterpret_cast<Protocol::Status *> (data);
-    unsigned long ip = *reinterpret_cast<unsigned long *> (data + sizeof(Protocol::Status));
+    unsigned long ip = *reinterpret_cast<unsigned long *> (static_cast<char *> (data) + sizeof(Protocol::Status));
     unsigned long port = *reinterpret_cast<unsigned long *>
-            (data + sizeof(Protocol::Status) + sizeof(unsigned long));
+            (static_cast<char *> (data) + sizeof(Protocol::Status) + sizeof(unsigned long));
 
     PortableSocket sock;
 

@@ -25,6 +25,8 @@ Network *Protocol::getDefaultGetaway() const
 
 unsigned int Protocol::getCurrentReplyId() const
 {
+    ScopedLock s(const_cast<Mutex *> (&_m));
+
     return (_packetCount);
 }
 

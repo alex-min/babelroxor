@@ -25,6 +25,7 @@ private:
     std::map<std::string, std::pair<Network *, Protocol::NetworkPacket::NetworkHeader> > _proxyfiedArray;
     unsigned long _ip;
     std::string _sip;
+    static std::string _tmpString;
 };
 
 #endif // NETWORKROUTE_H

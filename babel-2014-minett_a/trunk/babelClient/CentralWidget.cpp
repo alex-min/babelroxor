@@ -1,4 +1,5 @@
 #include "CentralWidget.h"
+#include "requestlink.h"
 #include <QDebug>
 
 namespace Graphic
@@ -11,7 +12,8 @@ CentralWidget::CentralWidget()
     _hangUpButton.setShape(CustomButton::ROUND);
 
     _callButton.setText("Call");
-    _hangUpButton.setText("Hang Up");
+    _hangUpButton.setText("HangUp"
+                          );
 
     _callButton.setRadius(8.0, 8.0);
     _hangUpButton.setRadius(8.0, 8.0);
@@ -35,6 +37,9 @@ CentralWidget::CentralWidget()
 
 void    CentralWidget::callClient(std::string const &login)
 {
+    // AudioThreadSingleton::getInstance()->addLogin("lol");
+    emit newLink(QString(login.c_str()));
+//    RequestLinkSingleton::getInstance()->createNewLink(login);
     Q_UNUSED(login);
 }
 
