@@ -12,7 +12,8 @@ My_Speex::Encode::Encode()
     speex_encoder_ctl(enc_state, SPEEX_SET_QUALITY, &quality);
     speex_encoder_ctl(enc_state, SPEEX_GET_FRAME_SIZE, &frame_size);
     speex_encoder_ctl(enc_state, SPEEX_SET_SAMPLING_RATE, &rate);
-    //speex_encoder_ctl(enc_state, SPEEX_SET_VAD, &on);
+    int on = 1;
+    speex_encoder_ctl(enc_state, SPEEX_SET_VAD, &on);
 }
 
 My_Speex::Encode::~Encode()
@@ -22,18 +23,51 @@ My_Speex::Encode::~Encode()
     speex_encoder_destroy(enc_state);
 }
 
+int My_Speex::Encode::encode(short *b, char *cbits)
+{
+    speex_bits_reset(&bits_enc);
+    speex_encode_int(enc_state, b, &bits_enc);
+  //  speex_encode(enc_state, input, &bits_enc);
+
+//    int size = speex_bits_nbytes(&ebits);
+ //    memset(cbits, 0, frame_size );
+
+    nbBytes = speex_bits_write(&bits_enc, cbits, frame_size);
+    //printf("%s\n", cbits);
+    return (nbBytes);
+}
+
+SpeexBits       My_Speex::Encode::getBits_enc()
+{
+    return (bits_enc);
+}
+
+int             My_Speex::Encode::getRate()
+{
+    return (rate);
+}
+
+int             My_Speex::Encode::getFrame_size()
+{
+    return (frame_size);
+}
+
+
+
+
 My_Speex::Decode::Decode()
 {
+    int enh = 1;
+
     frame_size = 0;
-     rate = 8000;
+    rate = 8000;
     dec_state = speex_decoder_init(speex_lib_get_mode(SPEEX_MODEID_WB));
-     /*Set the perceptual enhancement on*/
- //   tmp=1;
-  //  speex_decoder_ctl(dec_state, SPEEX_SET_ENH, &tmp);
     speex_bits_init(&bits_dec);
+    speex_decoder_ctl(dec_state, SPEEX_SET_ENH, &enh);
+
     speex_decoder_ctl(dec_state, SPEEX_GET_FRAME_SIZE, &frame_size);
     speex_decoder_ctl(dec_state, SPEEX_SET_SAMPLING_RATE, &rate);
-    out = new short[(frame_size + 1) * sizeof(short)];
+    out = new short[(frame_size) * sizeof(short)];
 }
 
 My_Speex::Decode::~Decode()
@@ -44,24 +78,10 @@ My_Speex::Decode::~Decode()
 
 
 
-int My_Speex::Encode::encode(short *b)
+
+short * My_Speex::Decode::decode(char *decode)
 {
-
-    std::cout << frame_size << std::endl;
-    speex_bits_reset(&bits_enc);
-    speex_encode_int(enc_state, b, &bits_enc);
-  //  speex_encode(enc_state, input, &bits_enc);
-
-//    int size = speex_bits_nbytes(&ebits);
-    cbits = new char[(frame_size + 1) * sizeof(char)];
-    nbBytes = speex_bits_write(&bits_enc, cbits, frame_size);
-    //printf("%s\n", cbits);
-    return (nbBytes);
-}
-
-short * My_Speex::Decode::decode(char *decode, int size)
-{
-    memset(out, 0, frame_size + 1);
+    memset(out, 0, frame_size);
     speex_bits_read_from(&bits_dec, decode, (int)strlen(decode));
      if (speex_decode_int(dec_state, &bits_dec, out) == -2)
      {
@@ -84,6 +104,26 @@ short * My_Speex::Decode::decode(char *decode, int size)
      return out;
 }
 
+
+SpeexBits       My_Speex::Decode::getBits_dec()
+{
+    return (bits_dec);
+}
+
+int             My_Speex::Decode::getRate()
+{
+    return (rate);
+}
+
+int             My_Speex::Decode::getFrame_size()
+{
+    return (frame_size);
+}
+
+short           *My_Speex::Decode::getOut()
+{
+    return (out);
+}
 
 //My_Speex::~My_Speex()
 //{
