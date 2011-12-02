@@ -21,6 +21,9 @@ public:
     virtual void   setType(PopUpType type) = 0;
     virtual void   setButtonType(int buttonType) = 0;
     virtual int getButtonType() const = 0;
+    virtual std::string const &getLogin() = 0;
+    virtual void               setLogin(std::string const &login) = 0;
+
 };
 }
 

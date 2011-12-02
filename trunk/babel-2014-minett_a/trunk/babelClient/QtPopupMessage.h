@@ -30,6 +30,8 @@ public:
     virtual QtPopUpMessage::PopUpType   getType() const;
     virtual void   setButtonType(int buttonType);
     virtual int getButtonType() const;
+    virtual std::string const &getLogin();
+    virtual void               setLogin(std::string const &login);
     static QtPopUpMessage*  createPopUp(QtPopUpMessage::PopUpType type, std::string const &title, std::string const &text, std::string const &icon = "");
 
 private:
@@ -40,6 +42,7 @@ private:
     static std::string _title;
     static std::string _text;
     static std::string _icon;
+    static std::string _login;
     static AssocIcon   _assocTab[5];
     static ButtonType  _buttonType;
 };

@@ -1,6 +1,7 @@
 #include "requestlink.h"
 #include "connecttome.h"
 #include "accountmanager.h"
+#include "ListenServer.h"
 
 RequestLink::RequestLink()
 {
@@ -36,10 +37,12 @@ return (false);
 
 void RequestLink::calling(bool timeout, Packet *)
 {
+    std::cout << "RequestLink::calling: THIS FUNCTION IS THE GOAL OF THE PROJECT !! :P" << std::endl;
     if (timeout)
     {
-
+        ListenServerSingleton::getInstance()->emitCallFail();
     }
+//    emin callSuccess(login); //throw popup
 }
 
 bool RequestLink::createNewLink(std::string const &login)
@@ -77,6 +80,12 @@ void RequestLink::testConnection(bool timeout, Packet *p)
                                                      _type,
                                                      NetworkRouteSingleton::getInstance()->getuIp(),
                                                      _port);
+        unsigned int id = Protocol::getInstance()->getCurrentReplyId();
+        Protocol::getInstance()->send(p->getReturningLogin(), Protocol::CALL, "", 0);
+        Protocol::getInstance()->registerPacketId(id, p->getReturningLogin(),
+                                                  p->getNetwork(), this,
+                                                  reinterpret_cast<Protocol::SlotCall> (&RequestLink::calling), p->getReturningLogin(),
+                                                  Protocol::DEFAULT_TIMEOUT);
         PortableNetworkManagerSingle::getInstance()->addNetwork(_net);
     }
 

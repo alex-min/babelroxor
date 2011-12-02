@@ -1,4 +1,5 @@
 #include "CallAnswer.h"
+#include "ListenServer.h"
 
 CallAnswer::CallAnswer()
 {
@@ -10,7 +11,8 @@ void    CallAnswer::onCall(Network *network, const std::string &login, void *dat
     if (!network || login == "" || !data || len < 0 || !header)
         return ;
 
- //   DockWidgetContentSingleton::getInstance()->showCallPopUp();
+    std::cout << "CallAnswer::onCall() : CALLING !!" << std::endl;
+    ListenServerSingleton::getInstance()->emitCall(login);
 }
 
 std::string const &CallAnswer::getLogin()

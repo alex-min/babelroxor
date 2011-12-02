@@ -11,10 +11,10 @@ public:
     Win32Time();
     virtual void setToMsTimeOfDay();
     virtual ITime & operator- (ITime const &) const;
-    virtual unsigned int getMs() const;
-    virtual void setMs(unsigned int ms);
+    virtual unsigned long getMs() const;
+    virtual void setMs(unsigned long ms);
 protected:
-    unsigned int _timems;
+    unsigned long long _timems;
 };
 
 #endif

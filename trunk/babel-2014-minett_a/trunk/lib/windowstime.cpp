@@ -48,7 +48,7 @@ void Win32Time::setToMsTimeOfDay()
     struct timeval t;
 
     ::gettimeofday(&t);
-    _timems = t.tv_sec * 1000 + t.tv_usec / 100;
+    _timems = t.tv_sec * 1000 + t.tv_usec / 10000;
 }
 
 ITime & Win32Time::operator- (ITime const &c) const
@@ -59,12 +59,12 @@ ITime & Win32Time::operator- (ITime const &c) const
     return (t);
 }
 
-unsigned int Win32Time::getMs() const
+unsigned long long Win32Time::getMs() const
 {
     return this->_timems;
 }
 
-void Win32Time::setMs(unsigned int ms)
+void Win32Time::setMs(unsigned long long ms)
 {
     this->_timems = ms;
 }

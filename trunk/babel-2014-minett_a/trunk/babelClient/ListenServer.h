@@ -32,6 +32,8 @@ signals:
     void    warningPopUp(QString const&, QString const&);
     void    contactStatusChanged(QString const &, int);
     void    successPopUp(QString const &, QString const &);
+    void    callOccured(QString const &);
+    void    callFail();
 
 public:
     ListenServer();
@@ -40,6 +42,8 @@ public:
     void    emitWarningPopUp(std::string const &title, std::string const &text);
     void    emitSuccessPopUp(std::string const &title, std::string const &text);
     void    emitContactStatusChanged(std::string const &login, int status);
+    void    emitCall(std::string const &login);
+    void    emitCallFail();
     virtual ~ListenServer();
 
 public slots:
@@ -47,6 +51,7 @@ public slots:
     void    updateClientStatus(QString const &login, int status);
     void    createAccount(QString const &login, QString const &password);
     void    createNewLink(QString const &login);
+
 
 private:
     PortableNetworkManager _networkManager;
