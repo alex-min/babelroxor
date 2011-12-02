@@ -13,6 +13,7 @@ void TimerPool::addToPool(Packet *pack,
     PortableTime time;
 
     time.setToMsTimeOfDay();
+    std::cout << "TimerPool::addTotimeout| " << timeout << std::endl;
     _pool[pack].first = time.getMs() + timeout;
     _pool[pack].second = std::pair<ISlotInterface *, Protocol::SlotCall> (pack->getSlot(), pack->getSlotCall());
 }
@@ -37,6 +38,7 @@ void TimerPool::autocall()
     PoolMap::iterator it2;
     while (it != _pool.end())
     {
+       // std::cout << _time.getMs() << " => " << it->second.first << std::endl;
         if (_time.getMs() > it->second.first)
         {
             if (it->second.second.first && it->second.second.second)
@@ -57,7 +59,7 @@ void TimerPool::autocall()
 
 int TimerPool::getMsNextCall()
 {
-    int time = -1;
+    long long time = -1;
 
     _time.setToMsTimeOfDay();
 
@@ -68,7 +70,7 @@ int TimerPool::getMsNextCall()
     }
     if (time == -1)
         return (TimerPool::DEFAULT_TIMEOUT);
-    if (_time.getMs() > static_cast<unsigned int>(time))
+    if (_time.getMs() > static_cast<unsigned long long>(time))
     {
         TimerPool::autocall();
         return (TimerPool::getMsNextCall());
