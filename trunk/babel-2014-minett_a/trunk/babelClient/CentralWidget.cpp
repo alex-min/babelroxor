@@ -44,16 +44,17 @@ void    CentralWidget::showFailCall()
     popUp->setIconPixmap(QPixmap("../trunk/images/warning.png"));
     popUp->show();
 
-    connect(popUp, SIGNAL(finished(int)), this, SLOT(deleteLater()));
+    connect(popUp, SIGNAL(finished(int)), popUp, SLOT(deleteLater()));
 }
 
-void    CentralWidget::showCallPopUp(QString const &login)
+void    CentralWidget::showCallPopUp(QString const &login, unsigned int id)
 {
     QtPopUpMessage *popUp = QtPopUpMessage::createPopUp(QtPopUpMessage::WARNING, "Call", "You have a call request of " + login.toStdString());
 
     popUp->setIconPixmap(QPixmap("../trunk/images/warning.png"));
     popUp->setButtonType(QtPopUpMessage::AcceptButton | QtPopUpMessage::RefuseButton);
     popUp->setLogin(login.toStdString());
+    popUp->setProperty("id", id);
     popUp->show();
 
     connect(popUp, SIGNAL(finished(int)), this, SLOT(checkIfCallIsAccepted(int)));
@@ -62,11 +63,25 @@ void    CentralWidget::showCallPopUp(QString const &login)
 void    CentralWidget::checkIfCallIsAccepted(int status)
 {
     QtPopUpMessage *popUp = qobject_cast<QtPopUpMessage*>(sender());
-
+    Protocol::Status s;
     if (status == QMessageBox::Yes)
-        showCurrentContacts();
+    {
+        s = Protocol::OK;
+        Protocol::getInstance()->send(popUp->getLogin(),
+                                      Protocol::STATUS,
+                                      &s,
+                                      sizeof(Protocol::Status), popUp->property("id").toInt(), false);
 
-    popUp->deleteLater();
+
+        showCurrentContacts(popUp->getLogin());
+    }
+    else
+    {
+        s = Protocol::FAILED;
+        Protocol::getInstance()->send(popUp->getLogin(), Protocol::STATUS, &s,
+                                      sizeof(Protocol::Status), popUp->property("id").toInt(), false);
+        popUp->deleteLater();
+    }
 }
 
 void    CentralWidget::callClient(std::string const &login)
@@ -89,10 +104,8 @@ void    CentralWidget::call()
     callClient(currentContactLogin);
 }
 
-void    CentralWidget::showCurrentContacts()
+void    CentralWidget::showCurrentContacts(std::string const &currentContactLogin)
 {
-    std::string const & currentContactLogin = _dockWidgetContent->getCurrentContactLogin();
-
     _windowManager->show();
     _windowManager->activateWindow();
 
@@ -103,6 +116,13 @@ void    CentralWidget::showCurrentContacts()
         w->setContactLogin(currentContactLogin);
         _windowManager->addContact(w, QIcon("../trunk/images/onCall.png"));
     }
+}
+
+void    CentralWidget::showCurrentContacts()
+{
+    std::string const & currentContactLogin = _dockWidgetContent->getCurrentContactLogin();
+
+    CentralWidget::showCurrentContacts(currentContactLogin);
 }
 
 void    CentralWidget::hangUp()

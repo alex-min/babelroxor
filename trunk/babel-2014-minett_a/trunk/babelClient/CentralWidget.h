@@ -14,6 +14,7 @@
 #include "InterfaceCentralWidget.h"
 #include "singleton.h"
 #include "TalkWindowManager.h"
+#include "protocol.h"
 
 namespace Graphic
 {
@@ -30,12 +31,13 @@ public:
     virtual void    callClient(std::string const &login);
     virtual void    hangUpClient(std::string const &login);
     void            showCurrentContacts();
+    void            showCurrentContacts(std::string const &);
     ~CentralWidget();
 
 public slots:
     void    call();
     void    hangUp();
-    void    showCallPopUp(QString const &login);
+    void    showCallPopUp(QString const &login, unsigned id);
     void    checkIfCallIsAccepted(int status);
     void    showFailCall();
 

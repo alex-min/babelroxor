@@ -32,7 +32,7 @@ signals:
     void    warningPopUp(QString const&, QString const&);
     void    contactStatusChanged(QString const &, int);
     void    successPopUp(QString const &, QString const &);
-    void    callOccured(QString const &);
+    void    callOccured(QString const &, unsigned int);
     void    callFail();
 
 public:
@@ -42,7 +42,7 @@ public:
     void    emitWarningPopUp(std::string const &title, std::string const &text);
     void    emitSuccessPopUp(std::string const &title, std::string const &text);
     void    emitContactStatusChanged(std::string const &login, int status);
-    void    emitCall(std::string const &login);
+    void    emitCall(std::string const &login, unsigned int id);
     void    emitCallFail();
     virtual ~ListenServer();
 
