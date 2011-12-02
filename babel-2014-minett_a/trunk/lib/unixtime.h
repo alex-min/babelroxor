@@ -12,10 +12,10 @@ public:
     UNIXTime();
     virtual void setToMsTimeOfDay();
     virtual ITime & operator- (ITime const &) const;
-    virtual unsigned int getMs() const;
-    virtual void setMs(unsigned int ms);
+    virtual unsigned long long getMs() const;
+    virtual void setMs(unsigned long long ms);
 protected:
-    unsigned int _timems;
+    unsigned long long _timems;
 };
 
 #endif

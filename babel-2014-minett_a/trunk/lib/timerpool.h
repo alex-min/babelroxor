@@ -11,7 +11,7 @@
 class TimerPool
 {
 public:
-    typedef std::map<Packet *, std::pair<unsigned int, std::pair<ISlotInterface *, Protocol::SlotCall> > > PoolMap;
+    typedef std::map<Packet *, std::pair<unsigned long long, std::pair<ISlotInterface *, Protocol::SlotCall> > > PoolMap;
     enum {DEFAULT_TIMEOUT = 50};
 
     TimerPool();
