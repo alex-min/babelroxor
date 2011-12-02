@@ -15,14 +15,21 @@ CONFIG   -= app_bundle
 TEMPLATE = app
 
 
-SOURCES += ./portaudio/portaudio.cpp
+SOURCES +=  ./portaudio/AudioCallback.cpp   \
+            ./portaudio/AudioHandler.cpp    \
+            ./portaudio/DecoderSpeex.cpp    \
+            ./portaudio/EncoderSpeex.cpp
 
 
 
-HEADERS += ./portaudio/portaudio.h \
-    ./portaudio/portaudio2.h
+HEADERS +=  ./portaudio/AudioCallback.h     \
+            ./portaudio/AudioHandler.h      \
+            ./portaudio/DecoderSpeex.h      \
+            ./portaudio/EncoderSpeex.h      \
+            ./portaudio/Utils.h
 
-LIBS += -L./portaudio/ -lportaudio
+
+LIBS += -L./portaudio/ -lportaudio_x86
 
 win32: LIBS += -L./portaudio/ -lportaudio_x86
 unix: LIBS += -L./usr/local/lib/ -lportaudio
@@ -32,3 +39,4 @@ INCLUDEPATH += ./portaudio/
 DEPENDPATH += ./portaudio/
 
 win32: PRE_TARGETDEPS += ./portaudio/portaudio_x86.lib
+
