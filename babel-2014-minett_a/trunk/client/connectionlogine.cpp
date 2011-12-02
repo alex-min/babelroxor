@@ -15,6 +15,7 @@ void ConnectionLogin::connect(const std::string &login, const std::string &passw
     Protocol::getInstance()->registerPacketId(id, login, Protocol::getInstance()->getDefaultGetaway(),
                                               ProtocolInterfaceSlot::getInstance(),
                                               reinterpret_cast<Protocol::SlotCall> (&_ProtocolInterfaceSlot::loginSlot),
+                                              "",
                                               Protocol::DEFAULT_TIMEOUT);
 }
 
@@ -33,5 +34,6 @@ void    ConnectionLogin::registerAccount(std::string const &login, std::string c
     Protocol::getInstance()->registerPacketId(id, login, Protocol::getInstance()->getDefaultGetaway(),
                                               ProtocolInterfaceSlot::getInstance(),
                                               reinterpret_cast<Protocol::SlotCall> (&_ProtocolInterfaceSlot::registerSlot),
+                                              login,
                                               Protocol::DEFAULT_TIMEOUT);
 }

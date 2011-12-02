@@ -48,11 +48,13 @@ Protocol::Status Protocol::sockTypeToStatus(IPortableSocket::SockType const & ty
 
 
 void Protocol::registerPacketId(unsigned short id, std::string const &login, Network *net,
-                      ISlotInterface *slot, Protocol::SlotCall call, short timeout)
+                      ISlotInterface *slot, Protocol::SlotCall call, std::string const &returning_login, short timeout)
 {
     ScopedLock s(&_m);
 
     Packet *p = Pool(Packet)::getInstance()->generate();
+
+    p->setReturningLogin(returning_login);
     p->setLogin(login);
     p->setTimeout(timeout);
     p->setSlot(slot);
