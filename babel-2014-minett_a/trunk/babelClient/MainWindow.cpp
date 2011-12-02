@@ -55,6 +55,8 @@ void    MainWindow::init()
     connect(ListenServerSingleton::getInstance(), SIGNAL(successPopUp(QString const&,QString const&)),
             this, SLOT(showSuccessPopUp(QString const&,QString const&)));
     connect(ListenServerSingleton::getInstance(), SIGNAL(contactStatusChanged(QString,int)), _dockWidgetContent, SLOT(updateStatusForContact(QString,int)));
+    connect(ListenServerSingleton::getInstance(), SIGNAL(callOccured(QString const &)), _centralWidget, SLOT(showCallPopUp(QString const &)));
+    connect(ListenServerSingleton::getInstance(), SIGNAL(callFail()), _centralWidget, SLOT(showFailCall()));
 }
 
 void    MainWindow::showWarningPopUp(QString const &title, QString const &text)

@@ -29,11 +29,16 @@ public:
     CentralWidget();
     virtual void    callClient(std::string const &login);
     virtual void    hangUpClient(std::string const &login);
+    void            showCurrentContacts();
     ~CentralWidget();
 
 public slots:
     void    call();
     void    hangUp();
+    void    showCallPopUp(QString const &login);
+    void    checkIfCallIsAccepted(int status);
+    void    showFailCall();
+
 
 private:
 

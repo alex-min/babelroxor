@@ -7,6 +7,7 @@ QtPopUpMessage::PopUpType QtPopUpMessage::_type = QtPopUpMessage::NOTYPE;
 std::string QtPopUpMessage::_title = "";
 std::string QtPopUpMessage::_text = "";
 std::string QtPopUpMessage::_icon = "";
+std::string QtPopUpMessage::_login = "";
 QtPopUpMessage::ButtonType  QtPopUpMessage::_buttonType = QtPopUpMessage::BaseButton;
 
 QtPopUpMessage::AssocIcon QtPopUpMessage::_assocTab[] =
@@ -25,6 +26,16 @@ QtPopUpMessage::QtPopUpMessage(std::string const &title, std::string const &text
     _text = text;
 
     setWindowModality(Qt::ApplicationModal);
+}
+
+std::string const &QtPopUpMessage::getLogin()
+{
+    return (_login);
+}
+
+void        QtPopUpMessage::setLogin(std::string const &login)
+{
+    _login = login;
 }
 
 QtPopUpMessage*  QtPopUpMessage::createPopUp(QtPopUpMessage::PopUpType type, std::string const &title, std::string const &text, std::string const &icon)

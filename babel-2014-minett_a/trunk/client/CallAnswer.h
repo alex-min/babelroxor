@@ -5,7 +5,7 @@
 #include "islotinterface.h"
 #include "DockWidgetContent.h"
 
-class CallAnswer : ISlotInterface
+class CallAnswer : public ISlotInterface
 {
 public:
     CallAnswer();

@@ -2,6 +2,7 @@
 #include "audiothread.h"
 #include "CentralWidget.h"
 #include "requestlink.h"
+#include "connecttome.h"
 #include <QCoreApplication>
 
 #include "ListenServer.h"
@@ -23,8 +24,8 @@ ListenServer::ListenServer()
     proto->registerSlot(Protocol::TEST_CONNECTION, TestConnectionSingleton::getInstance());
     proto->registerSlot(Protocol::PROXY_RECEIVED, ProxyReceivedSlotSingleton::getInstance());
     proto->registerSlot(Protocol::REQUEST_STATUS, StatusAnswerSingleton::getInstance());
-
-    //    Protocol::getInstance()->registerSlot(Protocol::CALL, CallAnswerSingleton::getInstance());
+    proto->registerSlot(Protocol::CONNECT_TO_ME, ConnectToMe::getInstance());
+    proto->registerSlot(Protocol::CALL, CallAnswerSingleton::getInstance());
 
     std::cout << "Connecting {{---}}" << std::endl;
     if (!net->getSocket()->connect("127.0.0.1", 4646))
@@ -39,6 +40,16 @@ ListenServer::ListenServer()
     connect(DockWidgetContentSingleton::getInstance(), SIGNAL(clientStatus(QString const&, int)), this, SLOT(updateClientStatus(QString const&, int)));
     connect(AccountSingleton::getInstance(), SIGNAL(accountCreation(QString const&,QString const&)), this, SLOT(createAccount(QString const&, QString const&)));
     connect(CentralWidgetSingleton::getInstance(), SIGNAL(newLink(QString const &)), this, SLOT(createNewLink(QString const &)));
+}
+
+void    ListenServer::emitCallFail()
+{
+    emit callFail();
+}
+
+void    ListenServer::emitCall(std::string const &login)
+{
+    emit callOccured(QString(login.c_str()));
 }
 
 void    ListenServer::createAccount(QString const &login, QString const &password)
