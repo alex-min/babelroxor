@@ -2,7 +2,12 @@
 #define AUDIOSLOT_H
 #include "islotinterface.h"
 #include "singleton.h"
-#include "portaudio.h"
+//#include "portaudio.h"
+
+#include "AudioCallback.h"
+#include "AudioHandler.h"
+#include "DecoderSpeex.h"
+#include "EncoderSpeex.h"
 
 class AudioSlot : public ISlotInterface
 {
@@ -11,7 +16,9 @@ public:
     AudioSlot();
 
 private:
-    portAudio _pa;
+    //portAudio _pa;
+    PortaudioWrapper::AudioHandler	_dec;
+    PortaudioWrapper::SpeexBuffer	_s;
 };
 
 typedef Singleton<AudioSlot> AudioSlotSingle;

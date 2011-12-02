@@ -7,6 +7,12 @@
 #include <list>
 #include "singleton.h"
 
+#include "AudioCallback.h"
+#include "AudioHandler.h"
+#include "DecoderSpeex.h"
+#include "EncoderSpeex.h"
+
+
 class AudioThread : public QThread
 {
 public:
@@ -16,7 +22,9 @@ public:
     std::list<std::string> & getLoginList();
 
 private:
-    portAudio _pa;
+    //portAudio _pa;
+    PortaudioWrapper::AudioHandler	_enc;
+    PortaudioWrapper::SpeexBuffer	_s;
     std::list<std::string> _loginCall;
     Mutex _m;
 };

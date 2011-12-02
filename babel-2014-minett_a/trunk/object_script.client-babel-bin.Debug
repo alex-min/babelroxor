@@ -36,7 +36,11 @@ INPUT(
 ./debug\QtPopupMessage.o
 ./debug\ListenServer.o
 ./debug\TalkWindowManager.o
-./debug\portaudio.o
+./debug\AudioCallback.o
+./debug\AudioHandler.o
+./debug\DecoderSpeex.o
+./debug\EncoderSpeex.o
+./debug\My_Speex.o
 ./debug\main.o
 ./debug\audioslot.o
 ./debug\protocolinterfaceslot.o
