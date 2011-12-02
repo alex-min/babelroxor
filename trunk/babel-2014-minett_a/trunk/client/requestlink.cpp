@@ -82,6 +82,7 @@ void RequestLink::testConnection(bool timeout, Packet *p)
                                                      _port);
         unsigned int id = Protocol::getInstance()->getCurrentReplyId();
         Protocol::getInstance()->send(p->getReturningLogin(), Protocol::CALL, "", 0);
+        std::cout << "registring id:" << id << std::endl;
         Protocol::getInstance()->registerPacketId(id, p->getReturningLogin(),
                                                   p->getNetwork(), this,
                                                   reinterpret_cast<Protocol::SlotCall> (&RequestLink::calling), p->getReturningLogin(),

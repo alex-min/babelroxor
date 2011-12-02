@@ -181,6 +181,7 @@ void Protocol::sendProxifiedPacket(Network *network, SlotType type, const void *
     network->getWriteBuffer()->append(reinterpret_cast<char *>(&packet), sizeof(NetworkPacket::NetworkHeader));
     if (data)
         network->getWriteBuffer()->append(data, length);
+    _packetCount++;
     std::cout << "Protocol::Network->getWriteBufferSize(=>" << network->getWriteBuffer()->getReadSize() << std::endl;
 }
 
@@ -204,6 +205,7 @@ void Protocol::sendPacket(Network *network, SlotType type, const void *data, uns
     network->getWriteBuffer()->append(reinterpret_cast<char *>(&packet), sizeof(NetworkPacket::NetworkHeader));
     if (data)
     network->getWriteBuffer()->append(data, length);
+    _packetCount++;
     //PortableSocket::send(reinterpret_cast<char *>(&packet), length);
 }
 
