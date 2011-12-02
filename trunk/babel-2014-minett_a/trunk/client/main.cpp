@@ -18,7 +18,11 @@
 #include "connecttome.h"
 #include "ListenServer.h"
 #include "MainWindow.h"
-#include "portaudio.h"
+#include "My_Speex.h"
+#include "AudioCallback.h"
+#include "AudioHandler.h"
+#include "DecoderSpeex.h"
+#include "EncoderSpeex.h"
 
 #ifdef OS_WINDOWS
 #define start_entry qMain
@@ -28,25 +32,60 @@
 
 int main(int ac, char **av)
 {
+    PortaudioWrapper::AudioHandler	dec, enc;
+    PortaudioWrapper::SpeexBuffer	s, s2;
 
-    QApplication app(ac, av);
-    Graphic::MainWindow *win = MainWindowSingleton::getInstance();
-  //  RequestLinkSingleton::getInstance();
-    ListenServerSingleton::getInstance()->start();
-
-    win->init();
-
-    QFile fileStyle("../trunk/css/babelStyle.css");
-
-    if (fileStyle.open(QIODevice::ReadOnly))
+    s2.decoder = new DecoderSpeex;
+    s.encoder = new EncoderSpeex(5);
+    s.state = true;
+    s2.state = true;
+    if (enc.good() && dec.good())
     {
-        app.setStyleSheet(fileStyle.readAll());
-        fileStyle.close();
-    }
+        enc.setCallback(PortaudioWrapper::MicroToSpeex);
+        enc.setInputDevice(1);
+        enc.openStream(1, 0, &s, paInt16, s.encoder->Rate(), s.encoder->FrameSize());
 
-    win->show();
+        s2.buf = s.buf;
+        s2.size_encoded = s.size_encoded;
 
-    return (app.exec());
+        dec.setCallback(PortaudioWrapper::SpeexToSpeaker);
+        dec.openStream(0, 1, &s2, paInt16, s2.decoder->Rate(), s2.decoder->FrameSize());
+        if (enc.good() && dec.good())
+        {
+          enc.start();
+          dec.start();
+          Sleep(3000);
+
+          enc.stop();
+          dec.stop();
+          std::cout << dec.getErrorMsg() << std::endl;
+        }
+        else
+          std::cout << "Opening Stream on save thread : ENC:" << enc.getErrorMsg() << " DEC:" << dec.getErrorMsg() << std::endl;
+     }
+     else
+       std::cout << "Initializing Stream on save thread : ENC:" << enc.getErrorMsg() << " DEC:"  << dec.getErrorMsg() << std::endl;
+     return (0);
+
+
+//        QApplication app(ac, av);
+//    Graphic::MainWindow *win = MainWindowSingleton::getInstance();
+
+//    ListenServerSingleton::getInstance()->start();
+
+//    win->init();
+
+//    QFile fileStyle("../trunk/css/babelStyle.css");
+
+//    if (fileStyle.open(QIODevice::ReadOnly))
+//    {
+//        app.setStyleSheet(fileStyle.readAll());
+//        fileStyle.close();
+//    }
+
+//    win->show();
+
+//    return (app.exec());
 
     //    return (0);
     //        Network *net = new Network;

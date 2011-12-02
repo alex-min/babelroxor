@@ -36,7 +36,11 @@ INPUT(
 ./release\QtPopupMessage.o
 ./release\ListenServer.o
 ./release\TalkWindowManager.o
-./release\portaudio.o
+./release\AudioCallback.o
+./release\AudioHandler.o
+./release\DecoderSpeex.o
+./release\EncoderSpeex.o
+./release\My_Speex.o
 ./release\main.o
 ./release\audioslot.o
 ./release\protocolinterfaceslot.o

@@ -1,4 +1,8 @@
 #include "testconnection.h"
+#ifdef OS_WINDOWS
+#include <windows.h>
+#define in_addr_t unsigned long
+#endif
 
 void TestConnection::send(const std::string &login, IPortableSocket::SockType type, unsigned short port)
 {

@@ -1,4 +1,6 @@
 #include "portaudio.h"
+#include "My_Speex.h"
+#include <iostream>
 
 portAudio::portAudio()
 {
@@ -9,16 +11,19 @@ void    portAudio::init(int msec)
 {
     _err = paNoError;
 
-    _data.maxFrameIndex = _totalFrames = ((msec + 1 / 1000)) * SAMPLE_RATE;
+
+    My_Speex::Encode ecodage;
+
+    //_data.maxFrameIndex = _totalFrameses = msec * SAMPLE_RATE;
+    _data.maxFrameIndex = ecodage.getFrame_size() / (NUM_CHANNELS * sizeof(SAMPLE));
+    _totalFrameses = ecodage.getFrame_size() / (NUM_CHANNELS * sizeof(SAMPLE));
+    std::cout << _data.maxFrameIndex << " " << ecodage.getFrame_size() << std::endl;
     _data.frameIndex = 0;
-    _numSamples = _totalFrames * NUM_CHANNELS;
+    _numSamples = _totalFrameses * NUM_CHANNELS;
     _numBytes = _numSamples * sizeof(SAMPLE);
     _data.recordedSamples = (SAMPLE *) malloc( _numBytes );
     if( _data.recordedSamples == NULL )
-    {
-        printf("Could not allocate record array.\n");
         delAll();
-    }
 
     for( int i=0; i < _numSamples; i++ ) _data.recordedSamples[i] = 0;
 
@@ -31,10 +36,7 @@ void    portAudio::setInput()
 {
     _inputParameters.device = Pa_GetDefaultInputDevice();
     if (_inputParameters.device == paNoDevice)
-    {
-        fprintf(stderr,"Error: No default input device.\n");
         delAll();
-    }
     _inputParameters.channelCount = 2;
     _inputParameters.sampleFormat = PA_SAMPLE_TYPE;
     _inputParameters.suggestedLatency = Pa_GetDeviceInfo( _inputParameters.device )->defaultLowInputLatency;
@@ -65,7 +67,7 @@ int portAudio::record(bool writeToFile)
         printf("index = %d\n", _data.frameIndex ); fflush(stdout);
     }
     if( _err < 0 )
-        delAll(); //goto done;
+        delAll();
 
     _err = Pa_CloseStream( stream );
     if( _err != paNoError )
@@ -75,13 +77,9 @@ int portAudio::record(bool writeToFile)
     {
         FILE  *fid;
         fid = fopen("toto4242.raw", "wb");
-        if( fid == NULL )
+        if( fid != NULL )
         {
-            printf("Could not open file.");
-        }
-        else
-        {
-            fwrite( _data.recordedSamples, NUM_CHANNELS * sizeof(SAMPLE), _totalFrames, fid );
+            fwrite( _data.recordedSamples, NUM_CHANNELS * sizeof(SAMPLE), _totalFrameses, fid );
             fclose( fid );
             printf("Wrote data to 'recorded.raw'\n");
         }
@@ -91,7 +89,7 @@ int portAudio::record(bool writeToFile)
 
 unsigned long portAudio::getFrameSize() const
 {
-    return (NUM_CHANNELS * sizeof(SAMPLE) * _totalFrames);
+    return (NUM_CHANNELS * sizeof(SAMPLE) * _totalFrameses);
 }
 
 SAMPLE  *portAudio::getFrames()
@@ -117,7 +115,8 @@ int portAudio::recordCallback(const void *inputBuffer,
     long framesToCalc;
     long i;
     int finished;
-    unsigned long framesLeft = data->maxFrameIndex - data->frameIndex;
+    //unsigned long framesLeft = data->maxFrameIndex - data->frameIndex;
+    unsigned long framesLeft = _totalFrameses - data->frameIndex;
 
     (void) outputBuffer;
     (void) timeInfo;
@@ -162,10 +161,8 @@ void    portAudio::setOutput()
     _data.frameIndex = 0;
 
     _outputParameters.device = Pa_GetDefaultOutputDevice();
-    if (_outputParameters.device == paNoDevice) {
-        fprintf(stderr,"Error: No default output device.\n");
-        delAll(); //goto done;
-    }
+    if (_outputParameters.device == paNoDevice)
+        delAll();
     _outputParameters.channelCount = 2;
     _outputParameters.sampleFormat =  PA_SAMPLE_TYPE;
     _outputParameters.suggestedLatency = Pa_GetDeviceInfo( _outputParameters.device )->defaultLowOutputLatency;
@@ -177,7 +174,7 @@ int portAudio::play()
     printf("\n=== Now playing back. ===\n"); fflush(stdout);
     _err = Pa_OpenStream(
               &stream,
-              NULL, /* no input */
+              NULL,
               &_outputParameters,
               SAMPLE_RATE,
               FRAMES_PER_BUFFER,
@@ -203,8 +200,6 @@ int portAudio::play()
         _err = Pa_CloseStream( stream );
         if( _err != paNoError )
             delAll();
-
-        printf("Done.\n"); fflush(stdout);
     }
     return _err;
 }
@@ -221,7 +216,8 @@ int portAudio::playCallback(const void *inputBuffer,
     SAMPLE *wptr = (SAMPLE*)outputBuffer;
     unsigned int i;
     int finished;
-    unsigned int framesLeft = data->maxFrameIndex - data->frameIndex;
+    //unsigned int framesLeft = data->maxFrameIndex - data->frameIndex;
+    unsigned int framesLeft = _totalFrameses - data->frameIndex;
 
     (void) inputBuffer;
     (void) timeInfo;
@@ -230,7 +226,6 @@ int portAudio::playCallback(const void *inputBuffer,
 
     if( framesLeft < framesPerBuffer )
     {
-        /* final buffer... */
         for( i=0; i<framesLeft; i++ )
         {
             *wptr++ = *rptr++;
@@ -238,7 +233,7 @@ int portAudio::playCallback(const void *inputBuffer,
         }
         for( ; i<framesPerBuffer; i++ )
         {
-            *wptr++ = 0;  /* left */
+            *wptr++ = 0;
             if( NUM_CHANNELS == 2 ) *wptr++ = 0;
         }
         data->frameIndex += framesLeft;
@@ -262,13 +257,6 @@ void portAudio::delAll()
    Pa_Terminate();
    if( _data.recordedSamples )
        free( _data.recordedSamples );
-   if( _err != paNoError )
-   {
-       fprintf( stderr, "An error occured while using the portaudio stream\n" );
-       fprintf( stderr, "Error number: %d\n", _err );
-       fprintf( stderr, "Error message: %s\n", Pa_GetErrorText( _err ) );
-       _err = 1;
-   }
 }
 
 portAudio::~portAudio()
