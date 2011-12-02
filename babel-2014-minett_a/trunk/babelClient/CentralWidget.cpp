@@ -54,6 +54,7 @@ void    CentralWidget::showCallPopUp(QString const &login, unsigned int id)
     popUp->setIconPixmap(QPixmap("../trunk/images/warning.png"));
     popUp->setButtonType(QtPopUpMessage::AcceptButton | QtPopUpMessage::RefuseButton);
     popUp->setLogin(login.toStdString());
+    std::cout << "SET PROPERTY:" << id << std::endl;
     popUp->setProperty("id", id);
     popUp->show();
 
@@ -67,6 +68,8 @@ void    CentralWidget::checkIfCallIsAccepted(int status)
     if (status == QMessageBox::Yes)
     {
         s = Protocol::OK;
+        std::cout << "[CentralWidget::checkIfCallIsAccepted() : " << popUp->getLogin() <<
+                     "=>" << popUp->property("id").toInt() << std::endl;
         Protocol::getInstance()->send(popUp->getLogin(),
                                       Protocol::STATUS,
                                       &s,
