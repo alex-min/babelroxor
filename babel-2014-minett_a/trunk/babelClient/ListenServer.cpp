@@ -47,9 +47,9 @@ void    ListenServer::emitCallFail()
     emit callFail();
 }
 
-void    ListenServer::emitCall(std::string const &login)
+void    ListenServer::emitCall(std::string const &login, unsigned int id)
 {
-    emit callOccured(QString(login.c_str()));
+    emit callOccured(QString(login.c_str()), id);
 }
 
 void    ListenServer::createAccount(QString const &login, QString const &password)
