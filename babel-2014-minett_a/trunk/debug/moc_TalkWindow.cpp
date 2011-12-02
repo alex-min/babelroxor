@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'TalkWindow.h'
 **
-** Created: Wed 30. Nov 10:38:46 2011
+** Created: Fri 2. Dec 17:01:33 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
 **
 ** WARNING! All changes made in this file will be lost!

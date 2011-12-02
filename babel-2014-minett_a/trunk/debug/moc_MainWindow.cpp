@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'MainWindow.h'
 **
-** Created: Wed 30. Nov 10:38:42 2011
+** Created: Fri 2. Dec 17:31:22 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_Graphic__MainWindow[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-       2,   14, // methods
+       3,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -32,14 +32,16 @@ static const uint qt_meta_data_Graphic__MainWindow[] = {
 
  // slots: signature, parameters, type, tag, flags
       32,   21,   20,   20, 0x0a,
-      76,   20,   20,   20, 0x0a,
+      66,   21,   20,   20, 0x0a,
+     100,   20,   20,   20, 0x0a,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_Graphic__MainWindow[] = {
     "Graphic::MainWindow\0\0title,text\0"
-    "showConnectionPopUpWarning(QString,QString)\0"
+    "showWarningPopUp(QString,QString)\0"
+    "showSuccessPopUp(QString,QString)\0"
     "switchOnConnectedState()\0"
 };
 
@@ -72,11 +74,12 @@ int Graphic::MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: showConnectionPopUpWarning((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< const QString(*)>(_a[2]))); break;
-        case 1: switchOnConnectedState(); break;
+        case 0: showWarningPopUp((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< const QString(*)>(_a[2]))); break;
+        case 1: showSuccessPopUp((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< const QString(*)>(_a[2]))); break;
+        case 2: switchOnConnectedState(); break;
         default: ;
         }
-        _id -= 2;
+        _id -= 3;
     }
     return _id;
 }

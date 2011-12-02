@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'Account.h'
 **
-** Created: Wed 30. Nov 10:38:40 2011
+** Created: Fri 2. Dec 17:01:27 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,24 +23,29 @@ static const uint qt_meta_data_Graphic__Account[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-       3,   14, // methods
+       4,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       0,       // signalCount
+       1,       // signalCount
+
+ // signals: signature, parameters, type, tag, flags
+      20,   18,   17,   17, 0x05,
 
  // slots: signature, parameters, type, tag, flags
-      18,   17,   17,   17, 0x0a,
-      52,   45,   17,   17, 0x0a,
-      74,   17,   17,   17, 0x0a,
+      53,   17,   17,   17, 0x0a,
+      87,   80,   17,   17, 0x0a,
+     109,   17,   17,   17, 0x0a,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_Graphic__Account[] = {
-    "Graphic::Account\0\0createFormAccount(QString)\0"
-    "status\0validFormAccount(int)\0logIn()\0"
+    "Graphic::Account\0\0,\0"
+    "accountCreation(QString,QString)\0"
+    "createFormAccount(QString)\0status\0"
+    "validFormAccount(int)\0logIn()\0"
 };
 
 const QMetaObject Graphic::Account::staticMetaObject = {
@@ -74,13 +79,21 @@ int Graphic::Account::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: createFormAccount((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 1: validFormAccount((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 2: logIn(); break;
+        case 0: accountCreation((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< const QString(*)>(_a[2]))); break;
+        case 1: createFormAccount((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 2: validFormAccount((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 3: logIn(); break;
         default: ;
         }
-        _id -= 3;
+        _id -= 4;
     }
     return _id;
+}
+
+// SIGNAL 0
+void Graphic::Account::accountCreation(QString const & _t1, QString const & _t2)
+{
+    void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)) };
+    QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 QT_END_MOC_NAMESPACE
