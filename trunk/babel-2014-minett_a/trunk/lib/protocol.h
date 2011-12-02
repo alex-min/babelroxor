@@ -67,7 +67,7 @@ public:
     Network *getDefaultGetaway() const;
     void registerSlot(SlotType type, ISlotInterface *slot);
     void registerPacketId(unsigned short id, std::string const &login, Network *net,
-                          ISlotInterface *slot, SlotCall call, short timeout = -1);
+                          ISlotInterface *slot, SlotCall call, std::string const &returning_login="", short timeout = -1);
     void unregisterPacket(unsigned short id, std::string const &login);
     void defaultGateway(Network *network);
     void readEvent(Network *network);

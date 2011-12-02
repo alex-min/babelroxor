@@ -20,11 +20,12 @@ bool RequestLink::createServerSockMiam(std::string const &login)
      _port = 7536;
       short unsigned int id = Protocol::getInstance()->getCurrentReplyId();
      std::cout << "RequestLink::createServerSock() : id = " << id << std::endl;
-     TestConnectionSingleton::getInstance()->send(login, IPortableSocket::TCP, 7536, false);
+     TestConnectionSingleton::getInstance()->send("", IPortableSocket::TCP, 7536, false);
      std::cout << "RequestLink::createServerSock() :: registring packet..." << std::endl;
-     Protocol::getInstance()->registerPacketId(id, login, Protocol::getInstance()->getDefaultGetaway(),
+     Protocol::getInstance()->registerPacketId(id, "", Protocol::getInstance()->getDefaultGetaway(),
                                               RequestLinkSingleton::getInstance(),
                                               reinterpret_cast<Protocol::SlotCall> (&RequestLink::testConnection),
+                                              login,
                                               Protocol::DEFAULT_TIMEOUT);
      std::cout << "RequestLink::createServerSock() :: DONE..." << std::endl;
 return (false);
@@ -60,18 +61,19 @@ void RequestLink::testConnection(bool timeout, Packet *p)
 {
     if (timeout || !p || p->getStatus() == Protocol::FAILED)
     {
-        std::cout << "RequestLink::testConnection() : no response from host" << std::endl;
+        std::cout << "RequestLink::testConnection() : no response from host timeout=" << timeout  << std::endl;
         Protocol::getInstance()->send(p->getLogin(), Protocol::REQUEST_CONNECTION, NULL, 0);
         return ;
     }
     _serverSockExist = true;
     std::cout << "here:RequestLink::testConnection();" << std::endl;
+    std::cout << "RequestLink::testConnection() len = " << p->getLen() << std::endl;
     if (p->getData() != NULL && p->getLen() >= sizeof(Protocol::Status) + 4)
     {
         std::cout << "{<=>}" << "HELLO WORLD" << std::endl;
         NetworkRouteSingleton::getInstance()->setIp
                 (*(reinterpret_cast<unsigned int *> (static_cast<char *> (p->getData()) + sizeof(Protocol::Status))));
-        ConnectToMe::getInstance()->sendConnnectToMe(p->getLogin(),
+        ConnectToMe::getInstance()->sendConnnectToMe(p->getReturningLogin(),
                                                      _type,
                                                      NetworkRouteSingleton::getInstance()->getuIp(),
                                                      _port);

@@ -42,6 +42,11 @@ void Packet::erase()
     _call = NULL;
 }
 
+void Packet::setReturningLogin(std::string const &l)
+{
+     _returning_login = l;
+}
+
 void Packet::setTimeout(int msTimeout)
 {
     _timeout = msTimeout;
@@ -134,4 +139,9 @@ Protocol::Status Packet::getStatus() const
         return (Protocol::FAILED);
     Protocol::Status s;
     return (*reinterpret_cast<Protocol::Status *> (Packet::getData()));
+}
+
+std::string const & Packet::getReturningLogin() const
+{
+    return (_returning_login);
 }

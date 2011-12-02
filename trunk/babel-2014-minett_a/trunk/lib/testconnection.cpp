@@ -18,6 +18,23 @@ void TestConnection::send(const std::string &login, IPortableSocket::SockType ty
     Protocol::getInstance()->send(login, Protocol::TEST_CONNECTION, _data, sizeof(Protocol::Status) + sizeof(unsigned short), packetId);
 }
 
+void TestConnection::sendConnectionStatus(const std::string &login,
+                                          Protocol::Status stat, std::string const &ip)
+{
+    in_addr_t u_ip = ::inet_addr(ip.c_str());
+    ::memcpy(_data, &stat, sizeof(Protocol::Status));
+    ::memcpy(_data + sizeof(Protocol::Status), &u_ip, sizeof(int));
+    Protocol::getInstance()->send(login, Protocol::CONNECTION_STATUS, _data, sizeof(Protocol::Status) + sizeof(int));
+}
+
+void TestConnection::sendConnectionStatus(const std::string &login,
+                                          Protocol::Status stat, std::string const &ip, unsigned int packetId)
+{
+    in_addr_t u_ip = ::inet_addr(ip.c_str());
+    ::memcpy(_data, &stat, sizeof(Protocol::Status));
+    ::memcpy(_data + sizeof(Protocol::Status), &u_ip, sizeof(int));
+    Protocol::getInstance()->send(login, Protocol::CONNECTION_STATUS, _data, sizeof(Protocol::Status) + sizeof(int), packetId);
+   }
 
 void    TestConnection::onCall(Network *network, std::string const &login, void *data, unsigned int len,
                                Protocol::NetworkPacket::NetworkHeader *header)
@@ -46,8 +63,7 @@ void    TestConnection::onCall(Network *network, std::string const &login, void 
         break;
         default:
         sendStatus = Protocol::FAILED;
-        Protocol::getInstance()->send(login, Protocol::TEST_CONNECTION, &sendStatus, sizeof(Protocol::Status),
-                                      header->_packetId, true);
+        TestConnection::sendConnectionStatus(login, Protocol::FAILED, network->getSocket()->getIp(), header->_packetId);
         return ;
         break;
     }
@@ -60,5 +76,5 @@ void    TestConnection::onCall(Network *network, std::string const &login, void 
     {
         sendStatus = Protocol::FAILED;
     }
-   Protocol::getInstance()->send(login, Protocol::TEST_CONNECTION, &sendStatus, sizeof(Protocol::Status), header->_packetId, true);
-}
+    TestConnection::sendConnectionStatus(login, Protocol::OK, network->getSocket()->getIp(), header->_packetId);
+ }

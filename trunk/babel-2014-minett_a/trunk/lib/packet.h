@@ -14,6 +14,7 @@ public:
            int msTimeout = -1,
            ISlotInterface *interfacef = NULL,
            Protocol::SlotCall call = NULL);
+    void setReturningLogin(const std::string &);
     void setTimeout(int msTimeout);
     void setNetwork(Network *net);
     void setLogin(std::string const &login);
@@ -24,6 +25,7 @@ public:
     void setSlotCall(Protocol::SlotCall call);
     void setId(unsigned int id);
 
+    std::string const & getReturningLogin() const;
     unsigned int getTimeout() const;
     Network *getNetwork() const;
     std::string const & getLogin() const;
@@ -46,6 +48,7 @@ protected:
     Protocol::NetworkPacket::NetworkHeader *_head;
     ISlotInterface *_interface;
     Protocol::SlotCall _call;
+    std::string _returning_login;
 };
 
 
