@@ -28,12 +28,13 @@ void ConnectionLogin::onCall(Network *network, const std::string &login,
 
     std::cout << "CALLING CONNECTION with login " << loginAccount << " and network=" << network << std::endl;
 
-    bool ret = true;
+    Account *account = AccountManagerSingleton::getInstance()->getAccount(loginAccount, passwordAccount);
 
-    ret = AccountManagerSingleton::getInstance()->checkIfAccountExist(loginAccount, passwordAccount);
-
-    if (ret)
+    if (account && account->isConnected() == false)
+    {
         _s = Protocol::OK;
+        account->setConnected(true);
+    }
     else
         _s = Protocol::FAILED;
 

@@ -30,6 +30,7 @@ public:
     virtual void    logInAccount(std::string const &login, std::string const &password);
     virtual std::string const &getLogin();
     void            resetFields();
+    virtual std::string const &getPassword();
     ~Account();
 
 public slots:
@@ -49,6 +50,7 @@ private:
     QLabel      _createAccount;
     QPushButton _connectionButton;
     std::string _connectLogin;
+    std::string _connectPassword;
 };
 }
 

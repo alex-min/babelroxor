@@ -1,4 +1,6 @@
 #include "windowsnetworkmanager.h"
+#include "accountmanager.h"
+
 #ifdef OS_WINDOWS
 
 Win32NetworkManager::Win32NetworkManager()
@@ -53,6 +55,11 @@ void Win32NetworkManager::run(long uTimeout)
                 {
                 std::cout << "Disconnect ---" << std::endl;
                 (*it)->getSocket()->disconnect();
+                AccountManagerSingleton::getInstance()->getAccountFromLogin(
+                            AccountManagerSingleton::getInstance()->getLoginFromNetwork(*it))->setConnected(false);
+                NetworkRouteSingleton::getInstance()->eraseRoute(
+                            AccountManagerSingleton::getInstance()->getLoginFromNetwork(*it));
+                AccountManagerSingleton::getInstance()->removeNetwork(*it);
                 _network.erase(it);
                 Win32NetworkManager::generateReadFs();
                 return ;

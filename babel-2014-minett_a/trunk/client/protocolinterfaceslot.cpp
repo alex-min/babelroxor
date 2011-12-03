@@ -11,7 +11,8 @@ void _ProtocolInterfaceSlot::loginSlot(bool timeout, Packet *p)
 {
     if (timeout || !p || p->getStatus() == Protocol::FAILED)
     {
-        ListenServerSingleton::getInstance()->emitWarningPopUp("Log-in", "Your login or password is wrong.");
+        ListenServerSingleton::getInstance()->emitWarningPopUp("Log-in", "Either you have not created an account with these fields "
+                                                               "or you are already connected to this account.");
 
         std::cerr << "[err] Cannot login to host : " << timeout << std::endl;
         return ;

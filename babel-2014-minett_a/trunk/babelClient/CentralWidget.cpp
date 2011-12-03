@@ -83,8 +83,9 @@ void    CentralWidget::checkIfCallIsAccepted(int status)
         s = Protocol::FAILED;
         Protocol::getInstance()->send(popUp->getLogin(), Protocol::STATUS, &s,
                                       sizeof(Protocol::Status), popUp->property("id").toInt(), false);
-        popUp->deleteLater();
     }
+
+    popUp->deleteLater();
 }
 
 void    CentralWidget::callClient(std::string const &login)

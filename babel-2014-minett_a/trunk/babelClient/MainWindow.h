@@ -18,6 +18,9 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
+signals:
+    void    closeConnection(QString const &, QString const &);
+
 public:
     MainWindow(QWidget *parent = 0);
     void    init();
@@ -27,6 +30,9 @@ public slots:
     void    showWarningPopUp(QString const &title, QString const &text);
     void    showSuccessPopUp(QString const &title, QString const &text);
     void    switchOnConnectedState();
+
+protected:
+    virtual void closeEvent(QCloseEvent *);
 
 private:
     QDockWidget *_dockWidget;

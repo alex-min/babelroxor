@@ -42,7 +42,6 @@ void RequestLink::calling(bool timeout, Packet *)
     {
         ListenServerSingleton::getInstance()->emitCallFail();
     }
-//    emin callSuccess(login); //throw popup
 }
 
 bool RequestLink::createNewLink(std::string const &login)

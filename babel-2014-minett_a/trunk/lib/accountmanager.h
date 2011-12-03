@@ -25,6 +25,8 @@ public:
     Account*            getAccountAt(int id);
     Account const*      getAccountFromLogin(std::string const &login) const;
     Account*            getAccountFromLogin(std::string const &login);
+    Account const*      getAccount(std::string const &login, std::string const &password) const;
+    Account*            getAccount(std::string const &login, std::string const &password);
     bool                removeAccount(Account* account);
     bool                removeAccountFromLogin(std::string const &login);
     bool                removeAccountAt(int id);

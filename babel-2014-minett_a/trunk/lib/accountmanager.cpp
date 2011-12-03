@@ -87,6 +87,28 @@ Account*    AccountManager::getAccountFromLogin(std::string const &login)
     return (0);
 }
 
+Account const*      AccountManager::getAccount(std::string const &login, std::string const &password) const
+{
+    std::list<Account*>::const_iterator it;
+
+    for (it = _accountList.begin(); it != _accountList.end(); ++it)
+        if ((*it)->getLogin() == login && (*it)->getPassword() == password)
+            return (*it);
+
+    return (0);
+}
+
+Account*            AccountManager::getAccount(std::string const &login, std::string const &password)
+{
+    std::list<Account*>::iterator it;
+
+    for (it = _accountList.begin(); it != _accountList.end(); ++it)
+        if ((*it)->getLogin() == login && (*it)->getPassword() == password)
+            return (*it);
+
+    return (0);
+}
+
 bool    AccountManager::removeAccount(Account* account)
 {
     std::list<Account*>::iterator it;
