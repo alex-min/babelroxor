@@ -35,10 +35,13 @@ void UNIXNetworkManager::generateWriteFs()
 
 void UNIXNetworkManager::addNetwork(Network *network)
 {
-    _network.push_back(network);
-    if (network->getSocket()->UNIXGetSocket() > _maxfd)
+    if (network && network->getSocket())
+    {
+        _network.push_back(network);
+        if (network->getSocket()->UNIXGetSocket() > _maxfd)
         _maxfd = network->getSocket()->UNIXGetSocket();
-    UNIXNetworkManager::generateReadFs();
+     UNIXNetworkManager::generateReadFs();
+    }
 }
 
 void UNIXNetworkManager::removeNetwork(Network *network)
