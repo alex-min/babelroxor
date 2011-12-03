@@ -1,6 +1,10 @@
 #ifndef MY_SPEEX_H
 #define MY_SPEEX_H
 
+#ifdef OS_UNIX
+#include <unistd.h>
+#define Sleep ::sleep
+#endif
 #include <speex.h>
 #include <QVector>
 #include <QByteArray>
