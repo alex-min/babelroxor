@@ -30,6 +30,7 @@ SOURCES += ./client/main.cpp \
     client/CallAnswer.cpp \
     client/audiothread.cpp \
     client/connectionlogine.cpp \
+    client/RequestStatusAnswer.cpp \
 
 
 #HEADERS  +=
@@ -44,3 +45,4 @@ HEADERS += \
     client/CallAnswer.h \
     client/audiothread.h \
     client/connectionlogine.h \
+    client/RequestStatusAnswer.h \

@@ -1,9 +1,9 @@
 #ifndef AUDIOSLOT_H
 #define AUDIOSLOT_H
+
 #include "islotinterface.h"
 #include "singleton.h"
 #include "portaudio.h"
-
 #include "AudioCallback.h"
 #include "AudioHandler.h"
 #include "DecoderSpeex.h"
@@ -16,9 +16,9 @@ public:
     AudioSlot();
 
 private:
-    //portAudio _pa;
-    PortaudioWrapper::AudioHandler	_dec;
-    PortaudioWrapper::SpeexBuffer	_s;
+//    portAudio _pa;
+//    PortaudioWrapper::AudioHandler	_dec;
+//    PortaudioWrapper::SpeexBuffer	_s;
 };
 
 typedef Singleton<AudioSlot> AudioSlotSingle;

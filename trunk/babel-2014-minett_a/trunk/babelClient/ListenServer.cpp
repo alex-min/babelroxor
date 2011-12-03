@@ -1,20 +1,20 @@
 #include "ListenServer.h"
-#include "audiothread.h"
 #include "CentralWidget.h"
 #include "requestlink.h"
 #include "connecttome.h"
 #include <QCoreApplication>
-
 #include "ListenServer.h"
 #include "audiothread.h"
 #include "DockWidgetContent.h"
 #include "status.h"
 #include "StatusAnswer.h"
+#include "RequestStatusAnswer.h"
 #include "Account.h"
+#include "MainWindow.h"
 
 ListenServer::ListenServer()
 {
-    Network *net = new Network;
+    _net = new Network;
     Protocol *proto = Protocol::getInstance();
     ConnectionSlot *c = new ConnectionSlot;
     ProxySlot *p = new ProxySlot;
@@ -23,23 +23,38 @@ ListenServer::ListenServer()
     proto->registerSlot(Protocol::PROXY_FORWARD, p);
     proto->registerSlot(Protocol::TEST_CONNECTION, TestConnectionSingleton::getInstance());
     proto->registerSlot(Protocol::PROXY_RECEIVED, ProxyReceivedSlotSingleton::getInstance());
-    proto->registerSlot(Protocol::REQUEST_STATUS, StatusAnswerSingleton::getInstance());
+    proto->registerSlot(Protocol::STATUS, StatusAnswerSingleton::getInstance());
+    proto->registerSlot(Protocol::REQUEST_STATUS, RequestStatusAnswerSingleton::getInstance());
     proto->registerSlot(Protocol::CONNECT_TO_ME, ConnectToMe::getInstance());
     proto->registerSlot(Protocol::CALL, CallAnswerSingleton::getInstance());
 
     std::cout << "Connecting {{---}}" << std::endl;
-    if (!net->getSocket()->connect("127.0.0.1", 4646))
+    if (!_net->getSocket()->connect("127.0.0.1", 4646))
         _connection = false;
     else
         _connection = true;
 
-    Protocol::getInstance()->defaultGateway(net);
-    _networkManager.addNetwork(net);
+    Protocol::getInstance()->defaultGateway(_net);
+    _networkManager.addNetwork(_net);
 
+    connect(MainWindowSingleton::getInstance(), SIGNAL(closeConnection(QString const &,QString const &)), this, SLOT(disconnectClient(QString const &, QString const &)));
     connect(DockWidgetContentSingleton::getInstance(), SIGNAL(newClient(QString const &)), this, SLOT(addNewClient(QString const &)));
-    connect(DockWidgetContentSingleton::getInstance(), SIGNAL(clientStatus(QString const&, int)), this, SLOT(updateClientStatus(QString const&, int)));
+    connect(DockWidgetContentSingleton::getInstance(), SIGNAL(clientStatus(int, QList<std::string> const &)), this, SLOT(updateClientStatus(int, QList<std::string> const &)));
     connect(AccountSingleton::getInstance(), SIGNAL(accountCreation(QString const&,QString const&)), this, SLOT(createAccount(QString const&, QString const&)));
     connect(CentralWidgetSingleton::getInstance(), SIGNAL(newLink(QString const &)), this, SLOT(createNewLink(QString const &)));
+}
+
+void    ListenServer::emitAddContactToUpdateList(const std::string &login)
+{
+    emit newContactToUpdateList(QString(login.c_str()));
+}
+
+void    ListenServer::disconnectClient(QString const &login, QString const &password)
+{
+    Q_UNUSED(login);
+    Q_UNUSED(password);
+
+    _net->getSocket()->disconnect();
 }
 
 void    ListenServer::emitCallFail()
@@ -62,9 +77,9 @@ void    ListenServer::emitContactStatusChanged(std::string const &login, int sta
     emit contactStatusChanged(QString(login.c_str()), status);
 }
 
-void    ListenServer::updateClientStatus(QString const &login, int status)
+void    ListenServer::updateClientStatus(int status, QList<std::string> const &contactUpdateList)
 {
-    StatusSingleton::getInstance()->updateStatus(login.toStdString(), status);
+    StatusSingleton::getInstance()->updateStatus(status, contactUpdateList.toStdList());
 }
 
 void    ListenServer::addNewClient(QString const &login)
@@ -74,6 +89,7 @@ void    ListenServer::addNewClient(QString const &login)
 
 void    ListenServer::createNewLink(QString const &login)
 {
+    std::cout << "CREATE NEW LINK" << std::endl;
     RequestLinkSingleton::getInstance()->createNewLink(login.toStdString());
 }
 
@@ -107,7 +123,7 @@ void    ListenServer::emitSuccessPopUp(std::string const &title, std::string con
 void    ListenServer::emitConnected()
 {
     std::cout << "C'est bon !!" << std::endl;
-    AudioThreadSingleton::getInstance()->addLogin("lol");
+    //AudioThreadSingleton::getInstance()->addLogin("lol");
     std::cout << "C'est bon !!" << std::endl;
     emit connected();
 }

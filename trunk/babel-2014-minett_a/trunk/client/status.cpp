@@ -13,29 +13,34 @@ Status::AssocStatus Status::_statusTab[] =
 
 Status::Status()
 {
-
+    _currentStatus = Protocol::ONLINE;
 }
 
 void    Status::requestStatus(std::string const &login)
 {
     std::cout << "requestStatus to add loginContact: " << login << std::endl;
-    std::cout << "this method is not implemented yet" << std::endl;
 
-    //Protocol::getInstance()->send(login, );
+    Protocol::getInstance()->send(login, Protocol::REQUEST_STATUS, "", 0, false);
 }
 
-void    Status::updateStatus(std::string const &login, int status)
+void    Status::updateStatus(std::string const &login)
 {
-    std::cout << std::endl << std::endl;
-    std::cout << "update status of " << login << std::endl;
-    std::cout << std::endl << std::endl;
-    Protocol::Status stat = Protocol::NEED_REGISTRATION;
+    Protocol::getInstance()->send(login, Protocol::STATUS, &_currentStatus, sizeof(Protocol::STATUS), false);
+}
+
+void    Status::updateStatus(int status, std::list<std::string> const &updateList)
+{
+    Protocol::Status stat = Protocol::OFFLINE;
 
     stat = Status::getProtocolStatusFromClientStatus(status);
 
+    std::cout << "UPDATE STATUS" << std::endl;
+
     if (stat != (Protocol::Status)(-1))
     {
-        Protocol::getInstance()->send(login, Protocol::STATUS, &stat, sizeof(Protocol::STATUS), false);
+        _currentStatus = stat;
+        for (std::list<std::string>::const_iterator it = updateList.begin(); it != updateList.end(); ++it)
+            Protocol::getInstance()->send(*it, Protocol::STATUS, &stat, sizeof(Protocol::STATUS), false);
     }
 }
 

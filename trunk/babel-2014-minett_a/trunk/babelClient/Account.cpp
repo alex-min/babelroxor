@@ -6,6 +6,7 @@ namespace Graphic
 Account::Account()
 {
     _connectLogin = "";
+    _connectPassword = "";
     _login.setText("Login :");
     _password.setText("Password :");
     _info.setText("If you have not an account you have to create one :");
@@ -49,6 +50,13 @@ Account::Account()
     connect(&_connectionButton, SIGNAL(clicked()), this, SLOT(logIn()));
 }
 
+std::string const&  Account::getPassword()
+{
+    _connectPassword = _passwordLineEdit.text().toStdString();
+
+    return (_connectPassword);
+}
+
 void    Account::logInAccount(std::string const &login, std::string const &password)
 {
     ConnectionLoginSingleton::getInstance()->connect(login, password);
@@ -66,6 +74,7 @@ void    Account::resetFields()
     _loginLineEdit.clear();
     _passwordLineEdit.clear();
     _connectLogin = "";
+    _connectPassword = "";
 }
 
 void    Account::logIn()

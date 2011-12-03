@@ -20,13 +20,15 @@ public:
     Status();
     static Protocol::Status    getProtocolStatusFromClientStatus(int status);
     static int                 getClientStatusFromProtocolStatus(Protocol::Status status);
-    void    updateStatus(std::string const &login, int status);
+    void    updateStatus(int status, std::list<std::string> const &updateList);
+    void    updateStatus(std::string const &login);
     void    sendCallStatus(std::string const &login, int callStatus);
     void    requestStatus(std::string const &login);
     ~Status();
 
 private:
     static AssocStatus  _statusTab[7];
+    Protocol::Status    _currentStatus;
 };
 
 typedef Singleton<Status>   StatusSingleton;

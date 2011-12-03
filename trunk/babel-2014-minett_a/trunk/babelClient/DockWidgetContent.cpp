@@ -114,11 +114,6 @@ void    DockWidgetContent::updateClientAvatar(std::string const &filename)
     // do a request to update the avatar in the server
 }
 
-void    DockWidgetContent::updateClientStatus(int status)
-{
-    emit clientStatus(QString(_login.c_str()), status);
-}
-
 void    DockWidgetContent::updateContactStatus(std::string const &login, int status)
 {
     foreach (QListWidgetItem *item, _contactItemList)
@@ -138,16 +133,20 @@ void    DockWidgetContent::updateContactStatus(std::string const &login, int sta
     }
 }
 
+void    DockWidgetContent::addContactToUpdateList(const QString &login)
+{
+    foreach (std::string item, _contactUpdateList)
+    {
+        if (item == login.toStdString())
+        return;
+    }
+
+    _contactUpdateList.append(login.toStdString());
+}
+
 void    DockWidgetContent::addClientContact(std::string const &login)
 {
     emit newClient(QString(login.c_str()));
-}
-
-void    DockWidgetContent::removeCurrentClientContact(std::string const &login)
-{
-    Q_UNUSED(login);
-
-    //ask to the server if we can remove the contact selected
 }
 
 std::string const &    DockWidgetContent::getCurrentContactLogin()
@@ -186,7 +185,7 @@ void    DockWidgetContent::updateAvatar(QString name)
 
 void    DockWidgetContent::updateStatus(int status)
 {
-    updateClientStatus(status);
+    emit clientStatus(status, _contactUpdateList);
 }
 
 void    DockWidgetContent::addContact()
@@ -245,7 +244,7 @@ void    DockWidgetContent::closeContactDialog(int finished)
         QLineEdit *loginLineEdit = qobject_cast<QLineEdit*>(l->itemAt(1)->widget());
         std::string login = loginLineEdit->text().toStdString();
 
-        if (!isContactAlreadyAdd(loginLineEdit->text()))
+        if (!isContactAlreadyAdd(loginLineEdit->text()) && login != _login)
         {
             QListWidgetItem *item = new QListWidgetItem(QIcon("../trunk/images/status_deconnected"), loginLineEdit->text());
 
@@ -276,16 +275,20 @@ void DockWidgetContent::removeContact()
 {
     QListWidgetItem *item = _contactList.currentItem();
 
+    removeCurrentClientContact(item->text().toStdString());
+}
+
+void    DockWidgetContent::removeCurrentClientContact(const std::string &login)
+{
+    QListWidgetItem *item = _contactList.currentItem();
+
     if (item)
     {
-        std::string login = item->text().toStdString();
-
         _contactItemList.removeOne(item);
         _contactList.removeItemWidget(item);
+        _contactUpdateList.removeOne(login);
 
         delete item;
-
-        removeCurrentClientContact(login);
     }
 }
 

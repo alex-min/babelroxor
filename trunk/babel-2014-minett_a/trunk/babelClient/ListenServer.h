@@ -34,6 +34,7 @@ signals:
     void    successPopUp(QString const &, QString const &);
     void    callOccured(QString const &, unsigned int);
     void    callFail();
+    void    newContactToUpdateList(QString const &);
 
 public:
     ListenServer();
@@ -44,20 +45,22 @@ public:
     void    emitContactStatusChanged(std::string const &login, int status);
     void    emitCall(std::string const &login, unsigned int id);
     void    emitCallFail();
+    void    emitAddContactToUpdateList(std::string const &login);
+
     virtual ~ListenServer();
 
 public slots:
     void    addNewClient(QString const &login);
-    void    updateClientStatus(QString const &login, int status);
+    void    updateClientStatus(int status, QList<std::string> const &contactUpdateList);
     void    createAccount(QString const &login, QString const &password);
     void    createNewLink(QString const &login);
-
+    void    disconnectClient(QString const &login, QString const &password);
 
 private:
     PortableNetworkManager _networkManager;
     bool                   _connection;
-    AudioThread _t;
-
+    Network                *_net;
+//    AudioThread _t;
 };
 
 typedef Singleton<ListenServer> ListenServerSingleton;

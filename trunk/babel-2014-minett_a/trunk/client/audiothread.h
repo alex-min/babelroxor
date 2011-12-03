@@ -22,7 +22,7 @@ public:
     std::list<std::string> & getLoginList();
 
 private:
-    //portAudio _pa;
+    portAudio _pa;
     PortaudioWrapper::AudioHandler	_enc;
     PortaudioWrapper::SpeexBuffer	_s;
     std::list<std::string> _loginCall;

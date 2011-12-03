@@ -83,6 +83,8 @@ void UNIXNetworkManager::run(long uTimeout)
             {
                 std::cout << "client disconnected" << std::endl;
                 (*it)->getSocket()->disconnect();
+                AccountManagerSingleton::getInstance()->getAccountFromLogin(
+                            AccountManagerSingleton::getInstance()->getLoginFromNetwork(*it))->setConnected(false);
                 NetworkRouteSingleton::getInstance()->eraseRoute(
                             AccountManagerSingleton::getInstance()->getLoginFromNetwork(*it));
                 AccountManagerSingleton::getInstance()->removeNetwork(*it);
