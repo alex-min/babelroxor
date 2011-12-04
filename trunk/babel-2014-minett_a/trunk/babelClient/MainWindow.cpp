@@ -59,6 +59,7 @@ void    MainWindow::init()
     connect(ListenServerSingleton::getInstance(), SIGNAL(callFail()), _centralWidget, SLOT(showFailCall()));
     connect(ListenServerSingleton::getInstance(), SIGNAL(newContactToUpdateList(QString const &)), _dockWidgetContent, SLOT(addContactToUpdateList(QString const &)));
     connect(ListenServerSingleton::getInstance(), SIGNAL(textMessageChanged(QString const &)), _centralWidget, SLOT(updateTalkWindowText(QString const&)));
+    connect(_dockWidgetContent, SIGNAL(called()), _centralWidget, SLOT(call()));
 }
 
 void    MainWindow::closeEvent(QCloseEvent *)

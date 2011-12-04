@@ -56,6 +56,7 @@ std::string const &TalkWindow::getContactLogin()
 void    TalkWindow::updateText(const std::string &text)
 {
     _textView.setText(_textView.toPlainText() + "\n" + QString(text.c_str()));
+    _textView.moveCursor(QTextCursor::End);
 }
 
 void    TalkWindow::sendTextToServer()
@@ -65,6 +66,7 @@ void    TalkWindow::sendTextToServer()
 
     _textToSend.clear();
     _textView.setText(_textView.toPlainText() + "\n" + QString(login.c_str()) + ": " + QString(text.c_str()));
+    _textView.moveCursor(QTextCursor::End);
 
     text = login + ": " + text;
 
