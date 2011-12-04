@@ -11,6 +11,8 @@ class TalkWindowManager : public QTabWidget
 {
     Q_OBJECT
 
+signals:
+    void    tabClosed(QString const &);
 public:
     TalkWindowManager();
     void    addContact(QWidget *contactWindow, QIcon const &status);

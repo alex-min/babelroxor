@@ -32,7 +32,9 @@ SOURCES += ./client/main.cpp \
     client/connectionlogine.cpp \
     client/RequestStatusAnswer.cpp \
     client/TextMessage.cpp \
-    client/TextMessageAnswer.cpp
+    client/TextMessageAnswer.cpp \
+    client/HangUp.cpp \
+    client/HangUpAnswer.cpp
 
 
 #HEADERS  +=
@@ -49,7 +51,13 @@ HEADERS += \
     client/connectionlogine.h \
     client/RequestStatusAnswer.h \
     client/TextMessage.h \
-    client/TextMessageAnswer.h
+    client/TextMessageAnswer.h \
+    client/HangUp.h \
+    client/HangUpAnswer.h
+
+
+
+
 
 
 
