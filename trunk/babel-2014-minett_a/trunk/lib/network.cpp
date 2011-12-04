@@ -14,6 +14,16 @@ Network::Network(PortableSocket *sock, unsigned int readCirbufSize, unsigned int
 {
 }
 
+std::string const &Network::getName() const
+{
+    return (_name);
+}
+
+void Network::setName(std::string const &name)
+{
+    _name = name;
+}
+
 PortableSocket *Network::getSocket()
 {
     return (_socket);

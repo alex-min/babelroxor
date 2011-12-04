@@ -35,13 +35,14 @@ ListenServer::ListenServer()
         _connection = true;
 
     Protocol::getInstance()->defaultGateway(_net);
-    _networkManager.addNetwork(_net);
+    PortableNetworkManagerSingle::getInstance()->addNetwork(_net);
 
     connect(MainWindowSingleton::getInstance(), SIGNAL(closeConnection(QString const &,QString const &)), this, SLOT(disconnectClient(QString const &, QString const &)));
     connect(DockWidgetContentSingleton::getInstance(), SIGNAL(newClient(QString const &)), this, SLOT(addNewClient(QString const &)));
     connect(DockWidgetContentSingleton::getInstance(), SIGNAL(clientStatus(int, QList<std::string> const &)), this, SLOT(updateClientStatus(int, QList<std::string> const &)));
     connect(AccountSingleton::getInstance(), SIGNAL(accountCreation(QString const&,QString const&)), this, SLOT(createAccount(QString const&, QString const&)));
     connect(CentralWidgetSingleton::getInstance(), SIGNAL(newLink(QString const &)), this, SLOT(createNewLink(QString const &)));
+    connect(CentralWidgetSingleton::getInstance(), SIGNAL(needOpenTalkWindow(QString)), this, SLOT(openTalkWindow(QString)));
 }
 
 void    ListenServer::emitAddContactToUpdateList(const std::string &login)
@@ -77,6 +78,12 @@ void    ListenServer::emitContactStatusChanged(std::string const &login, int sta
     emit contactStatusChanged(QString(login.c_str()), status);
 }
 
+
+void ListenServer::openTalkWindow(const QString &login)
+{
+    CentralWidgetSingleton::getInstance()->addTalkWindow(login);
+}
+
 void    ListenServer::updateClientStatus(int status, QList<std::string> const &contactUpdateList)
 {
     StatusSingleton::getInstance()->updateStatus(status, contactUpdateList.toStdList());
@@ -104,7 +111,7 @@ void    ListenServer::run(void)
 
     while (1)
     {
-        _networkManager.run(TimerPoolSingleton::getInstance()->getMsNextCall());
+        PortableNetworkManagerSingle::getInstance()->run(TimerPoolSingleton::getInstance()->getMsNextCall());
         TimerPoolSingleton::getInstance()->autocall();
     }
 

@@ -68,7 +68,7 @@ void UNIXNetworkManager::run(long uTimeout)
     for (std::list<Network *>::iterator it = _network.begin(); it != _network.end()
          ; ++it)
     {
-        if (FD_ISSET((*it)->getSocket()->UNIXGetSocket(), &_readfs))
+        if ((*it)->getSocket() && FD_ISSET((*it)->getSocket()->UNIXGetSocket(), &_readfs))
         {
             if ((*it)->getSocket()->isServerSock())
             {
@@ -76,15 +76,22 @@ void UNIXNetworkManager::run(long uTimeout)
                 Network *n = new Network((*it)->getSocket()->waitForClient());
                 UNIXNetworkManager::addNetwork(n);
                 Protocol::getInstance()->welcomeEvent(n);
+                if ((*it)->getName() != "") {
+                    std::cout << "NETWORKMANAGER:Registering with " << (*it)->getName() << " and net=" << n << std::endl;
+                    NetworkRouteSingleton::getInstance()->registerRoute((*it)->getName(), n, false);
+                }
                 return ;
-            }
+            } else {
+                try {
             size = (*it)->getSocket()->read(_mainBuffer, 512);
             if (size == 0)
             {
                 std::cout << "client disconnected" << std::endl;
                 (*it)->getSocket()->disconnect();
-                AccountManagerSingleton::getInstance()->getAccountFromLogin(
-                            AccountManagerSingleton::getInstance()->getLoginFromNetwork(*it))->setConnected(false);
+                if (AccountManagerSingleton::getInstance()->getAccountFromLogin(
+                            AccountManagerSingleton::getInstance()->getLoginFromNetwork(*it)) != NULL)
+                    AccountManagerSingleton::getInstance()->getAccountFromLogin(
+                                AccountManagerSingleton::getInstance()->getLoginFromNetwork(*it))->setConnected(false);
                 NetworkRouteSingleton::getInstance()->eraseRoute(
                             AccountManagerSingleton::getInstance()->getLoginFromNetwork(*it));
                 AccountManagerSingleton::getInstance()->removeNetwork(*it);
@@ -98,15 +105,21 @@ void UNIXNetworkManager::run(long uTimeout)
                 (*it)->getReadBuffer()->append(_mainBuffer, size);
                 Protocol::getInstance()->readEvent(*it);
             }
+                } catch (std::exception e) {
+                }
+            }
         }
-        else if (FD_ISSET((*it)->getSocket()->UNIXGetSocket(), &_writefs))
+        else if ((*it)->getSocket() && FD_ISSET((*it)->getSocket()->UNIXGetSocket(), &_writefs))
         {
             std::cout << "UNIXNetworkManager::writing..." << std::endl;
 
             size = (*it)->getWriteBuffer()->extract(_mainBuffer, 512);
             std::cout << "UNIXNetworkManager::after_extract" << std::endl;
+            if ((*it)->getSocket()) {
              (*it)->getSocket()->send(_mainBuffer, size);
+            }
             std::cout << "UNIXNetworkManager::after_send" << std::endl;
+
         }
     }
 }

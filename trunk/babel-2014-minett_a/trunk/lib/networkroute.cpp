@@ -1,4 +1,5 @@
 #include "networkroute.h"
+#include "accountmanager.h"
 
 std::string NetworkRoute::_tmpString = "";
 
@@ -11,7 +12,10 @@ void NetworkRoute::registerRoute(std::string const &login, Network *network, boo
     if (proxy)
         packetProxyHeader._slotType = Protocol::PROXY_FORWARD;
     else
+    {
         packetProxyHeader._slotType = Protocol::PROXY_DIRECT;
+        AccountManagerSingleton::getInstance()->setLoginToNetwork(network, login);
+    }
     packetProxyHeader._len = 0;
     packetProxyHeader._packetId = 0x4242;
     packetProxyHeader._checksum = 0x4242;

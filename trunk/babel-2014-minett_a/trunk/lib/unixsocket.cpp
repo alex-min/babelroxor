@@ -20,6 +20,7 @@ bool UNIXSocket::isServerSock() const
 
 void UNIXSocket::disconnect()
 {
+    std::cout << "UNIXSocket::disconnect()" << std::endl;
     if (_sock != -1)
           close(_sock);
 }
@@ -40,7 +41,7 @@ unsigned int UNIXSocket::read(char *buf, unsigned int size)
     int rd;
     rd = ::recv(_sock, buf, size, MSG_DONTWAIT);
     if (rd == -1)
-        return (0);
+        throw std::exception();
     return (rd);
 }
 
@@ -50,7 +51,7 @@ unsigned int UNIXSocket::read(IPortableSocket *sock, char *buf, unsigned int siz
     if (!cl)
         return (0);
     int rd;
-    rd = ::recv(cl->_sock, static_cast<void *>(buf), size, MSG_DONTWAIT);
+    rd = ::recv(cl->_sock, static_cast<void *>(buf), size, 0);
     if (rd == -1)
         return (0);
     return (rd);
@@ -78,6 +79,7 @@ UNIXSocket::UNIXSocket(int sock, struct sockaddr_in sin, unsigned short port)
     _sin = sin;
     _ip.assign(::inet_ntoa(_sin.sin_addr));
     _port = port;
+    _isServerSock = false;
 }
 
 void UNIXSocket::send(const char *str, unsigned int len)
@@ -179,7 +181,7 @@ UNIXSocket * UNIXSocket::waitForClient()
              close(csock);
              return (NULL);
        }
-    _client_connected++;
+    //_client_connected++;
     return (new UNIXSocket(csock, client_sin, _port));
 }
 

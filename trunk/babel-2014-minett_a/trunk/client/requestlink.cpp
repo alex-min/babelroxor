@@ -2,6 +2,11 @@
 #include "connecttome.h"
 #include "accountmanager.h"
 #include "ListenServer.h"
+#include "CentralWidget.h"
+#ifdef OS_UNIX
+#include <sys/time.h>
+#include <unistd.h>
+#endif
 
 RequestLink::RequestLink()
 {
@@ -17,7 +22,8 @@ bool RequestLink::createServerSockMiam(std::string const &login)
     if (1)
     {
       _net->getSocket()->createServerSocket(IPortableSocket::TCP, 7536);
-     _type = IPortableSocket::TCP;
+      PortableNetworkManagerSingle::getInstance()->addNetwork(_net);
+      _type = IPortableSocket::TCP;
      _port = 7536;
       short unsigned int id = Protocol::getInstance()->getCurrentReplyId();
      std::cout << "RequestLink::createServerSock() : id = " << id << std::endl;
@@ -35,13 +41,21 @@ return (false);
     return (true);
 }
 
-void RequestLink::calling(bool timeout, Packet *)
+void RequestLink::calling(bool timeout, Packet *p)
 {
     std::cout << "RequestLink::calling: THIS FUNCTION IS THE GOAL OF THE PROJECT !! :P" << std::endl;
     if (timeout)
     {
         ListenServerSingleton::getInstance()->emitCallFail();
+        return ;
     }
+    if (p == NULL || p->getLogin() == "")
+    {
+    }
+    else {
+     CentralWidgetSingleton::getInstance()->emitNeedOpenTalkWindow(p->getLogin().c_str());
+    }
+    //    emin callSuccess(login); //throw popup
 }
 
 bool RequestLink::createNewLink(std::string const &login)
@@ -75,18 +89,18 @@ void RequestLink::testConnection(bool timeout, Packet *p)
         std::cout << "{<=>}" << "HELLO WORLD" << std::endl;
         NetworkRouteSingleton::getInstance()->setIp
                 (*(reinterpret_cast<unsigned int *> (static_cast<char *> (p->getData()) + sizeof(Protocol::Status))));
+        _net->setName(p->getReturningLogin());
         ConnectToMe::getInstance()->sendConnnectToMe(p->getReturningLogin(),
                                                      _type,
                                                      NetworkRouteSingleton::getInstance()->getuIp(),
                                                      _port);
         unsigned int id = Protocol::getInstance()->getCurrentReplyId();
-        Protocol::getInstance()->send(p->getReturningLogin(), Protocol::CALL, "", 0);
+        Protocol::getInstance()->send(p->getReturningLogin(), Protocol::CALL, "", 0, id, false);
         std::cout << "registring id:" << id << std::endl;
         Protocol::getInstance()->registerPacketId(id, p->getReturningLogin(),
                                                   p->getNetwork(), this,
                                                   reinterpret_cast<Protocol::SlotCall> (&RequestLink::calling), p->getReturningLogin(),
-                                                  Protocol::DEFAULT_TIMEOUT);
-        PortableNetworkManagerSingle::getInstance()->addNetwork(_net);
+                                                  20000);
     }
 
 }

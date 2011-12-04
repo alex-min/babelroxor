@@ -12,7 +12,7 @@ void    CallAnswer::onCall(Network *network, const std::string &login, void *dat
     if (!network || login == "" || !data || len < 0 || !header)
         return ;
 
-    std::cout << "CallAnswer::onCall() : CALLING !!" << std::endl;
+    std::cout << "CallAnswer::onCall() : CALLING !!" << header->_packetId << std::endl;
     ListenServerSingleton::getInstance()->emitCall(login, header->_packetId);
 }
 
