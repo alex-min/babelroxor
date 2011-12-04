@@ -53,15 +53,22 @@ std::string const &TalkWindow::getContactLogin()
     return (_contactLogin);
 }
 
+void    TalkWindow::updateText(const std::string &text)
+{
+    _textView.setText(_textView.toPlainText() + "\n" + QString(text.c_str()));
+}
+
 void    TalkWindow::sendTextToServer()
 {
-    //send a request to the server with the login and the message
-
     std::string login = _dockWidgetContent->getLogin();
     std::string text = _textToSend.toPlainText().toStdString();
 
-    Q_UNUSED(login);
-    Q_UNUSED(text);
+    _textToSend.clear();
+    _textView.setText(_textView.toPlainText() + "\n" + QString(login.c_str()) + ": " + QString(text.c_str()));
+
+    text = login + ": " + text;
+
+    emit textToSend(QString(_contactLogin.c_str()), QString(text.c_str()));
 }
 
 void    TalkWindow::changeFamily(QString const &name)

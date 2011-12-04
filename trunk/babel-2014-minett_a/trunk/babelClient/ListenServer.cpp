@@ -11,6 +11,8 @@
 #include "RequestStatusAnswer.h"
 #include "Account.h"
 #include "MainWindow.h"
+#include "TextMessage.h"
+#include "TextMessageAnswer.h"
 
 ListenServer::ListenServer()
 {
@@ -27,6 +29,7 @@ ListenServer::ListenServer()
     proto->registerSlot(Protocol::REQUEST_STATUS, RequestStatusAnswerSingleton::getInstance());
     proto->registerSlot(Protocol::CONNECT_TO_ME, ConnectToMe::getInstance());
     proto->registerSlot(Protocol::CALL, CallAnswerSingleton::getInstance());
+    proto->registerSlot(Protocol::TEXT, TextMessageAnswerSingleton::getInstance());
 
     std::cout << "Connecting {{---}}" << std::endl;
     if (!_net->getSocket()->connect("127.0.0.1", 4646))
@@ -43,6 +46,17 @@ ListenServer::ListenServer()
     connect(AccountSingleton::getInstance(), SIGNAL(accountCreation(QString const&,QString const&)), this, SLOT(createAccount(QString const&, QString const&)));
     connect(CentralWidgetSingleton::getInstance(), SIGNAL(newLink(QString const &)), this, SLOT(createNewLink(QString const &)));
     connect(CentralWidgetSingleton::getInstance(), SIGNAL(needOpenTalkWindow(QString)), this, SLOT(openTalkWindow(QString)));
+    connect(CentralWidgetSingleton::getInstance(), SIGNAL(textChanged(QString const &,QString const &)), this, SLOT(sendText(QString const &, QString const &)));
+}
+
+void    ListenServer::emitTextMessageChanged(const std::string &text)
+{
+    emit textMessageChanged(QString(text.c_str()));
+}
+
+void    ListenServer::sendText(QString const &login, QString const &text)
+{
+    TextMessageSingleton::getInstance()->sendTextMessage(login.toStdString(), text.toStdString());
 }
 
 void    ListenServer::emitAddContactToUpdateList(const std::string &login)

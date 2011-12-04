@@ -14,6 +14,17 @@ TalkWindowManager::TalkWindowManager()
     connect(this, SIGNAL(tabCloseRequested(int)), this, SLOT(removeContact(int)));
 }
 
+TalkWindow* TalkWindowManager::getWindowFromLogin(std::string const &login)
+{
+    for (int i = 0; i < count(); i++)
+    {
+        TalkWindow *itemWindow = dynamic_cast<TalkWindow*>(widget(i));
+
+        if (itemWindow->getContactLogin() == login)
+            return (itemWindow);
+    }
+}
+
 bool    TalkWindowManager::checkIfContactExist(QWidget *contactWindow)
 {
     TalkWindow *newItem = dynamic_cast<TalkWindow*>(contactWindow);

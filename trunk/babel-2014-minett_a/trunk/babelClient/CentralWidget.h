@@ -24,7 +24,8 @@ class CentralWidget : public QWidget, InterfaceCentralWidget
 
 signals:
     void newLink(QString const &);
-    void    needOpenTalkWindow(QString const &);
+    void textChanged(QString const &, QString const &);
+    void needOpenTalkWindow(QString const &);
 
 public:
 
@@ -44,6 +45,7 @@ public slots:
     void    showCallPopUp(QString const &login, unsigned id);
     void    checkIfCallIsAccepted(int status);
     void    showFailCall();
+    void    updateTalkWindowText(QString const &text);
 
 
 private:
