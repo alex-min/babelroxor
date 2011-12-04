@@ -15,5 +15,7 @@ void    TextMessageAnswer::onCall(Network *network, std::string const & login, v
 
     std::string text = static_cast<char*>(data);
 
+    text.resize(len);
+
     ListenServerSingleton::getInstance()->emitTextMessageChanged(text);
 }

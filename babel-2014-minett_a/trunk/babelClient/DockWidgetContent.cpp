@@ -61,6 +61,7 @@ DockWidgetContent::DockWidgetContent()
     connect(&_removeContactButton, SIGNAL(clicked()), this, SLOT(removeContact()));
     connect(&_statusComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateStatus(int)));
     connect(&_avatarButton, SIGNAL(clicked()), this, SLOT(chooseAvatar()));
+    connect(&_contactList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SIGNAL(called()));
 }
 
 void    DockWidgetContent::updateStatusForContact(const QString &login, int status)

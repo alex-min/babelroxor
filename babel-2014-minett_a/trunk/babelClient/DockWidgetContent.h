@@ -29,7 +29,8 @@ class DockWidgetContent : public QWidget, public InterfaceDockWidgetContent
 
 signals:
     void    newClient(QString const &);
-    void clientStatus(int, QList<std::string> const &);
+    void    clientStatus(int, QList<std::string> const &);
+    void    called();
 
 public:
     DockWidgetContent();
