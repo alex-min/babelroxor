@@ -101,6 +101,16 @@ void    CentralWidget::hangUpClient(std::string const &login)
     Q_UNUSED(login);
 }
 
+void            CentralWidget::emitNeedOpenTalkWindow(QString const &s)
+{
+    emit needOpenTalkWindow(s);
+}
+
+void    CentralWidget::addTalkWindow(QString const &l)
+{
+    CentralWidget::showCurrentContacts(l.toStdString());
+}
+
 void    CentralWidget::call()
 {
     std::string const & currentContactLogin = _dockWidgetContent->getCurrentContactLogin();

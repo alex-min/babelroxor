@@ -54,10 +54,10 @@ public slots:
     void    updateClientStatus(int status, QList<std::string> const &contactUpdateList);
     void    createAccount(QString const &login, QString const &password);
     void    createNewLink(QString const &login);
+    void    openTalkWindow(QString const &login);
     void    disconnectClient(QString const &login, QString const &password);
 
 private:
-    PortableNetworkManager _networkManager;
     bool                   _connection;
     Network                *_net;
 //    AudioThread _t;

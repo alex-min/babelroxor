@@ -31,7 +31,7 @@
 #define start_entry main
 #endif
 
-int main(int ac, char **av)
+int start_entry(int ac, char **av)
 {
 //    PortaudioWrapper::AudioHandler	dec, enc;
 //    PortaudioWrapper::SpeexBuffer	s, s2;

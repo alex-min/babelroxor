@@ -10,7 +10,8 @@ void    ProxySlot::onCall(Network *network, std::string const &login, void *data
     if (login == "")
     {
         status = Protocol::FAILED;
-        Protocol::getInstance()->sendPacket(network, Protocol::STATUS, &status, sizeof(Protocol::Status));
+        Protocol::getInstance()->sendPacket(network, Protocol::STATUS, &status, sizeof(Protocol::Status),
+                                            header->_packetId, false);
         std::cout << "[proxy] need registration" << std::endl;
         return ;
     }
@@ -18,7 +19,8 @@ void    ProxySlot::onCall(Network *network, std::string const &login, void *data
     if (!net)
     {
         status = Protocol::FAILED;
-        Protocol::getInstance()->sendPacket(network, Protocol::STATUS, &status, sizeof(Protocol::Status));
+        Protocol::getInstance()->sendPacket(network, Protocol::STATUS, &status, sizeof(Protocol::Status),
+                                            header->_packetId, false);
         std::cout << "[proxy]" << AccountManager::dataTologin(data, len) << " may not be connected" << std::endl;
         return ;
     }
@@ -28,7 +30,7 @@ void    ProxySlot::onCall(Network *network, std::string const &login, void *data
     {
        const Protocol::NetworkPacket::NetworkHeader *head =
         reinterpret_cast<const Protocol::NetworkPacket::NetworkHeader *> (static_cast<const char *>(data) + login_to.length() + 1);
-       std::cout << "ProxySlot::onCall() : Sending proxified packet" << std::endl;
+       std::cout << "ProxySlot::onCall() : Sending proxified packet with id = " << header->_packetId << std::endl;
        Protocol::getInstance()->sendProxifiedPacket(
                                       AccountManagerSingleton::getInstance()->getNetworkFromLogin(login_to),
                                       static_cast<Protocol::SlotType> (head->_slotType),
@@ -37,7 +39,9 @@ void    ProxySlot::onCall(Network *network, std::string const &login, void *data
                                       len - sizeof(Protocol::NetworkPacket::NetworkHeader)
                                       - login_to.length() - 1,
                                       login,
-                                      true
+                                      header->_packetId,
+                                      true,
+                                      false
                                       );
     }
 }

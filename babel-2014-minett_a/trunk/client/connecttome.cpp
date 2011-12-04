@@ -1,4 +1,5 @@
 #include "connecttome.h"
+#include "accountmanager.h"
 
 _ConnectToMe::_ConnectToMe()
 {
@@ -26,16 +27,18 @@ void _ConnectToMe::onCall(Network *network, const std::string &login,
     unsigned long port = *reinterpret_cast<unsigned long *>
             (static_cast<char *> (data) + sizeof(Protocol::Status) + sizeof(unsigned long));
 
-    PortableSocket sock;
+    PortableSocket *sock = new PortableSocket;
 
-    if (sock.connect(NetworkRoute::getIpFromLong(ip), port, NetworkRoute::statusToSockType(s)) == false)
+    std::cout << "ConnectToMe::connecting to " << NetworkRoute::getIpFromLong(ip) << ":" << port << std::endl;
+    if (sock->connect(NetworkRoute::getIpFromLong(ip), port, NetworkRoute::statusToSockType(s)) == false)
     {
+                 std::cout << "ConnectToMe::connectionFailed" << std::endl;
+                 delete sock;
         // connection failed (could not happen).
         return ;
     }
 
-    Network *net = new Network;
-    net->setSocket(&sock);
+    Network *net = new Network(sock);
     PortableNetworkManagerSingle::getInstance()->addNetwork(net);
     NetworkRouteSingleton::getInstance()->registerRoute(login, net, false);
 }

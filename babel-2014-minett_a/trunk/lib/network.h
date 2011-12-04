@@ -17,8 +17,11 @@ public:
     CircularBuffer *getWriteBuffer();
     PortableSocket *getSocket();
     void setSocket(PortableSocket *sock);
+    std::string const &getName() const;
+    void setName(std::string const &);
 
 protected:
+    std::string  _name;
     PortableSocket *_socket;
     CircularBuffer _readBuf;
     CircularBuffer _writeBuf;

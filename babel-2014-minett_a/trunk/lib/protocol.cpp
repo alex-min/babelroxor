@@ -249,6 +249,8 @@ void Protocol::onReceivePacket(CircularBuffer *buf, Network *net)
         size = 4096;
         buf->extract(_buffer, 4096);
     }
+    std::cout << "Protocol::onReceivePacket() : with login = " << AccountManagerSingleton::getInstance()->getLoginFromNetwork(net)
+               << "and net=" << net << std::endl;
 
     Protocol::dispatchPacket(net,
                              AccountManagerSingleton::getInstance()->getLoginFromNetwork(net),
