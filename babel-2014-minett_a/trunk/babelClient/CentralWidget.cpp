@@ -35,6 +35,12 @@ CentralWidget::CentralWidget()
 
     connect(&_callButton, SIGNAL(clicked()), this, SLOT(call()));
     connect(&_hangUpButton, SIGNAL(clicked()), this, SLOT(hangUp()));
+    connect(_windowManager, SIGNAL(tabClosed(QString const &)), this, SLOT(hangUpTab(QString const &)));
+}
+
+void    CentralWidget::hangUpTab(QString const &contactLogin)
+{
+    hangUpClient(_dockWidgetContent->getLogin(), contactLogin.toStdString());
 }
 
 void    CentralWidget::updateTalkWindowText(QString const &text)
@@ -58,13 +64,15 @@ void    CentralWidget::showFailCall()
 
 void    CentralWidget::showCallPopUp(QString const &login, unsigned int id)
 {
-    QtPopUpMessage *popUp = QtPopUpMessage::createPopUp(QtPopUpMessage::WARNING, "Call", "You have a call request of " + login.toStdString());
+    QtPopUpMessage *popUp = QtPopUpMessage::createPopUp(QtPopUpMessage::WARNING, "Call", "You have a call request of "
+                                                        + login.toStdString() + ". Do you want to accept this call ?");
 
     popUp->setIconPixmap(QPixmap("../trunk/images/warning.png"));
     popUp->setButtonType(QtPopUpMessage::AcceptButton | QtPopUpMessage::RefuseButton);
     popUp->setLogin(login.toStdString());
     std::cout << "SET PROPERTY:" << id << std::endl;
     popUp->setProperty("id", id);
+
     popUp->show();
 
     connect(popUp, SIGNAL(finished(int)), this, SLOT(checkIfCallIsAccepted(int)));
@@ -101,13 +109,11 @@ void    CentralWidget::callClient(std::string const &login)
 {
     // AudioThreadSingleton::getInstance()->addLogin("lol");
     emit newLink(QString(login.c_str()));
-    //    RequestLinkSingleton::getInstance()->createNewLink(login);
-    Q_UNUSED(login);
 }
 
-void    CentralWidget::hangUpClient(std::string const &login)
+void    CentralWidget::hangUpClient(std::string const &senderLogin, std::string const &contactLogin)
 {
-    Q_UNUSED(login);
+    emit hangUpTalk(QString(senderLogin.c_str()), QString(contactLogin.c_str()));
 }
 
 void            CentralWidget::emitNeedOpenTalkWindow(QString const &s)
@@ -156,7 +162,21 @@ void    CentralWidget::hangUp()
 
     _windowManager->removeContact(currentContactLogin);
 
-    hangUpClient(currentContactLogin);
+    hangUpClient(_dockWidgetContent->getLogin(), currentContactLogin);
+}
+
+void    CentralWidget::applyHangUp(QString const &contactLogin)
+{
+    QtPopUpMessage *popUp = QtPopUpMessage::createPopUp(QtPopUpMessage::WARNING, "Hang Up", contactLogin.toStdString() +
+                                                        " has just hung up the conversation.");
+
+    popUp->setIconPixmap(QPixmap("../trunk/images/information.png"));
+
+    popUp->show();
+
+    _windowManager->removeContact(contactLogin.toStdString());
+
+    connect(popUp, SIGNAL(finished(int)), this, SLOT(checkIfCallIsAccepted(int)));
 }
 
 CentralWidget::~CentralWidget()

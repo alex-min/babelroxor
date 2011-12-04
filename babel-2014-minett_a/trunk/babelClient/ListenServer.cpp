@@ -13,6 +13,8 @@
 #include "MainWindow.h"
 #include "TextMessage.h"
 #include "TextMessageAnswer.h"
+#include "HangUp.h"
+#include "HangUpAnswer.h"
 
 ListenServer::ListenServer()
 {
@@ -30,6 +32,7 @@ ListenServer::ListenServer()
     proto->registerSlot(Protocol::CONNECT_TO_ME, ConnectToMe::getInstance());
     proto->registerSlot(Protocol::CALL, CallAnswerSingleton::getInstance());
     proto->registerSlot(Protocol::TEXT, TextMessageAnswerSingleton::getInstance());
+    proto->registerSlot(Protocol::HANGUP, HangUpAnswerSingleton::getInstance());
 
     std::cout << "Connecting {{---}}" << std::endl;
     if (!_net->getSocket()->connect("127.0.0.1", 4646))
@@ -47,6 +50,17 @@ ListenServer::ListenServer()
     connect(CentralWidgetSingleton::getInstance(), SIGNAL(newLink(QString const &)), this, SLOT(createNewLink(QString const &)));
     connect(CentralWidgetSingleton::getInstance(), SIGNAL(needOpenTalkWindow(QString)), this, SLOT(openTalkWindow(QString)));
     connect(CentralWidgetSingleton::getInstance(), SIGNAL(textChanged(QString const &,QString const &)), this, SLOT(sendText(QString const &, QString const &)));
+    connect(CentralWidgetSingleton::getInstance(), SIGNAL(hangUpTalk(QString const &,QString const &)), this, SLOT(hangUp(QString const &, QString const &)));
+}
+
+void    ListenServer::emitHungUp(std::string const &contactLogin)
+{
+    emit hungUp(QString(contactLogin.c_str()));
+}
+
+void    ListenServer::hangUp(QString const &senderLogin, QString const &contactLogin)
+{
+    HangUpSingleton::getInstance()->sendHangUp(senderLogin.toStdString(), contactLogin.toStdString());
 }
 
 void    ListenServer::emitTextMessageChanged(const std::string &text)

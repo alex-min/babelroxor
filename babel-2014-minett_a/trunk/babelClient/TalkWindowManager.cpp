@@ -52,10 +52,11 @@ void TalkWindowManager::addContact(QWidget *contactWindow, QIcon const &status)
 void TalkWindowManager::removeContact(int tabNum)
 {
     QWidget *item = widget(tabNum);
+    TalkWindow *itemWindow = dynamic_cast<TalkWindow*>(item);
 
     removeTab(tabNum);
 
-    // send a message to the server to indicate the communication has just hang up
+    emit tabClosed(QString(itemWindow->getContactLogin().c_str()));
 
     if (!count())
         close();
@@ -73,8 +74,6 @@ void TalkWindowManager::removeContact(std::string const &login)
         if (itemWindow->getContactLogin() == login)
         {
             removeTab(i);
-
-            // send a message to the server to indicate the communication has just hang up
 
             delete item;
 

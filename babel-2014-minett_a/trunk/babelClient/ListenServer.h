@@ -36,6 +36,7 @@ signals:
     void    callFail();
     void    newContactToUpdateList(QString const &);
     void    textMessageChanged(QString const &);
+    void    hungUp(QString const &);
 
 public:
     ListenServer();
@@ -48,6 +49,7 @@ public:
     void    emitCallFail();
     void    emitAddContactToUpdateList(std::string const &login);
     void    emitTextMessageChanged(std::string const &text);
+    void    emitHungUp(std::string const &contactLogin);
 
     virtual ~ListenServer();
 
@@ -59,6 +61,7 @@ public slots:
     void    openTalkWindow(QString const &login);
     void    disconnectClient(QString const &login, QString const &password);
     void    sendText(QString const &login, QString const &text);
+    void    hangUp(QString const &senderLogin, QString const &contactLogin);
 
 private:
     bool                   _connection;

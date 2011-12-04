@@ -26,12 +26,13 @@ signals:
     void newLink(QString const &);
     void textChanged(QString const &, QString const &);
     void needOpenTalkWindow(QString const &);
+    void hangUpTalk(QString const &, QString const &);
 
 public:
 
     CentralWidget();
     virtual void    callClient(std::string const &login);
-    virtual void    hangUpClient(std::string const &login);
+    virtual void    hangUpClient(std::string const &senderLogin, std::string const &contactLogin);
     void            showCurrentContacts();
     void            showCurrentContacts(std::string const &);
     ~CentralWidget();
@@ -46,7 +47,8 @@ public slots:
     void    checkIfCallIsAccepted(int status);
     void    showFailCall();
     void    updateTalkWindowText(QString const &text);
-
+    void    applyHangUp(QString const &contactLogin);
+    void    hangUpTab(QString const &contactLogin);
 
 private:
 
