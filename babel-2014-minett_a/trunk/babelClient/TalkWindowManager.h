@@ -15,6 +15,7 @@ public:
     TalkWindowManager();
     void    addContact(QWidget *contactWindow, QIcon const &status);
     void    removeContact(std::string const &login);
+    TalkWindow* getWindowFromLogin(std::string const &login);
     ~TalkWindowManager();
 
 private:

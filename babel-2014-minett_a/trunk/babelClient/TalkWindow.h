@@ -21,10 +21,13 @@ class TalkWindow : public QWidget, InterfaceTalkWindow
 {
     Q_OBJECT
 
+signals:
+    void    textToSend(QString const &, QString const &);
 public:
     TalkWindow(QWidget *parent = 0);
     void    setContactLogin(std::string const &login);
     std::string const & getContactLogin();
+    void    updateText(std::string const &text);
     ~TalkWindow();
 
 public slots:

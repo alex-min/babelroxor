@@ -31,6 +31,8 @@ SOURCES += ./client/main.cpp \
     client/audiothread.cpp \
     client/connectionlogine.cpp \
     client/RequestStatusAnswer.cpp \
+    client/TextMessage.cpp \
+    client/TextMessageAnswer.cpp
 
 
 #HEADERS  +=
@@ -46,3 +48,9 @@ HEADERS += \
     client/audiothread.h \
     client/connectionlogine.h \
     client/RequestStatusAnswer.h \
+    client/TextMessage.h \
+    client/TextMessageAnswer.h
+
+
+
+

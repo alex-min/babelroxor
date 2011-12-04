@@ -37,6 +37,15 @@ CentralWidget::CentralWidget()
     connect(&_hangUpButton, SIGNAL(clicked()), this, SLOT(hangUp()));
 }
 
+void    CentralWidget::updateTalkWindowText(QString const &text)
+{
+    std::string contactLogin = text.split(":")[0].toStdString();
+
+    _windowManager->getWindowFromLogin(contactLogin)->updateText(text.toStdString());
+    _windowManager->show();
+    _windowManager->activateWindow();
+}
+
 void    CentralWidget::showFailCall()
 {
     QtPopUpMessage *popUp = QtPopUpMessage::createPopUp(QtPopUpMessage::WARNING, "Call", "Your call has failed");
@@ -129,6 +138,8 @@ void    CentralWidget::showCurrentContacts(std::string const &currentContactLogi
 
         w->setContactLogin(currentContactLogin);
         _windowManager->addContact(w, QIcon("../trunk/images/onCall.png"));
+
+        connect(w, SIGNAL(textToSend(QString const &,QString const &)), this, SIGNAL(textChanged(QString const &, QString const &)));
     }
 }
 
