@@ -74,10 +74,27 @@ void AudioThread::run()
 
 //    std::cout << "Ca passe dans le run" << std::endl;
 
-//    _s.encoder = new EncoderSpeex(5);
-//    _s.decoder = new DecoderSpeex;
-//    _s.state = true;
-//    if (_enc.good())
+    std::cout << "Ca passe dans le run" << std::endl;
+
+    _s.encoder = new EncoderSpeex(5);
+    _s.decoder = new DecoderSpeex;
+    _s.state = true;
+    if (_enc.good())
+    {
+        _enc.setCallback(PortaudioWrapper::MicroToSpeex);
+        _enc.setInputDevice(1);
+        _enc.openStream(1, 0, &_s, paInt16, _s.encoder->Rate(), _s.encoder->FrameSize());
+        if (_enc.good())
+        {
+          _enc.start();
+          while (1) {}
+          _enc.stop();
+        }
+
+     }
+//    _pa.init(1);
+//    _pa.setInput();
+//    while (1)
 
 //   //Ici on encode et on balance ur le reseaux.
 //    std::cout << "on test si ya du monde" << std::endl;

@@ -308,6 +308,8 @@ void Protocol::dispatchPacket(Network *network, const std::string &login, void *
                                                                        data,
                                                                        len,
                                                                        header);
+    else
+        std::cerr << "{!!!!!} Dropping packet" << std::endl;
 }
 
 Protocol *Protocol::getInstance()
