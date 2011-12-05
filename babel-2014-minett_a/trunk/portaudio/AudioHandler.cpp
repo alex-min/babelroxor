@@ -164,7 +164,7 @@ void				AudioHandler::openStream(int nbInputChannel, int nbOutputChannel, void *
 			this->_out.suggestedLatency = Pa_GetDeviceInfo(this->_out.device )->defaultLowOutputLatency;
 			this->_out.hostApiSpecificStreamInfo = NULL;
 		}
-
+// std::cout << << std::endl;
 		this->_err = Pa_OpenStream(
                     &(this->_stream),
                     (nbInputChannel > 0) ? &(this->_in) : 0,

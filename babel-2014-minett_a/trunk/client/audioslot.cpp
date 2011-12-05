@@ -13,12 +13,12 @@ void AudioSlot::onCall(Network *network, const std::string &login, void *data, u
 {
     //ici on decode le data apres l'avoir caster en char *, puis on joue.
 
-    _s.buf = (char *)data;
-    _s.size_encoded = 42;
-//    _s.decoder = t->decoder;
-//    _s.encoder = t->encoder;
-    _s.state == DECODING;
+//    _s.buf = (char *)data;
+//    _s.size_encoded = 42;
+////    _s.decoder = t->decoder;
+////    _s.encoder = t->encoder;
+//    _s.state == DECODING;
 
-    _dec.start();
-    _dec.stop();
+//    _dec.start();
+//    _dec.stop();
 }

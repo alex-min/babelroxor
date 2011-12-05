@@ -45,5 +45,6 @@ unsigned int	EncoderSpeex::Encode(short *input, char *output)
 	nbBytes = speex_bits_nbytes(&_bits);
 	speex_bits_write(&_bits, output, _frameSize);
 	output[_frameSize] = 0;
+        std::cout << "nBytes" << nbBytes << std::endl;
 	return nbBytes;
 }

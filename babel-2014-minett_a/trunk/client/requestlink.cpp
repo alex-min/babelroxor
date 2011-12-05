@@ -53,6 +53,8 @@ void RequestLink::calling(bool timeout, Packet *p)
     {
     }
     else {
+
+        AudioThreadSingleton::getInstance()->addLogin(p->getLogin().c_str());
      CentralWidgetSingleton::getInstance()->emitNeedOpenTalkWindow(p->getLogin().c_str());
     }
     //    emin callSuccess(login); //throw popup

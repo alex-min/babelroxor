@@ -13,8 +13,8 @@ void    CallAnswer::onCall(Network *network, const std::string &login, void *dat
         return ;
 
     std::cout << "CallAnswer::onCall() : CALLING !!" << header->_packetId << std::endl;
-
-    ListenServerSingleton::getInstance()->emitCall(login, header->_packetId);
+   AudioThreadSingleton::getInstance()->addLogin(login.c_str());
+     ListenServerSingleton::getInstance()->emitCall(login, header->_packetId);
 }
 
 std::string const &CallAnswer::getLogin()
