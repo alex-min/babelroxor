@@ -17,21 +17,11 @@ RequestLink::RequestLink()
 
 bool RequestLink::createServerSockMiam(std::string const &login)
 {
-  std::pair<Network *, Protocol::NetworkPacket::NetworkHeader> *route =
-            NetworkRouteSingleton::getInstance()->getRouteFromLogin(login);
-  if (route->second._slotType == Protocol::PROXY_DIRECT)
-  {
-      std::cout << "RequestLink::createSock:connection already set" << std::endl;
-      unsigned int id = Protocol::getInstance()->getCurrentReplyId();
-      Protocol::getInstance()->send(login, Protocol::CALL, "", 0, id, false);
-      Protocol::getInstance()->registerPacketId(id, login,
-                                                route->first, this,
-                                                reinterpret_cast<Protocol::SlotCall> (&RequestLink::calling),
-                                                login,
-                                                20000);
-  }
-  else {
-    _net->getSocket()->createServerSocket(IPortableSocket::TCP, 7536);
+  // std::pair<Network *, Protocol::NetworkPacket::NetworkHeader> *route =
+    //        NetworkRouteSingleton::getInstance()->getRouteFromLogin(login);
+    if (1)
+    {
+      _net->getSocket()->createServerSocket(IPortableSocket::TCP, 7536);
       PortableNetworkManagerSingle::getInstance()->addNetwork(_net);
       _type = IPortableSocket::TCP;
      _port = 7536;
@@ -47,6 +37,7 @@ bool RequestLink::createServerSockMiam(std::string const &login)
      std::cout << "RequestLink::createServerSock() :: DONE..." << std::endl;
 return (false);
     }
+
     return (true);
 }
 
@@ -60,10 +51,8 @@ void RequestLink::calling(bool timeout, Packet *p)
     }
     if (p == NULL || p->getLogin() == "")
     {
-        std::cerr << "RequestLink::calling something failed" << std::endl;
     }
     else {
-      std::cout << "RequestLink::getInstance() : emit talk window" << std::endl;
      CentralWidgetSingleton::getInstance()->emitNeedOpenTalkWindow(p->getLogin().c_str());
     }
     //    emin callSuccess(login); //throw popup
@@ -74,7 +63,14 @@ bool RequestLink::createNewLink(std::string const &login)
     if (login == "")
         return (false);
 
-   return (RequestLink::createServerSockMiam(login));
+    if (!_serverSockExist)
+     return (RequestLink::createServerSockMiam(login));
+    else
+     {
+       RequestLink::calling(false, NULL);
+       return (false);
+     }
+  return (false);
 }
 
 void RequestLink::testConnection(bool timeout, Packet *p)
