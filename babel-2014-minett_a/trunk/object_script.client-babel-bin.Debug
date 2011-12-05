@@ -51,6 +51,11 @@ INPUT(
 ./debug\CallAnswer.o
 ./debug\audiothread.o
 ./debug\connectionlogine.o
+./debug\RequestStatusAnswer.o
+./debug\TextMessage.o
+./debug\TextMessageAnswer.o
+./debug\HangUp.o
+./debug\HangUpAnswer.o
 ./debug\moc_DockWidgetContent.o
 ./debug\moc_CentralWidget.o
 ./debug\moc_CustomButton.o

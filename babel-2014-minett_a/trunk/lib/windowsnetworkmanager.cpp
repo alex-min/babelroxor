@@ -1,6 +1,6 @@
-#include "unixnetworkmanager.h"
+#include "windowsnetworkmanager.h"
 #include "accountmanager.h"
-#ifdef OS_UNIX
+#ifdef OS_WINDOWS
 
 Win32NetworkManager::Win32NetworkManager() :
     _maxfd(-1),
@@ -14,7 +14,7 @@ void Win32NetworkManager::generateReadFs()
     for (std::list<Network *>::iterator it = _network.begin(); it != _network.end()
          ; ++it)
     {
-        FD_SET((*it)->getSocket()->UNIXGetSocket(), &_readfs);
+        FD_SET((*it)->getSocket()->Win32GetSocket(), &_readfs);
     }
 }
 
@@ -28,7 +28,7 @@ void Win32NetworkManager::generateWriteFs()
         if (!((*it)->getWriteBuffer()->isEmpty()))
         {
             _hasWriteFs = true;
-            FD_SET((*it)->getSocket()->UNIXGetSocket(), &_writefs);
+            FD_SET((*it)->getSocket()->Win32GetSocket(), &_writefs);
         }
     }
 }
@@ -38,8 +38,8 @@ void Win32NetworkManager::addNetwork(Network *network)
     if (network && network->getSocket())
     {
         _network.push_back(network);
-        if (network->getSocket()->UNIXGetSocket() > _maxfd)
-        _maxfd = network->getSocket()->UNIXGetSocket();
+        if (network->getSocket()->Win32GetSocket() > _maxfd)
+        _maxfd = network->getSocket()->Win32GetSocket();
      Win32NetworkManager::generateReadFs();
     }
 }
@@ -68,7 +68,7 @@ void Win32NetworkManager::run(long uTimeout)
     for (std::list<Network *>::iterator it = _network.begin(); it != _network.end()
          ; ++it)
     {
-        if ((*it)->getSocket() && FD_ISSET((*it)->getSocket()->UNIXGetSocket(), &_readfs))
+        if ((*it)->getSocket() && FD_ISSET((*it)->getSocket()->Win32GetSocket(), &_readfs))
         {
             if ((*it)->getSocket()->isServerSock())
             {
@@ -109,7 +109,7 @@ void Win32NetworkManager::run(long uTimeout)
                 }
             }
         }
-        else if ((*it)->getSocket() && FD_ISSET((*it)->getSocket()->UNIXGetSocket(), &_writefs))
+        else if ((*it)->getSocket() && FD_ISSET((*it)->getSocket()->Win32GetSocket(), &_writefs))
         {
             std::cout << "Win32NetworkManager::writing..." << std::endl;
 
