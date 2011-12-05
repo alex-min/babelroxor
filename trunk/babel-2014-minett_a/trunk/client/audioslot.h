@@ -9,6 +9,9 @@
 #include "DecoderSpeex.h"
 #include "EncoderSpeex.h"
 
+#define ENCODING true
+#define DECODING false
+
 class AudioSlot : public ISlotInterface
 {
 public:
@@ -17,8 +20,8 @@ public:
 
 private:
 //    portAudio _pa;
-//    PortaudioWrapper::AudioHandler	_dec;
-//    PortaudioWrapper::SpeexBuffer	_s;
+    PortaudioWrapper::AudioHandler	_dec;
+    PortaudioWrapper::SpeexBuffer	_s;
 };
 
 typedef Singleton<AudioSlot> AudioSlotSingle;

@@ -26,7 +26,7 @@ HEADERS +=  ./portaudio/AudioCallback.h     \
             ./portaudio/AudioHandler.h      \
             ./portaudio/DecoderSpeex.h      \
             ./portaudio/EncoderSpeex.h      \
-            ./portaudio/UtiAudioCallback.hls.h
+            ./portaudio/Utils.h
 
 
 LIBS += -L./portaudio/ -L./Speex/lib
@@ -36,7 +36,7 @@ unix: LIBS += -L/usr/local/lib/ -lportaudio -lspeex -lspeexdsp
 
 
 INCLUDEPATH += ./portaudio/
-INCLUDEPATH += ./Speex/
+INCLUDEPATH += ./Speex
 unix: INCLUDEPATH += /usr/local/include/speex
 DEPENDPATH += ./portaudio/
 

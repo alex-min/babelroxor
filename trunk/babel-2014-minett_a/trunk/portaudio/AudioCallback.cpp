@@ -81,15 +81,16 @@ int PortaudioWrapper::MicroToSpeex(const void *inputBuffer,
 	short			*ib = (short *)inputBuffer;
 
 
-	if (s->state == ENCODING)
-	{
+//	if (s->state == ENCODING)
+//	{
 		for (unsigned int i = 0; i < framesPerBuffer; i++, ib++)
                     tmp[i] = *ib;
 		s->buf = new char[s->encoder->FrameSize() + 1];
 		s->size_encoded = s->encoder->Encode(tmp, s->buf);
 		delete tmp;
 		s->state = DECODING;
-	}
+                //faire le send ici.
+        //}
 	return (0);
 }
 
@@ -104,15 +105,15 @@ int PortaudioWrapper::SpeexToSpeaker(const void *inputBuffer,
 	short			*tmp;
 	short			*ob = (short *)outputBuffer;
 
-	if (s->state == DECODING)
-	{
-		tmp = s->decoder->Decode(s->buf, s->size_encoded);
+        if (s->state == DECODING)
+        {
+                tmp = s->decoder->Decode(s->buf, s->size_encoded);
 		for (unsigned int i = 0; i < framesPerBuffer; i++, ob++)
 		{
 			*ob = tmp[i];
 		}
 		delete s->buf;
-		s->state = ENCODING;
-	}
+                s->state = ENCODING;
+        }
 	return (0);
 }

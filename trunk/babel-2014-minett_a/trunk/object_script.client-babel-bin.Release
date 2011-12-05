@@ -51,6 +51,11 @@ INPUT(
 ./release\CallAnswer.o
 ./release\audiothread.o
 ./release\connectionlogine.o
+./release\RequestStatusAnswer.o
+./release\TextMessage.o
+./release\TextMessageAnswer.o
+./release\HangUp.o
+./release\HangUpAnswer.o
 ./release\moc_DockWidgetContent.o
 ./release\moc_CentralWidget.o
 ./release\moc_CustomButton.o

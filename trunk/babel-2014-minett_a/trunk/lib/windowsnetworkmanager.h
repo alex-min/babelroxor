@@ -10,7 +10,6 @@ public:
     virtual void addNetwork(Network *network);
     virtual void removeNetwork(Network *network);
     virtual void run(long uTimeout = -1);
-    virtual void setProtocol(Protocol *protocol);
 
 
 private:

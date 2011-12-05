@@ -22,9 +22,8 @@ public:
     std::list<std::string> & getLoginList();
 
 private:
-    portAudio _pa;
-    PortaudioWrapper::AudioHandler	_enc;
     PortaudioWrapper::SpeexBuffer	_s;
+    PortaudioWrapper::AudioHandler	_enc;
     std::list<std::string> _loginCall;
     Mutex _m;
 };
