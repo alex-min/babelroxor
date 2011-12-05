@@ -18,6 +18,7 @@ Win32Socket::Win32Socket(SOCKET sock, SOCKADDR_IN sin, unsigned short port)
 {
     _sock = sock;
     _sin = sin;
+    _isServerSock = false;
     _ip.assign(inet_ntoa(_sin.sin_addr));
     _port = port;
 }
@@ -215,6 +216,8 @@ unsigned int Win32Socket::read(char *buf, unsigned int size)
     {
         ret = ::recv(this->_sock, buf, size, 0);
         SendBytes = ret;
+	if (ret == -1)
+	  throw std::exception();
         // don't work at all
      //   ret = WSARecv(this->_sock, &DataBuf, 1, &SendBytes, 0, 0, NULL);
     }
@@ -224,6 +227,8 @@ unsigned int Win32Socket::read(char *buf, unsigned int size)
         int tmp = sizeof(SOCKADDR_IN);
         DWORD flags = 0;
         ret = WSARecvFrom(this->_sock, &DataBuf, 1, &SendBytes, &flags, (SOCKADDR *) &sender, &tmp, NULL, NULL);
+	if (ret == -1)
+	  throw std::exception();
     }
     if (ret == SOCKET_ERROR)
         return (0);
