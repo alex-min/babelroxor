@@ -1,94 +1,21 @@
-#include "windowsnetworkmanager.h"
+#include "unixnetworkmanager.h"
 #include "accountmanager.h"
+#ifdef OS_UNIX
 
-#ifdef OS_WINDOWS
-
-Win32NetworkManager::Win32NetworkManager()
+Win32NetworkManager::Win32NetworkManager() :
+    _maxfd(-1),
+    _mainBuffer(new char[4096])
 {
-    this->_maxfd = -1;
-    this->_mainBuffer = new char[4096];
-}
-
-void Win32NetworkManager::addNetwork(Network *network)
-{
-    _network.push_back(network);
-    if (network->getSocket()->Win32GetSocket() > _maxfd)
-        _maxfd = network->getSocket()->Win32GetSocket();
-    Win32NetworkManager::generateReadFs();
-}
-
-void Win32NetworkManager::removeNetwork(Network *network)
-{
-    _network.remove(network);
-    network->getSocket()->disconnect();
-}
-
-void Win32NetworkManager::run(long uTimeout)
-{
-    struct timeval timeout;
-
-    timeout.tv_sec = 0;
-    timeout.tv_usec = uTimeout * 1000;
-    Win32NetworkManager::generateWriteFs();
-    unsigned int size;
-
-    memcpy(&_readfscpy, &_readfs, sizeof(fd_set));
-    //std::cout << "Select timeout " << uTimeout << std::endl;
-    if (select(this->_maxfd + 1, &_readfscpy, (_hasWriteFs == true) ? &_writefs : NULL, NULL,
-               (uTimeout == -1) ? NULL : &timeout) == SOCKET_ERROR)
-            return ;
-
-     for (std::list<Network *>::iterator it = _network.begin(); it != _network.end()
-         ; ++it)
-    {
-        if (FD_ISSET((*it)->getSocket()->Win32GetSocket(), &_readfscpy))
-        {
-            if ((*it)->getSocket()->isServerSock() && (*it)->getSocket()->getType() == IPortableSocket::TCP)
-            {
-              Network *n = new Network((*it)->getSocket()->waitForClient());
-              Win32NetworkManager::addNetwork(n);
-              Protocol::getInstance()->welcomeEvent(n);
-              return ;
-            }
-            size = (*it)->getSocket()->read(_mainBuffer, 512);
-            if (size == 0)
-                {
-                std::cout << "Disconnect ---" << std::endl;
-                (*it)->getSocket()->disconnect();
-                AccountManagerSingleton::getInstance()->getAccountFromLogin(
-                            AccountManagerSingleton::getInstance()->getLoginFromNetwork(*it))->setConnected(false);
-                NetworkRouteSingleton::getInstance()->eraseRoute(
-                            AccountManagerSingleton::getInstance()->getLoginFromNetwork(*it));
-                AccountManagerSingleton::getInstance()->removeNetwork(*it);
-                _network.erase(it);
-                Win32NetworkManager::generateReadFs();
-                return ;
-                }
-            else
-                {
-                (*it)->getReadBuffer()->append(_mainBuffer, size);
-                Protocol::getInstance()->readEvent(*it);
-                }
-        }
-        else if (FD_ISSET((*it)->getSocket()->Win32GetSocket(), &_writefs))
-        {
-            size = (*it)->getWriteBuffer()->extract(_mainBuffer, 512);
-            (*it)->getSocket()->send(_mainBuffer, size);
-        }
-    }
-}
-
-void Win32NetworkManager::setProtocol(Protocol *protocol)
-{
-    _protocol = protocol;
 }
 
 void Win32NetworkManager::generateReadFs()
 {
     FD_ZERO(&_readfs);
-    std::list<Network *>::iterator it = _network.begin();
-    for ( ; it != _network.end(); ++it)
-        FD_SET((*it)->getSocket()->Win32GetSocket(), &_readfs);
+    for (std::list<Network *>::iterator it = _network.begin(); it != _network.end()
+         ; ++it)
+    {
+        FD_SET((*it)->getSocket()->UNIXGetSocket(), &_readfs);
+    }
 }
 
 void Win32NetworkManager::generateWriteFs()
@@ -101,9 +28,102 @@ void Win32NetworkManager::generateWriteFs()
         if (!((*it)->getWriteBuffer()->isEmpty()))
         {
             _hasWriteFs = true;
-            FD_SET((*it)->getSocket()->Win32GetSocket(), &_writefs);
+            FD_SET((*it)->getSocket()->UNIXGetSocket(), &_writefs);
         }
     }
 }
+
+void Win32NetworkManager::addNetwork(Network *network)
+{
+    if (network && network->getSocket())
+    {
+        _network.push_back(network);
+        if (network->getSocket()->UNIXGetSocket() > _maxfd)
+        _maxfd = network->getSocket()->UNIXGetSocket();
+     Win32NetworkManager::generateReadFs();
+    }
+}
+
+void Win32NetworkManager::removeNetwork(Network *network)
+{
+    _network.remove(network);
+    network->getSocket()->disconnect();
+}
+
+void Win32NetworkManager::run(long uTimeout)
+{
+    struct timeval timeout;
+    timeout.tv_sec = 0;
+    timeout.tv_usec = uTimeout  *1000;
+    Win32NetworkManager::generateWriteFs();
+    unsigned int size;
+
+    Win32NetworkManager::generateReadFs();
+    ::memcpy(&_readfscpy, &_readfs, sizeof(fd_set));
+    if (::select(_maxfd + 1, &_readfs, (_hasWriteFs == true) ? &_writefs : NULL, NULL,
+                 (uTimeout == -1) ? NULL : &timeout) == -1)
+    {
+        return ;
+    }
+    for (std::list<Network *>::iterator it = _network.begin(); it != _network.end()
+         ; ++it)
+    {
+        if ((*it)->getSocket() && FD_ISSET((*it)->getSocket()->UNIXGetSocket(), &_readfs))
+        {
+            if ((*it)->getSocket()->isServerSock())
+            {
+                std::cout << "Waiting for client" << std::endl;
+                Network *n = new Network((*it)->getSocket()->waitForClient());
+                Win32NetworkManager::addNetwork(n);
+                Protocol::getInstance()->welcomeEvent(n);
+                if ((*it)->getName() != "") {
+                    std::cout << "NETWORKMANAGER:Registering with " << (*it)->getName() << " and net=" << n << std::endl;
+                    NetworkRouteSingleton::getInstance()->registerRoute((*it)->getName(), n, false);
+                }
+                return ;
+            } else {
+                try {
+            size = (*it)->getSocket()->read(_mainBuffer, 512);
+            if (size == 0)
+            {
+                std::cout << "client disconnected" << std::endl;
+                (*it)->getSocket()->disconnect();
+                if (AccountManagerSingleton::getInstance()->getAccountFromLogin(
+                            AccountManagerSingleton::getInstance()->getLoginFromNetwork(*it)) != NULL)
+                    AccountManagerSingleton::getInstance()->getAccountFromLogin(
+                                AccountManagerSingleton::getInstance()->getLoginFromNetwork(*it))->setConnected(false);
+                NetworkRouteSingleton::getInstance()->eraseRoute(
+                            AccountManagerSingleton::getInstance()->getLoginFromNetwork(*it));
+                AccountManagerSingleton::getInstance()->removeNetwork(*it);
+                _network.erase(it);
+                std::cout << _network.size() << " sockets remaining..." << std::endl;
+                Win32NetworkManager::generateReadFs();
+                return ;
+            }
+            else
+            {
+                (*it)->getReadBuffer()->append(_mainBuffer, size);
+                Protocol::getInstance()->readEvent(*it);
+            }
+                } catch (std::exception e) {
+                }
+            }
+        }
+        else if ((*it)->getSocket() && FD_ISSET((*it)->getSocket()->UNIXGetSocket(), &_writefs))
+        {
+            std::cout << "Win32NetworkManager::writing..." << std::endl;
+
+            size = (*it)->getWriteBuffer()->extract(_mainBuffer, 512);
+            std::cout << "Win32NetworkManager::after_extract" << std::endl;
+            if ((*it)->getSocket()) {
+             (*it)->getSocket()->send(_mainBuffer, size);
+            }
+            std::cout << "Win32NetworkManager::after_send" << std::endl;
+
+        }
+    }
+}
+
+
 
 #endif
