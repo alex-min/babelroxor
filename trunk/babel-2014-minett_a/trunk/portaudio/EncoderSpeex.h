@@ -21,14 +21,14 @@ namespace Audio2
 
     inline int		FrameSize()	{return _frameSize;}
     inline int		Rate()		{return _rate;}
-
+    char					*_encodeResult;
   private:
     void					*_state;
 	SpeexPreprocessState	*_preProcessorState;
     SpeexBits				_bits;
     int						_frameSize;
     int						_rate;
-    char					*_encodeResult;
+
   };
 }
 

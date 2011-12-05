@@ -4,6 +4,12 @@
 
 My_Speex::Encode::Encode()
 {
+
+
+
+
+
+
     frame_size = 0;
     quality = 5;
     rate = 8000;
@@ -13,6 +19,11 @@ My_Speex::Encode::Encode()
     speex_encoder_ctl(enc_state, SPEEX_GET_FRAME_SIZE, &frame_size);
     speex_encoder_ctl(enc_state, SPEEX_SET_SAMPLING_RATE, &rate);
     int on = 1;
+
+//    SpeexPreprocessState *preprocess_state = speex_preprocess_state_init(frame_size, sampling_rate);
+//    speex_preprocess_ctl(preprocess_state, request, ptr);
+
+//    speex_preprocess_state_destroy(preprocess_state);
     speex_encoder_ctl(enc_state, SPEEX_SET_VAD, &on);
 }
 
