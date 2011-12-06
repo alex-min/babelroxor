@@ -3,6 +3,8 @@
 
 _ConnectToMe::_ConnectToMe()
 {
+    _m.create();
+    _m.unlock();
 }
 
 void _ConnectToMe::sendConnnectToMe(std::string const &login, IPortableSocket::SockType type,
@@ -16,12 +18,23 @@ void _ConnectToMe::sendConnnectToMe(std::string const &login, IPortableSocket::S
                                   _buf, sizeof(Protocol::Status) + (sizeof(unsigned long) * 2), false);
 }
 
+void _ConnectToMe::canLog()
+{
+    _m.lock();
+}
+
+void _ConnectToMe::release()
+{
+    _m.unlock();
+}
+
 void _ConnectToMe::onCall(Network *network, const std::string &login,
                           void *data, unsigned int len, Protocol::NetworkPacket::NetworkHeader *header)
 {
     if (!network || login == "" || !data ||
             len < sizeof(Protocol::Status) + (sizeof(unsigned long) * 2) || !header)
         return ;
+    ScopedLock seeee(&_m);
     Protocol::Status s = *reinterpret_cast<Protocol::Status *> (data);
     unsigned long ip = *reinterpret_cast<unsigned long *> (static_cast<char *> (data) + sizeof(Protocol::Status));
     unsigned long port = *reinterpret_cast<unsigned long *>
