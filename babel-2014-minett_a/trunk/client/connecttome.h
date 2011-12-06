@@ -14,9 +14,13 @@ public:
                           unsigned long ip, unsigned long port);
     void onCall(Network *network, const std::string &login, void *data,
                 unsigned int len, Protocol::NetworkPacket::NetworkHeader *header);
+    void canLog();
+    void release();
+
 
 private:
     char _buf[sizeof(IPortableSocket::SockType) + sizeof(unsigned long) * 2];
+    Mutex _m;
 };
 
 typedef Singleton<_ConnectToMe> ConnectToMe;
