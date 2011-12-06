@@ -1,5 +1,8 @@
 #include "unixnetworkmanager.h"
 #include "accountmanager.h"
+#include "ListenServer.h"
+#include "status.h"
+#include "StatusAnswer.h"
 #ifdef OS_UNIX
 
 UNIXNetworkManager::UNIXNetworkManager() :
@@ -7,6 +10,7 @@ UNIXNetworkManager::UNIXNetworkManager() :
     _mainBuffer(new char[4096])
 {
     _m.create();
+    _m.unlock();
 }
 
 void UNIXNetworkManager::generateReadFs()
@@ -34,6 +38,10 @@ void UNIXNetworkManager::generateWriteFs()
     }
 }
 
+void UNIXNetworkManager::networkEvent()
+{
+}
+
 void UNIXNetworkManager::addNetwork(Network *network)
 {
     if (network && network->getSocket())
@@ -43,7 +51,6 @@ void UNIXNetworkManager::addNetwork(Network *network)
         _maxfd = network->getSocket()->UNIXGetSocket();
      UNIXNetworkManager::generateReadFs();
     }
-
 }
 
 void UNIXNetworkManager::removeNetwork(Network *network)
@@ -60,8 +67,6 @@ void UNIXNetworkManager::run(long uTimeout)
     UNIXNetworkManager::generateWriteFs();
     unsigned int size;
 
-
-
     UNIXNetworkManager::generateReadFs();
     ::memcpy(&_readfscpy, &_readfs, sizeof(fd_set));
     if (::select(_maxfd + 1, &_readfs, (_hasWriteFs == true) ? &_writefs : NULL, NULL,
@@ -69,7 +74,6 @@ void UNIXNetworkManager::run(long uTimeout)
     {
         return ;
     }
-    up:
     for (std::list<Network *>::iterator it = _network.begin(); it != _network.end()
          ; ++it)
     {
@@ -85,8 +89,11 @@ void UNIXNetworkManager::run(long uTimeout)
                     std::cout << "NETWORKMANAGER:Registering with " << (*it)->getName() << " and net=" << n << std::endl;
                     NetworkRouteSingleton::getInstance()->registerRoute((*it)->getName(), n, false);
                     AccountManagerSingleton::getInstance()->setLoginToNetwork(n, (*it)->getName());
+                    ListenServerSingleton::getInstance()->emitAddContactToUpdateList((*it)->getName());
+                    StatusSingleton::getInstance()->updateStatus((*it)->getName());
+
                 }
-                goto up;
+                return ;
             } else {
                 try {
             size = (*it)->getSocket()->read(_mainBuffer, 512);
@@ -104,6 +111,7 @@ void UNIXNetworkManager::run(long uTimeout)
                 _network.erase(it);
                 std::cout << _network.size() << " sockets remaining..." << std::endl;
                 UNIXNetworkManager::generateReadFs();
+                UNIXNetworkManager::generateWriteFs();
                 return ;
             }
             else
