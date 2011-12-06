@@ -1,5 +1,6 @@
 #include "DockWidgetContent.h"
 #include "ListenServer.h"
+#include "status.h"
 #include <QDebug>
 
 namespace Graphic
@@ -253,6 +254,7 @@ void    DockWidgetContent::closeContactDialog(int finished)
             _contactList.addItem(item);
             _contactItemList.append(item);
             DockWidgetContent::addContactToUpdateList(QString(login.c_str()));
+            Protocol::getInstance()->send(login, Protocol::REQUEST_STATUS, "", 0);
             addClientContact(login);
         }
     }
