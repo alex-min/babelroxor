@@ -104,6 +104,7 @@ void Protocol::send(std::string const &login,
     std::pair<Network *, Protocol::NetworkPacket::NetworkHeader> *route =
             NetworkRouteSingleton::getInstance()->getRouteFromLogin(login);
     std::cout << "Protocol::Send : Route found from login : " << route << std::endl;
+    if (route)
     std::cout << "Protocol::Send and proxy=" << (int) route->second._slotType << std::endl;
 
     if (route && login != "")
