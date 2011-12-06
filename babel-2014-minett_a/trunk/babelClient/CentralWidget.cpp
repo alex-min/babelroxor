@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <requestlink.h>
 #include "ListenServer.h"
+#include "connecttome.h"
 
 namespace Graphic
 {
@@ -85,6 +86,7 @@ void    CentralWidget::checkIfCallIsAccepted(int status)
     if (status == QMessageBox::Yes)
     {
         s = Protocol::OK;
+        ConnectToMe::getInstance()->canLog();
         std::cout << "[CentralWidget::checkIfCallIsAccepted() : " << popUp->getLogin() <<
                      "=>" << popUp->property("id").toInt() << std::endl;
         Protocol::getInstance()->send(popUp->getLogin(),
@@ -94,6 +96,7 @@ void    CentralWidget::checkIfCallIsAccepted(int status)
 
 
         showCurrentContacts(popUp->getLogin());
+        ConnectToMe::getInstance()->release();
     }
     else
     {
