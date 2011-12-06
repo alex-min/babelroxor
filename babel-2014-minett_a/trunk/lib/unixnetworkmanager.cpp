@@ -6,6 +6,7 @@ UNIXNetworkManager::UNIXNetworkManager() :
     _maxfd(-1),
     _mainBuffer(new char[4096])
 {
+    _m.create();
 }
 
 void UNIXNetworkManager::generateReadFs()
@@ -42,6 +43,7 @@ void UNIXNetworkManager::addNetwork(Network *network)
         _maxfd = network->getSocket()->UNIXGetSocket();
      UNIXNetworkManager::generateReadFs();
     }
+    _m.lock();
 }
 
 void UNIXNetworkManager::removeNetwork(Network *network)
@@ -58,12 +60,19 @@ void UNIXNetworkManager::run(long uTimeout)
     UNIXNetworkManager::generateWriteFs();
     unsigned int size;
 
+
+    up:
     UNIXNetworkManager::generateReadFs();
     ::memcpy(&_readfscpy, &_readfs, sizeof(fd_set));
     if (::select(_maxfd + 1, &_readfs, (_hasWriteFs == true) ? &_writefs : NULL, NULL,
                  (uTimeout == -1) ? NULL : &timeout) == -1)
     {
         return ;
+    }
+    if (_m.trylock())
+    {
+        _m.unlock();
+        goto up;
     }
     for (std::list<Network *>::iterator it = _network.begin(); it != _network.end()
          ; ++it)
@@ -79,6 +88,7 @@ void UNIXNetworkManager::run(long uTimeout)
                 if ((*it)->getName() != "") {
                     std::cout << "NETWORKMANAGER:Registering with " << (*it)->getName() << " and net=" << n << std::endl;
                     NetworkRouteSingleton::getInstance()->registerRoute((*it)->getName(), n, false);
+                    AccountManagerSingleton::getInstance()->setLoginToNetwork(n, (*it)->getName());
                 }
                 return ;
             } else {
@@ -102,6 +112,7 @@ void UNIXNetworkManager::run(long uTimeout)
             }
             else
             {
+                std::cout << "UNIXNetworkManager::run() SIZE = " << size << std::endl;
                 (*it)->getReadBuffer()->append(_mainBuffer, size);
                 Protocol::getInstance()->readEvent(*it);
             }
