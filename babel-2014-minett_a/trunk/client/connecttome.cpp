@@ -41,4 +41,5 @@ void _ConnectToMe::onCall(Network *network, const std::string &login,
     Network *net = new Network(sock);
     PortableNetworkManagerSingle::getInstance()->addNetwork(net);
     NetworkRouteSingleton::getInstance()->registerRoute(login, net, false);
+    AccountManagerSingleton::getInstance()->setLoginToNetwork(net, login);
 }
