@@ -143,6 +143,7 @@ void    DockWidgetContent::addContactToUpdateList(const QString &login)
     }
 
     _contactUpdateList.append(login.toStdString());
+
 }
 
 void    DockWidgetContent::addClientContact(std::string const &login)
@@ -251,7 +252,7 @@ void    DockWidgetContent::closeContactDialog(int finished)
 
             _contactList.addItem(item);
             _contactItemList.append(item);
-
+            DockWidgetContent::addContactToUpdateList(QString(login.c_str()));
             addClientContact(login);
         }
     }
