@@ -198,7 +198,7 @@ void Protocol::sendPacket(Network *network, SlotType type, const void *data, uns
           return ;
     ::memset(&packet, 0, sizeof(NetworkPacket::NetworkHeader));
     packet._begin = 0x7;
-    packet._slotType = static_cast<int> (type);
+    packet._slotType = static_cast<char> (type);
     packet._len = length;
     packet._packetId = packetId;
     packet._checksum = 0x4242;
