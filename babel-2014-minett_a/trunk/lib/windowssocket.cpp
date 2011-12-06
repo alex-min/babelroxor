@@ -11,6 +11,7 @@ Win32Socket::Win32Socket()
     _max_client = 200;
     _client_connected = 0;
     _isServerSock = false;
+    _type = TCP;
     _port = 0;
 }
 
@@ -21,6 +22,7 @@ Win32Socket::Win32Socket(SOCKET sock, SOCKADDR_IN sin, unsigned short port)
     _isServerSock = false;
     _ip.assign(inet_ntoa(_sin.sin_addr));
     _port = port;
+    _type = TCP;
 }
 
 int Win32Socket::Win32GetSocket() const
@@ -57,6 +59,7 @@ bool Win32Socket::createServerSocket(IPortableSocket::SockType type, unsigned in
         std::cout << "[-] Cannot create server socket" << std::endl;
         return (false);
     }
+    _port = port;
     return (true);
 }
 
@@ -93,7 +96,6 @@ void Win32Socket::disconnect()
     if (_sock != INVALID_SOCKET)
     {
         closesocket(this->_sock);
-        WSACleanup();
     }
 }
 
@@ -128,7 +130,12 @@ bool Win32Socket::connect(std::string const & remote, unsigned int port, SockTyp
     // Because WSAHTons don't work at all...
     // WSAHtons(this->_sock, static_cast<short>(port), &(this->_sin.sin_port));
     this->_type = type;
-    return (Win32Socket::createClientSocket());
+    bool ret = Win32Socket::createClientSocket();
+    if (ret)
+    {
+        _port = port;
+    }
+    return (ret);
 }
 
 Win32Socket *Win32Socket::waitForClient()
@@ -231,7 +238,7 @@ unsigned int Win32Socket::read(char *buf, unsigned int size)
 	  throw std::exception();
     }
     if (ret == SOCKET_ERROR)
-        return (0);
+        throw std::exception();
     std::cout << buf << std::endl;
     return (SendBytes);
 }

@@ -89,11 +89,20 @@ void    CentralWidget::checkIfCallIsAccepted(int status)
         ConnectToMe::getInstance()->canLog();
         std::cout << "[CentralWidget::checkIfCallIsAccepted() : " << popUp->getLogin() <<
                      "=>" << popUp->property("id").toInt() << std::endl;
-        Protocol::getInstance()->send(popUp->getLogin(),
+        std::cout << "login =>" << popUp->getLogin() << std::endl;
+//        Sleep(100);
+//        Protocol::getInstance()->send(popUp->getLogin(),
+//                                      Protocol::STATUS,
+//                                      &s,
+//                                      sizeof(Protocol::Status), popUp->property("id").toInt(), false);
+        Protocol::getInstance()->sendProxifiedPacket(Protocol::getInstance()->getDefaultGetaway(),
                                       Protocol::STATUS,
                                       &s,
-                                      sizeof(Protocol::Status), popUp->property("id").toInt(), false);
-
+                                      sizeof(Protocol::Status),
+                                      popUp->getLogin(),
+                                      popUp->property("id").toInt(),
+                                      false,
+                                      false);
 
         showCurrentContacts(popUp->getLogin());
         ConnectToMe::getInstance()->release();

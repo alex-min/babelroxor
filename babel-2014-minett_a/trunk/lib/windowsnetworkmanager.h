@@ -10,6 +10,7 @@ public:
     virtual void addNetwork(Network *network);
     virtual void removeNetwork(Network *network);
     virtual void run(long uTimeout = -1);
+    void networkEvent();
 
 
 private:
@@ -24,6 +25,7 @@ private:
     int     _maxfd;
     bool    _hasWriteFs;
     char    *_mainBuffer;
+    Mutex _m;
 };
 
 #endif

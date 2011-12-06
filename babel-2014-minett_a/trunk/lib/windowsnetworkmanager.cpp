@@ -6,6 +6,7 @@ Win32NetworkManager::Win32NetworkManager() :
     _maxfd(-1),
     _mainBuffer(new char[4096])
 {
+    _m.create();
 }
 
 void Win32NetworkManager::generateReadFs()
@@ -42,12 +43,19 @@ void Win32NetworkManager::addNetwork(Network *network)
         _maxfd = network->getSocket()->Win32GetSocket();
      Win32NetworkManager::generateReadFs();
     }
+   // _m.lock();
 }
 
 void Win32NetworkManager::removeNetwork(Network *network)
 {
     _network.remove(network);
     network->getSocket()->disconnect();
+}
+
+
+void        Win32NetworkManager::networkEvent()
+{
+    _m.lock();
 }
 
 void Win32NetworkManager::run(long uTimeout)
@@ -58,6 +66,7 @@ void Win32NetworkManager::run(long uTimeout)
     Win32NetworkManager::generateWriteFs();
     unsigned int size;
 
+// std::cout << "utimeout " << uTimeout << std::endl;
     Win32NetworkManager::generateReadFs();
     ::memcpy(&_readfscpy, &_readfs, sizeof(fd_set));
     if (::select(_maxfd + 1, &_readfs, (_hasWriteFs == true) ? &_writefs : NULL, NULL,
@@ -79,6 +88,7 @@ void Win32NetworkManager::run(long uTimeout)
                 if ((*it)->getName() != "") {
                     std::cout << "NETWORKMANAGER:Registering with " << (*it)->getName() << " and net=" << n << std::endl;
                     NetworkRouteSingleton::getInstance()->registerRoute((*it)->getName(), n, false);
+                    AccountManagerSingleton::getInstance()->setLoginToNetwork(n, (*it)->getName());
                 }
                 return ;
             } else {
