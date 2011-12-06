@@ -104,6 +104,7 @@ void Protocol::send(std::string const &login,
     std::pair<Network *, Protocol::NetworkPacket::NetworkHeader> *route =
             NetworkRouteSingleton::getInstance()->getRouteFromLogin(login);
     std::cout << "Protocol::Send : Route found from login : " << route << std::endl;
+    std::cout << "Protocol::Send and proxy=" << (int) route->second._slotType << std::endl;
 
     if (route && login != "")
     {
@@ -250,7 +251,7 @@ void Protocol::onReceivePacket(CircularBuffer *buf, Network *net)
         buf->extract(_buffer, 4096);
     }
     std::cout << "Protocol::onReceivePacket() : with login = " << AccountManagerSingleton::getInstance()->getLoginFromNetwork(net)
-               << "and net=" << net << std::endl;
+               << "and net=" << net << " and id=" << (int) _header._slotType << std::endl;
 
     Protocol::dispatchPacket(net,
                              AccountManagerSingleton::getInstance()->getLoginFromNetwork(net),
@@ -308,8 +309,6 @@ void Protocol::dispatchPacket(Network *network, const std::string &login, void *
                                                                        data,
                                                                        len,
                                                                        header);
-    else
-        std::cerr << "{!!!!!} Dropping packet" << std::endl;
 }
 
 Protocol *Protocol::getInstance()
