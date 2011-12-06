@@ -23,11 +23,17 @@ bool RequestLink::createServerSockMiam(std::string const &login)
        short unsigned int id = Protocol::getInstance()->getCurrentReplyId();
        std::cout << "{" << login << "} registring id:" << id << std::endl;
        Protocol::getInstance()->send(login, Protocol::CALL, "", 0, id, false);
+       Protocol::getInstance()->registerPacketId(id, login,
+                                                 route->first, this,
+                                                 reinterpret_cast<Protocol::SlotCall> (&RequestLink::calling),
+                                                 login,
+                                                 20000);
        return (true);
    }
    if (!_net->getSocket()->isServerSock()) {
        _net->getSocket()->createServerSockFromRange(IPortableSocket::TCP, 7536, 8000);
       PortableNetworkManagerSingle::getInstance()->addNetwork(_net);
+     // PortableNetworkManagerSingle::getInstance()->networkEvent();
       _type = IPortableSocket::TCP;
      _port = 7536;
       short unsigned int id = Protocol::getInstance()->getCurrentReplyId();
