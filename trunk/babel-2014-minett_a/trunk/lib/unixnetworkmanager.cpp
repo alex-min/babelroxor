@@ -43,7 +43,7 @@ void UNIXNetworkManager::addNetwork(Network *network)
         _maxfd = network->getSocket()->UNIXGetSocket();
      UNIXNetworkManager::generateReadFs();
     }
-    _m.lock();
+
 }
 
 void UNIXNetworkManager::removeNetwork(Network *network)
@@ -61,7 +61,7 @@ void UNIXNetworkManager::run(long uTimeout)
     unsigned int size;
 
 
-    up:
+
     UNIXNetworkManager::generateReadFs();
     ::memcpy(&_readfscpy, &_readfs, sizeof(fd_set));
     if (::select(_maxfd + 1, &_readfs, (_hasWriteFs == true) ? &_writefs : NULL, NULL,
@@ -69,11 +69,7 @@ void UNIXNetworkManager::run(long uTimeout)
     {
         return ;
     }
-    if (_m.trylock())
-    {
-        _m.unlock();
-        goto up;
-    }
+    up:
     for (std::list<Network *>::iterator it = _network.begin(); it != _network.end()
          ; ++it)
     {
@@ -90,7 +86,7 @@ void UNIXNetworkManager::run(long uTimeout)
                     NetworkRouteSingleton::getInstance()->registerRoute((*it)->getName(), n, false);
                     AccountManagerSingleton::getInstance()->setLoginToNetwork(n, (*it)->getName());
                 }
-                return ;
+                goto up;
             } else {
                 try {
             size = (*it)->getSocket()->read(_mainBuffer, 512);
