@@ -1,5 +1,8 @@
 #include "windowsnetworkmanager.h"
 #include "accountmanager.h"
+#include "ListenServer.h"
+#include "status.h"
+#include "StatusAnswer.h"
 #ifdef OS_WINDOWS
 
 Win32NetworkManager::Win32NetworkManager() :
@@ -89,6 +92,9 @@ void Win32NetworkManager::run(long uTimeout)
                     std::cout << "NETWORKMANAGER:Registering with " << (*it)->getName() << " and net=" << n << std::endl;
                     NetworkRouteSingleton::getInstance()->registerRoute((*it)->getName(), n, false);
                     AccountManagerSingleton::getInstance()->setLoginToNetwork(n, (*it)->getName());
+                    ListenServerSingleton::getInstance()->emitAddContactToUpdateList((*it)->getName());
+                    StatusSingleton::getInstance()->updateStatus((*it)->getName());
+         //           Protocol::getInstance()->sendPacket((n, (Protocol::SlotType) 33, "", 0));
                 }
                 return ;
             } else {
