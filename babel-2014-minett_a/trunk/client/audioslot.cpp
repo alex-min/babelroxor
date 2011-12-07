@@ -4,8 +4,10 @@ AudioSlot::AudioSlot()
 {
     _s.decoder = new DecoderSpeex;
     _s.encoder = new EncoderSpeex(5);
+    _s.state = true;
     _dec.setCallback(PortaudioWrapper::SpeexToSpeaker);
     _dec.openStream(0, 1, &_s, paInt16, _s.encoder->Rate(), _s.encoder->FrameSize());
+    _dec.start();
 }
 
 void AudioSlot::onCall(Network *network, const std::string &login, void *data, unsigned int len, Protocol::NetworkPacket::NetworkHeader *header)
@@ -16,5 +18,5 @@ void AudioSlot::onCall(Network *network, const std::string &login, void *data, u
     _s.size_encoded = len;
     _s.state = DECODING;
 
-    _dec.start();
+
 }
