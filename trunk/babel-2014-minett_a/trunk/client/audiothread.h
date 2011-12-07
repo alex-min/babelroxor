@@ -20,9 +20,10 @@ public:
     virtual void run();
     void addLogin(std::string const & login);
     std::list<std::string> & getLoginList();
+    void releaseLoginList();
+    void freeLoginList();
 
 private:
-    portAudio _pa;
     PortaudioWrapper::AudioHandler	_enc;
     PortaudioWrapper::SpeexBuffer	_s;
     std::list<std::string> _loginCall;

@@ -14,8 +14,9 @@ void _ConnectToMe::sendConnnectToMe(std::string const &login, IPortableSocket::S
     ::memcpy(_buf, &s, sizeof(Protocol::Status));
     ::memcpy(_buf + sizeof(Protocol::Status), &ip, sizeof(unsigned long));
     ::memcpy(_buf + sizeof(Protocol::Status) + sizeof(unsigned long), &port, sizeof(unsigned long));
+    std::cout << "ConnectToMe::sendConnnectToMe() : " << login << std::endl;
     Protocol::getInstance()->send(login, Protocol::CONNECT_TO_ME,
-                                  _buf, sizeof(Protocol::Status) + (sizeof(unsigned long) * 2), false);
+                                  _buf, sizeof(Protocol::Status) + (sizeof(unsigned long) * 2));
 }
 
 void _ConnectToMe::canLog()

@@ -1,8 +1,8 @@
 #include "unixnetworkmanager.h"
 #include "accountmanager.h"
-#include "ListenServer.h"
-#include "status.h"
-#include "StatusAnswer.h"
+//#include "ListenServer.h"
+//#include "status.h"
+//#include "StatusAnswer.h"
 #ifdef OS_UNIX
 
 UNIXNetworkManager::UNIXNetworkManager() :

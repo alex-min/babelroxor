@@ -110,6 +110,7 @@ void    ListenServer::emitContactStatusChanged(std::string const &login, int sta
 void ListenServer::openTalkWindow(const QString &login)
 {
     CentralWidgetSingleton::getInstance()->addTalkWindow(login);
+    AudioThreadSingleton::getInstance()->start();
 }
 
 void    ListenServer::updateClientStatus(int status, QList<std::string> const &contactUpdateList)
