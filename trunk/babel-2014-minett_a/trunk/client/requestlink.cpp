@@ -3,6 +3,7 @@
 #include "accountmanager.h"
 #include "ListenServer.h"
 #include "CentralWidget.h"
+#include "audiothread.h"
 #ifdef OS_UNIX
 #include <sys/time.h>
 #include <unistd.h>
@@ -34,6 +35,7 @@ bool RequestLink::createServerSockMiam(std::string const &login)
        _net->getSocket()->createServerSockFromRange(IPortableSocket::TCP, 7536, 8000);
       PortableNetworkManagerSingle::getInstance()->addNetwork(_net);
      // PortableNetworkManagerSingle::getInstance()->networkEvent();
+
       _type = IPortableSocket::TCP;
      _port = 7536;
       short unsigned int id = Protocol::getInstance()->getCurrentReplyId();
@@ -89,7 +91,11 @@ bool RequestLink::createNewLink(std::string const &login)
     if (login == "")
         return (false);
 
-     return (RequestLink::createServerSockMiam(login));
+    AudioThreadSingleton::getInstance()->releaseLoginList();
+    AudioThreadSingleton::getInstance()->addLogin(login);
+    AudioThreadSingleton::getInstance()->freeLoginList();
+
+    return (RequestLink::createServerSockMiam(login));
 }
 
 void RequestLink::testConnection(bool timeout, Packet *p)
@@ -105,7 +111,7 @@ void RequestLink::testConnection(bool timeout, Packet *p)
     std::cout << "RequestLink::testConnection() len = " << p->getLen() << std::endl;
     if (p->getData() != NULL && p->getLen() >= sizeof(Protocol::Status) + 4)
     {
-        std::cout << "{<=>}" << "HELLO WORLD" << std::endl;
+        std::cout << "{<=>}" << "HELLO WORLD : " << p->getReturningLogin() << std::endl;
         NetworkRouteSingleton::getInstance()->setIp
                 (*(reinterpret_cast<unsigned int *> (static_cast<char *> (p->getData()) + sizeof(Protocol::Status))));
         _net->setName(p->getReturningLogin());

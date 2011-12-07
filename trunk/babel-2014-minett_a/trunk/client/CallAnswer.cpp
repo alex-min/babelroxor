@@ -1,5 +1,6 @@
 #include "CallAnswer.h"
 #include "ListenServer.h"
+#include "audiothread.h"
 
 CallAnswer::CallAnswer()
 {
@@ -13,6 +14,10 @@ void    CallAnswer::onCall(Network *network, const std::string &login, void *dat
         return ;
 
     std::cout << "CallAnswer::onCall() : CALLING !!" << header->_packetId << std::endl;
+
+    AudioThreadSingleton::getInstance()->releaseLoginList();
+    AudioThreadSingleton::getInstance()->addLogin(login);
+    AudioThreadSingleton::getInstance()->freeLoginList();
 
     ListenServerSingleton::getInstance()->emitCall(login, header->_packetId);
 }
