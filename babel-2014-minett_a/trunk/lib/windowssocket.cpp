@@ -239,7 +239,7 @@ unsigned int Win32Socket::read(char *buf, unsigned int size)
     }
     if (ret == SOCKET_ERROR)
         throw std::exception();
-    std::cout << buf << std::endl;
+   // std::cout << buf << std::endl;
     return (SendBytes);
 }
 
