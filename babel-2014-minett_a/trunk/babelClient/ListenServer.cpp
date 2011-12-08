@@ -43,6 +43,8 @@ ListenServer::ListenServer()
     Protocol::getInstance()->defaultGateway(_net);
     PortableNetworkManagerSingle::getInstance()->addNetwork(_net);
 
+    AudioThreadSingleton::getInstance()->start();
+
     connect(MainWindowSingleton::getInstance(), SIGNAL(closeConnection(QString const &,QString const &)), this, SLOT(disconnectClient(QString const &, QString const &)));
     connect(DockWidgetContentSingleton::getInstance(), SIGNAL(newClient(QString const &)), this, SLOT(addNewClient(QString const &)));
     connect(DockWidgetContentSingleton::getInstance(), SIGNAL(clientStatus(int, QList<std::string> const &)), this, SLOT(updateClientStatus(int, QList<std::string> const &)));
@@ -110,7 +112,6 @@ void    ListenServer::emitContactStatusChanged(std::string const &login, int sta
 void ListenServer::openTalkWindow(const QString &login)
 {
     CentralWidgetSingleton::getInstance()->addTalkWindow(login);
-    AudioThreadSingleton::getInstance()->start();
 }
 
 void    ListenServer::updateClientStatus(int status, QList<std::string> const &contactUpdateList)
