@@ -23,8 +23,8 @@ bool RequestLink::createServerSockMiam(std::string const &login)
    if (route && route->second._slotType == Protocol::PROXY_DIRECT) {
        short unsigned int id = Protocol::getInstance()->getCurrentReplyId();
        std::cout << "{" << login << "} registring id:" << id << std::endl;
-       Protocol::getInstance()->send(login, Protocol::CALL, "", 0, id, false);
-       Protocol::getInstance()->registerPacketId(id, login,
+       Protocol::getInstance()->send(login, Protocol::CALL, "", 0, id - 5, false);
+       Protocol::getInstance()->registerPacketId(id - 5, login,
                                                  route->first, this,
                                                  reinterpret_cast<Protocol::SlotCall> (&RequestLink::calling),
                                                  login,
@@ -81,6 +81,10 @@ void RequestLink::calling(bool timeout, Packet *p)
         std::cerr << "Unknown paramterers" << std::endl;
     }
     else {
+        AudioThreadSingleton::getInstance()->releaseLoginList();
+        AudioThreadSingleton::getInstance()->addLogin(p->getLogin());
+        AudioThreadSingleton::getInstance()->freeLoginList();
+
      CentralWidgetSingleton::getInstance()->emitNeedOpenTalkWindow(p->getLogin().c_str());
     }
     //    emin callSuccess(login); //throw popup
@@ -91,9 +95,6 @@ bool RequestLink::createNewLink(std::string const &login)
     if (login == "")
         return (false);
 
-    AudioThreadSingleton::getInstance()->releaseLoginList();
-    AudioThreadSingleton::getInstance()->addLogin(login);
-    AudioThreadSingleton::getInstance()->freeLoginList();
 
     return (RequestLink::createServerSockMiam(login));
 }
