@@ -132,7 +132,7 @@ int PortaudioWrapper::SpeexToSpeaker(const void *inputBuffer,
 	short			*ob = (short *)outputBuffer;
 
 
-        std::cout << framesPerBuffer << std::endl;
+        //std::cout << framesPerBuffer << std::endl;
         if (s->state == DECODING)
         {
                 tmp = s->decoder->Decode(s->buf, s->size_encoded);

@@ -11,6 +11,13 @@ void AudioThread::addLogin(std::string const & login)
     _loginCall.push_back(login);
 }
 
+void AudioThread::removeLogin(std::string const & login)
+{
+    _m.lock();
+    _loginCall.remove(login);
+     _m.unlock();
+}
+
 std::list<std::string> & AudioThread::getLoginList()
 {
     _m.lock();

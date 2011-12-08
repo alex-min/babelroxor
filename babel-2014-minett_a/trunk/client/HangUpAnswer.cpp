@@ -14,7 +14,9 @@ void    HangUpAnswer::onCall(Network *network, const std::string &login, void *d
 
     std::cout << "HangUpAnswer::onCall() : CALLING !!" << std::endl;
 
-    std::string contactLogin = static_cast<char*>(data);
+    std::string contactLogin = AccountManager::dataTologin(data, len);
+
+    AudioThreadSingleton::getInstance()->removeLogin(login);
 
     contactLogin.resize(len);
 
