@@ -22,6 +22,8 @@ public:
     std::list<std::string> & getLoginList();
     void releaseLoginList();
     void freeLoginList();
+    void removeLogin(std::string const & login);
+    ~AudioThread() {_enc.stop();}
 
 private:
     PortaudioWrapper::AudioHandler	_enc;

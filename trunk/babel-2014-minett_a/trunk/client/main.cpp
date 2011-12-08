@@ -69,7 +69,7 @@ int main(int ac, char **av)
 //     return (0);
 
 
-        QApplication app(ac, av);
+    QApplication app(ac, av);
     Graphic::MainWindow *win = MainWindowSingleton::getInstance();
 
     ListenServerSingleton::getInstance()->start();
@@ -87,6 +87,20 @@ int main(int ac, char **av)
     win->show();
 
     return (app.exec());
+
+//    std::list<std::string> l;
+
+//    l.push_back("toto");
+//    l.push_back("titi");
+//    l.push_back("tata");
+
+//    for (std::list<std::string>::iterator it = l.begin(); it != l.end(); ++it)
+//        std::cout << (*it) << std::endl;
+
+//    l.remove("titi");
+
+//    for (std::list<std::string>::iterator it = l.begin(); it != l.end(); ++it)
+//        std::cout << (*it) << std::endl;
 
     //    return (0);
     //        Network *net = new Network;
