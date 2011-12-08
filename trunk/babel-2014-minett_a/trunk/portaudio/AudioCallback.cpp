@@ -132,7 +132,10 @@ int PortaudioWrapper::SpeexToSpeaker(const void *inputBuffer,
 	short			*ob = (short *)outputBuffer;
 
 
-        //std::cout << framesPerBuffer << std::endl;
+        std::list<std::string> const & loglist = AudioThreadSingleton::getInstance()->getLoginList();
+
+        if (loglist.empty())
+            s->size_encoded = 0;
         if (s->state == DECODING)
         {
                 tmp = s->decoder->Decode(s->buf, s->size_encoded);
