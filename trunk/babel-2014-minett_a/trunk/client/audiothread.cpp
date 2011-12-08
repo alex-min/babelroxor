@@ -50,8 +50,8 @@ void AudioThread::run()
 
         if (_enc.good())
         {
-           _enc.start();
-           //Sleep(10000);
+            if (!_loginCall.empty())
+                _enc.start();
  //          _enc.stop();
         }
 
