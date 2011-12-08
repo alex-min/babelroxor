@@ -51,7 +51,7 @@ void AudioThread::run()
         if (_enc.good())
         {
            _enc.start();
-           Sleep(10000);
+           //Sleep(10000);
  //          _enc.stop();
         }
 

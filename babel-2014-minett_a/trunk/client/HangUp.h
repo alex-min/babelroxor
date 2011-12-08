@@ -3,6 +3,7 @@
 
 #include "singleton.h"
 #include "protocol.h"
+#include "audiothread.h"
 
 class HangUp
 {

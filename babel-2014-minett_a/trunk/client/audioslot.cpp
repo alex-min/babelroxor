@@ -12,7 +12,7 @@ AudioSlot::AudioSlot()
 
 void AudioSlot::onCall(Network *network, const std::string &login, void *data, unsigned int len, Protocol::NetworkPacket::NetworkHeader *header)
 {
-    //std::cout << "AUDIOSLOT POWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" << std::endl;
+    std::cout << "AUDIOSLOT POWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" << std::endl;
     //ici on decode le data apres l'avoir caster en char *, puis on joue.
     _s.buf = (char *)data;
     _s.size_encoded = len;
