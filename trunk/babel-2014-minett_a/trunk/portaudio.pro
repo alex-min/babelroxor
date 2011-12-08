@@ -41,3 +41,4 @@ unix: INCLUDEPATH += /usr/local/include/speex
 DEPENDPATH += ./portaudio/
 
 win32: PRE_TARGETDEPS += ./portaudio/portaudio_x86.lib
+

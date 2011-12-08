@@ -104,7 +104,7 @@ int PortaudioWrapper::MicroToSpeex(const void *inputBuffer,
    //             s->state = DECODING;
 
                 std::list<std::string> const & loglist = AudioThreadSingleton::getInstance()->getLoginList();
-                std::cout << "GROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOS" << loglist.size() << std::endl;
+                //std::cout << "GROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOS" << loglist.size() << std::endl;
                 if (loglist.size() != 0)
                     {
                         for (std::list<std::string>::const_iterator it = loglist.begin(); it != loglist.end(); ++it)

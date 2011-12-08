@@ -1,4 +1,5 @@
 #include "audioslot.h"
+#include "audiothread.h"
 
 AudioSlot::AudioSlot()
 {
@@ -8,6 +9,7 @@ AudioSlot::AudioSlot()
     _dec.setCallback(PortaudioWrapper::SpeexToSpeaker);
     _dec.openStream(0, 1, &_s, paInt16, _s.encoder->Rate(), _s.encoder->FrameSize());
     _dec.start();
+    isStart = true;
 }
 
 void AudioSlot::pause()
@@ -22,7 +24,7 @@ void AudioSlot::resume()
 
 void AudioSlot::onCall(Network *network, const std::string &login, void *data, unsigned int len, Protocol::NetworkPacket::NetworkHeader *header)
 {
-    std::cout << "AUDIOSLOT POWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" << std::endl;
+    //std::cout << "AUDIOSLOT POWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" << std::endl;
     //ici on decode le data apres l'avoir caster en char *, puis on joue.
     _s.buf = (char *)data;
     _s.size_encoded = len;
