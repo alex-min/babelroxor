@@ -28,6 +28,13 @@ void AudioThread::removeLogin(std::string const & login)
      _m.unlock();
 }
 
+bool AudioThread::empty()
+{
+    if (_loginCall.size() == 0)
+        return (true);
+    return (false);
+}
+
 std::list<std::string> & AudioThread::getLoginList()
 {
     _m.lock();

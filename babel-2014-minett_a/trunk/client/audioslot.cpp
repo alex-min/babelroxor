@@ -10,6 +10,16 @@ AudioSlot::AudioSlot()
     _dec.start();
 }
 
+void AudioSlot::pause()
+{
+    _dec.stop();
+}
+
+void AudioSlot::resume()
+{
+   _dec.start();
+}
+
 void AudioSlot::onCall(Network *network, const std::string &login, void *data, unsigned int len, Protocol::NetworkPacket::NetworkHeader *header)
 {
     std::cout << "AUDIOSLOT POWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" << std::endl;
@@ -17,6 +27,5 @@ void AudioSlot::onCall(Network *network, const std::string &login, void *data, u
     _s.buf = (char *)data;
     _s.size_encoded = len;
     _s.state = DECODING;
-
-
+    AudioSlot::resume();
 }

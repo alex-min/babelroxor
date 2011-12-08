@@ -103,6 +103,9 @@ void    CentralWidget::checkIfCallIsAccepted(int status)
                                       popUp->property("id").toInt(),
                                       false,
                                       false);
+        AudioThreadSingleton::getInstance()->releaseLoginList();
+        AudioThreadSingleton::getInstance()->addLogin(popUp->getLogin());
+        AudioThreadSingleton::getInstance()->freeLoginList();
 
         showCurrentContacts(popUp->getLogin());
         ConnectToMe::getInstance()->release();

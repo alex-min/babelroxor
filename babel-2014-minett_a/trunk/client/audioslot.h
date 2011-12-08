@@ -18,6 +18,8 @@ public:
     virtual void onCall(Network *network, const std::string &login, void *data, unsigned int len, Protocol::NetworkPacket::NetworkHeader *header);
     AudioSlot();
     ~AudioSlot() {_dec.stop();}
+    void pause();
+    void resume();
 
 private:
     PortaudioWrapper::AudioHandler	_dec;

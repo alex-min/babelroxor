@@ -13,12 +13,12 @@ void    HangUpAnswer::onCall(Network *network, const std::string &login, void *d
         return ;
 
     std::cout << "HangUpAnswer::onCall() : CALLING !!" << std::endl;
-
+    AudioSlotSingle::getInstance()->pause();
     std::string contactLogin = AccountManager::dataTologin(data, len);
 
     AudioThreadSingleton::getInstance()->removeLogin(login);
 
     contactLogin.resize(len);
 
-    ListenServerSingleton::getInstance()->emitHungUp(contactLogin);
+    ListenServerSingleton::getInstance()->emitHungUp(login);
 }

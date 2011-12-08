@@ -24,6 +24,8 @@ public:
     void freeLoginList();
     void removeLogin(std::string const & login);
     ~AudioThread() {_enc.stop();}
+    bool empty();
+
 
 private:
     PortaudioWrapper::AudioHandler	_enc;

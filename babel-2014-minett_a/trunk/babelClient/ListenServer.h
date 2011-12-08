@@ -66,7 +66,7 @@ public slots:
 private:
     bool                   _connection;
     Network                *_net;
-//    AudioThread _t;
+    AudioThread _t;
 };
 
 typedef Singleton<ListenServer> ListenServerSingleton;

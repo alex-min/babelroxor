@@ -108,7 +108,7 @@ const PaDeviceInfo	*AudioHandler::getDeviceInfo(PaDeviceIndex idx)
 
 void				AudioHandler::start()
 {
-	if (this->_initialized && this->_stream && !this->_running)
+        if (this->_stream && !this->_running)
 	{
 		this->_err = Pa_StartStream(this->_stream);
 		if (!this->err())
@@ -118,7 +118,7 @@ void				AudioHandler::start()
 
 void				AudioHandler::stop()
 {
-	if (this->_initialized && this->_stream && this->_running)
+        if (this->_stream && this->_running)
 	{
 		this->_err = Pa_StopStream(this->_stream);
 		if (!this->err())

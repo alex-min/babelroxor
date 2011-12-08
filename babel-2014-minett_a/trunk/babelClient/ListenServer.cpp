@@ -63,6 +63,9 @@ void    ListenServer::emitHungUp(std::string const &contactLogin)
 void    ListenServer::hangUp(QString const &senderLogin, QString const &contactLogin)
 {
     HangUpSingleton::getInstance()->sendHangUp(senderLogin.toStdString(), contactLogin.toStdString());
+    AudioThreadSingleton::getInstance()->quit();
+
+
 }
 
 void    ListenServer::emitTextMessageChanged(const std::string &text)
@@ -96,6 +99,7 @@ void    ListenServer::emitCallFail()
 void    ListenServer::emitCall(std::string const &login, unsigned int id)
 {
     emit callOccured(QString(login.c_str()), id);
+    std::cout << "CALLING THE MOON" << std::endl;
 }
 
 void    ListenServer::createAccount(QString const &login, QString const &password)
@@ -128,6 +132,9 @@ void    ListenServer::createNewLink(QString const &login)
 {
     std::cout << "CREATE NEW LINK" << std::endl;
     RequestLinkSingleton::getInstance()->createNewLink(login.toStdString());
+
+    if (!AudioThreadSingleton::getInstance()->isRunning())
+        AudioThreadSingleton::getInstance()->start();
 }
 
 void    ListenServer::run(void)

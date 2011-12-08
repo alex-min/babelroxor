@@ -15,9 +15,6 @@ void    CallAnswer::onCall(Network *network, const std::string &login, void *dat
 
     std::cout << "CallAnswer::onCall() : CALLING !!" << header->_packetId << std::endl;
 
-    AudioThreadSingleton::getInstance()->releaseLoginList();
-    AudioThreadSingleton::getInstance()->addLogin(login);
-    AudioThreadSingleton::getInstance()->freeLoginList();
 
     ListenServerSingleton::getInstance()->emitCall(login, header->_packetId);
 }
