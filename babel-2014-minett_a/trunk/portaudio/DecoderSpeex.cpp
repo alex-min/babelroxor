@@ -36,7 +36,6 @@ short *DecoderSpeex::Decode(char *bitsToDecode, unsigned int size)
 {
   int ret;
 
- // std::cout << "Nbyte : " << size << " Strlen : " << (int)strlen(bitsToDecode) << std::endl;
   memset(_decodeResult, 0, _frameSize);
   speex_bits_read_from(&_bits, bitsToDecode, (int)strlen(bitsToDecode)/*size*/);
   ret = speex_decode_int(_state, &_bits, _decodeResult);

@@ -53,7 +53,7 @@ void AudioThread::freeLoginList()
 
 void AudioThread::run()
 {
-    std::cout << "Ca passe dans le run" << std::endl;
+    //std::cout << "Ca passe dans le run" << std::endl;
 
         if (_enc.good())
         {

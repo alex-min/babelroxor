@@ -24,6 +24,7 @@ public:
 private:
     PortaudioWrapper::AudioHandler	_dec;
     PortaudioWrapper::SpeexBuffer	_s;
+    bool                                isStart;
 };
 
 typedef Singleton<AudioSlot> AudioSlotSingle;
