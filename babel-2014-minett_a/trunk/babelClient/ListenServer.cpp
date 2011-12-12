@@ -20,7 +20,6 @@ ListenServer::ListenServer()
 {
     _net = new Network;
     Protocol *proto = Protocol::getInstance();
-    ConnectionSlot *c = new ConnectionSlot;
     ProxySlot *p = new ProxySlot;
     proto->registerSlot(Protocol::AUDIO, AudioSlotSingle::getInstance());
     proto->registerSlot(Protocol::CONNECTION, ProtocolInterfaceSlot::getInstance());

@@ -97,8 +97,6 @@ bool    ContactList::removeContactFromLogin(std::string const &login)
     for (it = _contactList.begin(); it != _contactList.end(); ++it)
         if ((*it)->getLogin() == login)
         {
-            Account *account = *it;
-
             it = _contactList.erase(it);
             //delete account;
 
@@ -116,8 +114,6 @@ bool    ContactList::removeContactAt(int id)
     for (it = _contactList.begin(); it != _contactList.end(); ++it)
         if (i++ == id)
         {
-            Account *account = *it;
-
             it = _contactList.erase(it);
             //delete account;
 

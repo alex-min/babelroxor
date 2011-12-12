@@ -1,21 +1,18 @@
 #ifndef AUDIO_ENCODER_SPEEX_H_
 #define AUDIO_ENCODER_SPEEX_H_
 
-#ifndef M_PI
-# define M_PI 3.14
-#endif
-
 #include "Utils.h"
 #include <speex.h>
 #include <speex_preprocess.h>
+#include <ISpeexencode.h>
 
 namespace Audio2
 {
-  class EncoderSpeex : public Utils::NonCopyable
+  class EncoderSpeex : public ISpeexencode
   {
   public:
     EncoderSpeex(int quality);
-    ~EncoderSpeex();
+    virtual ~EncoderSpeex();
 
     unsigned int	Encode(short *input, char *output);
 
@@ -24,7 +21,7 @@ namespace Audio2
     char					*_encodeResult;
   private:
     void					*_state;
-	SpeexPreprocessState	*_preProcessorState;
+    SpeexPreprocessState	*_preProcessorState;
     SpeexBits				_bits;
     int						_frameSize;
     int						_rate;

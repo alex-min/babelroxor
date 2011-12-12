@@ -24,8 +24,6 @@ void NetworkRoute::registerRoute(std::string const &login, Network *network, boo
 
 IPortableSocket::SockType NetworkRoute::statusToSockType(Protocol::Status s)
 {
-    IPortableSocket::SockType t;
-
     if (s == Protocol::UDP)
         return (IPortableSocket::UDP);
     return (IPortableSocket::TCP);
