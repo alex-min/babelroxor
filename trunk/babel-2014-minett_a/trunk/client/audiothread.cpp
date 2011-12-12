@@ -7,6 +7,7 @@ AudioThread::AudioThread()
     _s.encoder = new EncoderSpeex(5);
     _s.decoder = new DecoderSpeex;
     _s.state = true;
+    _s.buf = new char[4000];
     if (_enc.good())
     {
         _enc.setCallback(PortaudioWrapper::MicroToSpeex);

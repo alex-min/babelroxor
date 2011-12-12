@@ -6,6 +6,7 @@ AudioSlot::AudioSlot()
     _s.decoder = new DecoderSpeex;
     _s.encoder = new EncoderSpeex(5);
     _s.state = true;
+    _s.buf = new char[4000];
     _dec.setCallback(PortaudioWrapper::SpeexToSpeaker);
     _dec.openStream(0, 1, &_s, paInt16, _s.encoder->Rate(), _s.encoder->FrameSize());
     _dec.start();
