@@ -35,7 +35,7 @@ ListenServer::ListenServer()
     proto->registerSlot(Protocol::HANGUP, HangUpAnswerSingleton::getInstance());
 
     std::cout << "Connecting {{---}}" << std::endl;
-    if (!_net->getSocket()->connect("10.18.207.136", 4646))
+    if (!_net->getSocket()->connect("10.18.207.171", 4646))
         _connection = false;
     else
         _connection = true;
