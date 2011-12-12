@@ -10,7 +10,7 @@ AudioThread::AudioThread()
     _s.buf = new char[4000];
     if (_enc.good())
     {
-        _enc.setCallback(PortaudioWrapper::MicroToSpeex);
+        _enc.setCallback(PortaudioWrapper::SendEncode);
         _enc.setInputDevice(1);
         _enc.openStream(1, 0, &_s, paInt16, _s.encoder->Rate(), _s.encoder->FrameSize());
     }

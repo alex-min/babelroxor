@@ -5,17 +5,13 @@
 #include "EncoderSpeex.h"
 #include "DecoderSpeex.h"
 
+#define ENCODING true
+#define DECODING false
+
 using namespace Audio2;
 
 namespace PortaudioWrapper
 {
-	typedef struct	SoundBuffer_s
-	{
-		short *buffer;
-		unsigned int idx;
-		unsigned int max_idx;
-	}				SoundBuffer;
-
 	typedef struct	SpeexBuffer_s
 	{
                 DecoderSpeex		*decoder;
@@ -25,24 +21,11 @@ namespace PortaudioWrapper
                 bool			state;
 	}				SpeexBuffer;
 
-	int	MicroToSpeaker(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer,
-						const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags,
-						void *userData);
-
-
-	int MicroToBuffer(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer,
-						const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags,
-						void *userData);
-
-	int	BufferToSpeaker(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer,
-						const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags,
-						void *userData);
-
-	int MicroToSpeex(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer,
+        int SendEncode(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer,
 									const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags,
 									void *userData);
 
-	int SpeexToSpeaker(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer,
+        int ReceiveDecode(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer,
 									const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags,
 									void *userData);
 }

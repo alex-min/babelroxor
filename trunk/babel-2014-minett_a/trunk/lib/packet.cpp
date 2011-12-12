@@ -137,7 +137,6 @@ Protocol::Status Packet::getStatus() const
 {
     if (Packet::getData() == NULL || Packet::getLen() < sizeof(Protocol::Status))
         return (Protocol::FAILED);
-    Protocol::Status s;
     return (*reinterpret_cast<Protocol::Status *> (Packet::getData()));
 }
 

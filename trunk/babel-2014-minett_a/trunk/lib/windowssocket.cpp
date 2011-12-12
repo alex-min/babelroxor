@@ -212,7 +212,7 @@ void Win32Socket::send(IPortableSocket *sock, char *str, unsigned int len)
 // return : size of byte written in buf
 unsigned int Win32Socket::read(char *buf, unsigned int size)
 {
-    int     ret;
+    int     ret = 0;
     WSABUF  DataBuf;
     DWORD   SendBytes;
 
@@ -246,7 +246,7 @@ unsigned int Win32Socket::read(char *buf, unsigned int size)
 // return : size of byte written in buf
 unsigned int Win32Socket::read(IPortableSocket *sock, char *buf, unsigned int size)
 {
-    int     ret;
+    int     ret = 0;
     WSABUF  DataBuf;
     DWORD   SendBytes;
 
