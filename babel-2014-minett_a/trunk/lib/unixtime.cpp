@@ -17,11 +17,11 @@ void UNIXTime::setToMsTimeOfDay()
     //std::cout << "Timems : " << _timems << std::endl;
 }
 
-ITime &UNIXTime::operator- (ITime const &c) const
+ITime &UNIXTime::operator- (ITime const &c)
 {
-    UNIXTime t;
-    t.setMs(this->getMs() - c.getMs());
-    return (t);
+    this->setMs(this->getMs() - c.getMs());
+
+    return (*this);
 }
 
 unsigned long long UNIXTime::getMs() const
@@ -31,7 +31,7 @@ unsigned long long UNIXTime::getMs() const
 
 void UNIXTime::setMs(unsigned long long ms)
 {
-   _timems = ms;
+    _timems = ms;
 }
 
 #endif

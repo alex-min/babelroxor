@@ -1,8 +1,11 @@
 #include "windowsnetworkmanager.h"
 #include "accountmanager.h"
+
+#ifdef BABEL_CLIENT
 #include "ListenServer.h"
 #include "status.h"
 #include "StatusAnswer.h"
+#endif
 #ifdef OS_WINDOWS
 
 Win32NetworkManager::Win32NetworkManager() :

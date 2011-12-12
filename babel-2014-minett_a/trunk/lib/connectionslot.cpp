@@ -4,8 +4,8 @@ ConnectionSlot::ConnectionSlot()
 {
 }
 
-void    ConnectionSlot::onCall(Network *network, std::string const & login, void *data, unsigned int len,
-                               Protocol::NetworkPacket::NetworkHeader *header)
+void    ConnectionSlot::onCall(Network *network, std::string const &, void *data, unsigned int len,
+                               Protocol::NetworkPacket::NetworkHeader *)
 {
     // TODO : create a real login function
     std::string from_login = AccountManager::dataTologin(data, len);

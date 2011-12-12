@@ -191,6 +191,8 @@ void Protocol::sendProxifiedPacket(Network *network, SlotType type, const void *
 
 void Protocol::sendPacket(Network *network, SlotType type, const void *data, unsigned int length, unsigned int packetId, bool mutex)
 {
+    mutex = mutex;
+
     NetworkPacket::NetworkHeader packet;
     std::cout << "Protocol::sendPacket() : net:" << network << std::endl;
     ScopedLock s(&_m);
@@ -322,7 +324,10 @@ Protocol *Protocol::getInstance()
 void Protocol::welcomeEvent(Network *network)
 {
     std::cout << "New client connected" << std::endl;
-   // Protocol::sendPacket(network, Protocol::AUDIO, "hello world", 11);
+
+    network = network;
+
+    // Protocol::sendPacket(network, Protocol::AUDIO, "hello world", 11);
     //Protocol::sendProxifiedPacket(network, AUDIO, "hello world", 11, "minett_a", false);
     //char *str = "minett_a\0password";
     //Protocol::sendPacket(network, Protocol::CONNECTION, str, 17);

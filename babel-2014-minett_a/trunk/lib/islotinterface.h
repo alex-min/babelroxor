@@ -8,8 +8,8 @@ class Network;
 class ISlotInterface
 {
 public:
-    virtual void    onCall(Network *network, std::string const &login, void *data, unsigned int len,
-                           Protocol::NetworkPacket::NetworkHeader *header) {};
+    virtual void    onCall(Network *, std::string const &, void *, unsigned int,
+                           Protocol::NetworkPacket::NetworkHeader *) {};
 protected:
     Protocol::Status _s;
 

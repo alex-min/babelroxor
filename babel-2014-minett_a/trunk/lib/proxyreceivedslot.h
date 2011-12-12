@@ -9,7 +9,7 @@ class ProxyReceivedSlot : public ISlotInterface
 {
 public:
 
-    virtual void    onCall(Network *network, std::string const &login, void *data, unsigned int len,
+    virtual void    onCall(Network *network, std::string const &, void *data, unsigned int len,
                            Protocol::NetworkPacket::NetworkHeader *header);
 
 };

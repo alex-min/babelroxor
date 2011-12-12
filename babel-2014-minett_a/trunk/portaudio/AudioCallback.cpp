@@ -29,10 +29,10 @@ int	PortaudioWrapper::MicroToSpeaker(const void *inputBuffer,
 }
 
 int PortaudioWrapper::MicroToBuffer(const void *inputBuffer,
-					void *outputBuffer,
+                                        void *,
 					unsigned long framesPerBuffer,
-					const PaStreamCallbackTimeInfo* timeInfo,
-					PaStreamCallbackFlags statusFlags,
+                                        const PaStreamCallbackTimeInfo*,
+                                        PaStreamCallbackFlags,
 					void *userData)
 {
 	short *ib = (short *)inputBuffer;
@@ -49,11 +49,11 @@ int PortaudioWrapper::MicroToBuffer(const void *inputBuffer,
 	return (0);
 }
 
-int	PortaudioWrapper::BufferToSpeaker(const void *inputBuffer,
+int	PortaudioWrapper::BufferToSpeaker(const void *,
 					void *outputBuffer,
 					unsigned long framesPerBuffer,
-					const PaStreamCallbackTimeInfo* timeInfo,
-					PaStreamCallbackFlags statusFlags,
+                                        const PaStreamCallbackTimeInfo*,
+                                        PaStreamCallbackFlags,
 					void *userData)
 {
 	short *ob = (short *)outputBuffer;
@@ -74,10 +74,10 @@ int	PortaudioWrapper::BufferToSpeaker(const void *inputBuffer,
 #define WAIT 3
 
 int PortaudioWrapper::MicroToSpeex(const void *inputBuffer,
-					void *outputBuffer,
+                                        void *,
 					unsigned long framesPerBuffer,
-					const PaStreamCallbackTimeInfo* timeInfo,
-					PaStreamCallbackFlags statusFlags,
+                                        const PaStreamCallbackTimeInfo*,
+                                        PaStreamCallbackFlags,
 					void *userData)
 {
 	SpeexBuffer		*s = (SpeexBuffer *)userData;
@@ -107,11 +107,11 @@ int PortaudioWrapper::MicroToSpeex(const void *inputBuffer,
 	return (0);
 }
 
-int PortaudioWrapper::SpeexToSpeaker(const void *inputBuffer,
+int PortaudioWrapper::SpeexToSpeaker(const void *,
 					void *outputBuffer,
 					unsigned long framesPerBuffer,
-					const PaStreamCallbackTimeInfo* timeInfo,
-					PaStreamCallbackFlags statusFlags,
+                                        const PaStreamCallbackTimeInfo*,
+                                        PaStreamCallbackFlags,
 					void *userData)
 {
 	SpeexBuffer		*s = (SpeexBuffer *)userData;

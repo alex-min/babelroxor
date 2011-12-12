@@ -8,8 +8,8 @@ class ConnectionSlot : public ISlotInterface
 {
 public:
     ConnectionSlot();
-    virtual void    onCall(Network *network, const std::string &login, void *data, unsigned int len,
-                           Protocol::NetworkPacket::NetworkHeader *header);
+    virtual void    onCall(Network *network, const std::string &, void *data, unsigned int len,
+                           Protocol::NetworkPacket::NetworkHeader *);
 };
 
 #endif // CONNECTIONSLOT_H

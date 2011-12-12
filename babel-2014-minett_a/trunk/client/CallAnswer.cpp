@@ -8,9 +8,9 @@ CallAnswer::CallAnswer()
 }
 
 void    CallAnswer::onCall(Network *network, const std::string &login, void *data,
-                           unsigned int len, Protocol::NetworkPacket::NetworkHeader *header)
+                           unsigned int, Protocol::NetworkPacket::NetworkHeader *header)
 {
-    if (!network || login == "" || !data || len < 0 || !header)
+    if (!network || login == "" || !data || !header)
         return ;
 
     std::cout << "CallAnswer::onCall() : CALLING !!" << header->_packetId << std::endl;

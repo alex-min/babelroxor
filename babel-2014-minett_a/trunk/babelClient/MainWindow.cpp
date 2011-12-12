@@ -1,3 +1,4 @@
+#include <QApplication>
 #include "MainWindow.h"
 #include "ListenServer.h"
 
@@ -66,7 +67,14 @@ void    MainWindow::init()
 void    MainWindow::closeEvent(QCloseEvent *)
 {
     if (_stackedWidget->currentWidget() == _centralWidget)
+    {
+        _dockWidgetContent->saveContacts();
         emit closeConnection(QString(_accountInterface->getLogin().c_str()), QString(_accountInterface->getPassword().c_str()));
+    }
+
+    QApplication::quit();
+    AudioThreadSingleton::getInstance()->quit();
+    ListenServerSingleton::getInstance()->quit();
 
     deleteLater();
 }

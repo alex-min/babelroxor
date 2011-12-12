@@ -8,8 +8,8 @@ class Audio : public ISlotInterface
 {
 public:
     Audio();
-    virtual void    onCall(Network *network, std::string const & login, void *data, unsigned int len,
-                           Protocol::NetworkPacket::NetworkHeader *header);
+    virtual void    onCall(Network *, std::string const & login, void *data, unsigned int len,
+                           Protocol::NetworkPacket::NetworkHeader *);
 };
 
 #endif // AUDIO_H

@@ -6,7 +6,7 @@ class ITime
 {
 public:
     virtual void setToMsTimeOfDay() = 0;
-    virtual ITime & operator- (ITime const &) const = 0;
+    virtual ITime & operator- (ITime const &) = 0;
     virtual unsigned long long getMs() const = 0;
     virtual void setMs(unsigned long long ms) = 0;
 };

@@ -9,7 +9,7 @@ class ConnectionLogin : public ISlotInterface
 {
 public:
     ConnectionLogin();
-    void onCall(Network *network, const std::string &login, void *data, unsigned int len, Protocol::NetworkPacket::NetworkHeader *header);
+    void onCall(Network *network, const std::string &, void *data, unsigned int len, Protocol::NetworkPacket::NetworkHeader *header);
 };
 
 typedef Singleton<ConnectionLogin> ConnectionLoginSlot;

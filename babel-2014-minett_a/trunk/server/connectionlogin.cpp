@@ -4,7 +4,7 @@ ConnectionLogin::ConnectionLogin()
 {
 }
 
-void ConnectionLogin::onCall(Network *network, const std::string &login,
+void ConnectionLogin::onCall(Network *network, const std::string &,
                              void *data, unsigned int len, Protocol::NetworkPacket::NetworkHeader *header)
 {
     if (!network || !data || !header)
@@ -13,7 +13,7 @@ void ConnectionLogin::onCall(Network *network, const std::string &login,
     std::string loginAccount = "";
     std::string passwordAccount = "";
 
-    int i = 0;
+    unsigned int i = 0;
 
     char *d = static_cast<char*>(data);
 

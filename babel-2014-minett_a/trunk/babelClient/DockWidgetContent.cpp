@@ -7,6 +7,7 @@ namespace Graphic
 {
 DockWidgetContent::DockWidgetContent()
 {
+    _saver = 0;
     _loginLabel.setText("Profil_j");
     _loginLabel.setObjectName("login");
     _login = "Profil_j";
@@ -29,8 +30,6 @@ DockWidgetContent::DockWidgetContent()
     _avatarButton.setRadius(8.0, 8.0);
     _avatarButton.setBold(true);
     _avatarButton.setText("...");
-
-    fillContactList();
 
     _contactBox.setTitle("Your contact list :");
     _contactBox.setFlat(true);
@@ -65,15 +64,39 @@ DockWidgetContent::DockWidgetContent()
     connect(&_contactList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SIGNAL(called()));
 }
 
+void    DockWidgetContent::saveContacts()
+{
+    std::cout << "Saving contacts..." << std::endl;
+
+    foreach (QListWidgetItem *item, _contactItemList)
+    {
+        if (item)
+        {
+            _saver->AddContact(item->text().toStdString());
+
+            _contactItemList.removeOne(item);
+
+            delete item;
+        }
+    }
+}
+
 void    DockWidgetContent::updateStatusForContact(const QString &login, int status)
 {
-        updateContactStatus(login.toStdString(), status);
+    updateContactStatus(login.toStdString(), status);
 }
 
 void    DockWidgetContent::setLogin(const std::string &login)
 {
     _loginLabel.setText(QString(login.c_str()));
     _login = login;
+
+    if (!_saver)
+    {
+        _saver = new ContactListSaver(_login + "contactList.txt");
+        fillContactList();
+        updateStatus(0);
+    }
 }
 
 void    DockWidgetContent::showCallPopUp()
@@ -91,17 +114,19 @@ void    DockWidgetContent::showCallPopUp()
 
 void    DockWidgetContent::manageCall(int status)
 {
-//    QtPopUpMessage *popup = qobject_cast<QtPopUpMessage*>(sender());
-//    Status *stat =  StatusSingleton::getInstance();
+    status = status;
 
-//    if (status == YES)
-//        stat->sendCallStatus(CallAnswerSingleton::getInstance()->getLogin(), 1);
-//    else if (status == NO)
-//        stat->sendCallStatus(CallAnswerSingleton::getInstance()->getLogin(), 0);
+    //    QtPopUpMessage *popup = qobject_cast<QtPopUpMessage*>(sender());
+    //    Status *stat =  StatusSingleton::getInstance();
 
-//    CallAnswerSingleton::getInstance()->resetLogin();
+    //    if (status == YES)
+    //        stat->sendCallStatus(CallAnswerSingleton::getInstance()->getLogin(), 1);
+    //    else if (status == NO)
+    //        stat->sendCallStatus(CallAnswerSingleton::getInstance()->getLogin(), 0);
 
-//    popup->deleteLater();
+    //    CallAnswerSingleton::getInstance()->resetLogin();
+
+    //    popup->deleteLater();
 }
 
 std::string const &    DockWidgetContent::getLogin()
@@ -112,8 +137,6 @@ std::string const &    DockWidgetContent::getLogin()
 void    DockWidgetContent::updateClientAvatar(std::string const &filename)
 {
     Q_UNUSED(filename);
-
-    // do a request to update the avatar in the server
 }
 
 void    DockWidgetContent::updateContactStatus(std::string const &login, int status)
@@ -140,7 +163,7 @@ void    DockWidgetContent::addContactToUpdateList(const QString &login)
     foreach (std::string item, _contactUpdateList)
     {
         if (item == login.toStdString())
-        return;
+            return;
     }
 
     _contactUpdateList.append(login.toStdString());
@@ -288,6 +311,7 @@ void    DockWidgetContent::removeCurrentClientContact(const std::string &login)
 
     if (item)
     {
+        _saver->RemoveContact(item->text().toStdString());
         _contactItemList.removeOne(item);
         _contactList.removeItemWidget(item);
         _contactUpdateList.removeOne(login);
@@ -298,17 +322,25 @@ void    DockWidgetContent::removeCurrentClientContact(const std::string &login)
 
 void    DockWidgetContent::fillContactList()
 {
-    // ask the contact list of the client by requests to the server
+    _saver->LoadFile();
 
-    QListWidgetItem *item = new QListWidgetItem(QIcon("../trunk/images/status_deconnected"), "Rintintin");
+    std::list<std::string> const &l = _saver->getUsers();
 
-    _contactList.addItem(item);
-    _contactItemList.append(item);
+    for (std::list<std::string>::const_iterator it = l.begin(); it != l.end(); ++it)
+    {
+        QListWidgetItem *item = new QListWidgetItem(QIcon("../trunk/images/status_deconnected"), QString((*it).c_str()));
 
+        _contactList.addItem(item);
+        _contactItemList.append(item);
+
+        addContactToUpdateList(item->text());
+        Protocol::getInstance()->send((*it), Protocol::REQUEST_STATUS, "", 0);
+        addClientContact((*it));
+    }
 }
 
 DockWidgetContent::~DockWidgetContent()
 {
-
+    delete _saver;
 }
 }
