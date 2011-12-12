@@ -82,7 +82,7 @@ bool    ContactList::removeContact(Account* account)
         if (*it == account)
         {
             it = _contactList.erase(it);
-            //delete account;
+            delete *it;
 
             return (true);
         }
@@ -98,7 +98,7 @@ bool    ContactList::removeContactFromLogin(std::string const &login)
         if ((*it)->getLogin() == login)
         {
             it = _contactList.erase(it);
-            //delete account;
+            delete *it;
 
             return (true);
         }
@@ -115,7 +115,7 @@ bool    ContactList::removeContactAt(int id)
         if (i++ == id)
         {
             it = _contactList.erase(it);
-            //delete account;
+            delete *it;
 
             return (true);
         }

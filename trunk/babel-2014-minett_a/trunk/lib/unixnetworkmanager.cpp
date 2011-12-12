@@ -1,16 +1,17 @@
 #include "unixnetworkmanager.h"
 #include "accountmanager.h"
-//#include "ListenServer.h"
-//#include "status.h"
-//#include "StatusAnswer.h"
+#ifdef BABEL_CLIENT
+#include "ListenServer.h"
+#include "status.h"
+#include "StatusAnswer.h"
+#endif
 #ifdef OS_UNIX
 
 UNIXNetworkManager::UNIXNetworkManager() :
     _maxfd(-1),
     _mainBuffer(new char[4096])
 {
-    _m.create();
-    _m.unlock();
+
 }
 
 void UNIXNetworkManager::generateReadFs()
@@ -36,10 +37,6 @@ void UNIXNetworkManager::generateWriteFs()
             FD_SET((*it)->getSocket()->UNIXGetSocket(), &_writefs);
         }
     }
-}
-
-void UNIXNetworkManager::networkEvent()
-{
 }
 
 void UNIXNetworkManager::addNetwork(Network *network)
@@ -85,6 +82,7 @@ void UNIXNetworkManager::run(long uTimeout)
                 Network *n = new Network((*it)->getSocket()->waitForClient());
                 UNIXNetworkManager::addNetwork(n);
                 Protocol::getInstance()->welcomeEvent(n);
+#ifdef BABEL_CLIENT
                 if ((*it)->getName() != "") {
                     std::cout << "NETWORKMANAGER:Registering with " << (*it)->getName() << " and net=" << n << std::endl;
                     NetworkRouteSingleton::getInstance()->registerRoute((*it)->getName(), n, false);
@@ -93,6 +91,7 @@ void UNIXNetworkManager::run(long uTimeout)
                     StatusSingleton::getInstance()->updateStatus((*it)->getName());
 
                 }
+#endif
                 return ;
             } else {
                 try {

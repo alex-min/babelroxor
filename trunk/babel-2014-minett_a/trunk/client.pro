@@ -37,6 +37,7 @@ SOURCES += ./client/main.cpp \
     client/HangUpAnswer.cpp
 
 
+DEFINES += BABEL_CLIENT
 #HEADERS  +=
 
 HEADERS += \

@@ -23,7 +23,7 @@ void AudioSlot::resume()
    _dec.start();
 }
 
-void AudioSlot::onCall(Network *network, const std::string &login, void *data, unsigned int len, Protocol::NetworkPacket::NetworkHeader *header)
+void AudioSlot::onCall(Network *, const std::string &, void *data, unsigned int len, Protocol::NetworkPacket::NetworkHeader *)
 {
     //std::cout << "AUDIOSLOT POWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" << std::endl;
     //ici on decode le data apres l'avoir caster en char *, puis on joue.

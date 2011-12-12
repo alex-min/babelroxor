@@ -32,7 +32,7 @@ DecoderSpeex::~DecoderSpeex()
   speex_bits_destroy(&_bits);
 }
 
-short *DecoderSpeex::Decode(char *bitsToDecode, unsigned int size)
+short *DecoderSpeex::Decode(char *bitsToDecode, unsigned int)
 {
   int ret;
 

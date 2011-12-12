@@ -175,7 +175,7 @@ UNIXSocket * UNIXSocket::waitForClient()
      client_sin_len = sizeof(struct sockaddr_in);
      csock = accept(_sock, (struct sockaddr *) &client_sin,
                     (socklen_t *) &client_sin_len);
-     if ((_client_connected + 10) >= l.rlim_cur ||
+     if ((static_cast<unsigned int>(_client_connected) + 10) >= l.rlim_cur ||
          _client_connected == _max_client)
        {
              close(csock);

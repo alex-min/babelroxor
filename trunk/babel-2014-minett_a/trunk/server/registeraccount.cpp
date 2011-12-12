@@ -6,7 +6,7 @@ RegisterAccount::RegisterAccount()
 
 }
 
-void RegisterAccount::onCall(Network *network, const std::string &login, void *data, unsigned int len, Protocol::NetworkPacket::NetworkHeader *header)
+void RegisterAccount::onCall(Network *network, const std::string &, void *data, unsigned int len, Protocol::NetworkPacket::NetworkHeader *header)
 {
     if (!network || !data || !header)
         return ;
@@ -16,7 +16,7 @@ void RegisterAccount::onCall(Network *network, const std::string &login, void *d
     std::string loginAccount = "";
     std::string passwordAccount = "";
 
-    int i = 0;
+    unsigned int i = 0;
 
     char *d = static_cast<char*>(data);
 

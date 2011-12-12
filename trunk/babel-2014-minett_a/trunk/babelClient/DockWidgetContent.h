@@ -17,6 +17,7 @@
 #include "singleton.h"
 #include "QtPopupMessage.h"
 #include "CallAnswer.h"
+#include "contactListSaver.h"
 
 #define YES (16384)
 #define NO (65536)
@@ -43,6 +44,7 @@ public:
     virtual void    updateContactStatus(std::string const &login, int status);
     virtual void    addClientContact(std::string const &login);
     virtual void    removeCurrentClientContact(std::string const &login);
+    void            saveContacts();
     ~DockWidgetContent();
 
 public slots:
@@ -76,6 +78,7 @@ private:
     std::string      _currentContactLogin;
     QList<QListWidgetItem*> _contactItemList;
     QList<std::string>   _contactUpdateList;
+    ContactListSaver     *_saver;
 };
 }
 

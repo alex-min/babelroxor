@@ -18,8 +18,8 @@ public:
     bool createNewLink(std::string const &login);
     bool createServerSockMiam(std::string const &login);
     virtual void testConnection(bool timeout, Packet *);
-    virtual void    onCall(Network *network, std::string const &login, void *data, unsigned int len,
-                           Protocol::NetworkPacket::NetworkHeader *header);
+    virtual void    onCall(Network *, std::string const &, void *, unsigned int,
+                           Protocol::NetworkPacket::NetworkHeader *);
     virtual void calling(bool timeout, Packet *);
 
 protected:

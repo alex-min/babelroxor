@@ -23,6 +23,8 @@ TalkWindow* TalkWindowManager::getWindowFromLogin(std::string const &login)
         if (itemWindow->getContactLogin() == login)
             return (itemWindow);
     }
+
+    return (0);
 }
 
 bool    TalkWindowManager::checkIfContactExist(QWidget *contactWindow)

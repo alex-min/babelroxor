@@ -23,7 +23,9 @@
 
 int	MAIN(int ac, char **av)
 {
-    PortableTime pr;
+
+   ac = ac;
+   av = av;
 
 //    while (1) {
   //   pr.setToMsTimeOfDay();

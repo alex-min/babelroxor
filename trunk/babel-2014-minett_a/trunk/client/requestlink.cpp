@@ -131,7 +131,7 @@ void RequestLink::testConnection(bool timeout, Packet *p)
 
 }
 
-void    RequestLink::onCall(Network *network, std::string const &login, void *data, unsigned int len,
-                       Protocol::NetworkPacket::NetworkHeader *header)
+void    RequestLink::onCall(Network *, std::string const &, void *, unsigned int,
+                       Protocol::NetworkPacket::NetworkHeader *)
 {
 }

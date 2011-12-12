@@ -22,7 +22,8 @@ SOURCES += ./babelClient/DockWidgetContent.cpp \
     ./babelClient/TalkWindow.cpp \
     ./babelClient/QtPopupMessage.cpp \
     ./babelClient/ListenServer.cpp \
-    babelClient/TalkWindowManager.cpp
+    ./babelClient/TalkWindowManager.cpp \
+    ./babelClient/contactListSaver.cpp
 
 HEADERS  += ./babelClient/DockWidgetContent.h \
     ./babelClient/CentralWidget.h \
@@ -39,6 +40,7 @@ HEADERS  += ./babelClient/DockWidgetContent.h \
     ./babelClient/QtPopupMessage.h \
     ./babelClient/InterfacePopupMessage.h \
     ./babelClient/ListenServer.h \
-    babelClient/TalkWindowManager.h
+    ./babelClient/TalkWindowManager.h \
+    ./babelClient/contactListSaver.h
 
 
