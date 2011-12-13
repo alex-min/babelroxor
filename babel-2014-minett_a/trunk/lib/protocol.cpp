@@ -103,9 +103,9 @@ void Protocol::send(std::string const &login,
         return ;
     std::pair<Network *, Protocol::NetworkPacket::NetworkHeader> *route =
             NetworkRouteSingleton::getInstance()->getRouteFromLogin(login);
-    std::cout << "Protocol::Send : Route found from login : " << route << std::endl;
-    if (route)
-    std::cout << "Protocol::Send and proxy=" << (int) route->second._slotType << std::endl;
+   // std::cout << "Protocol::Send : Route found from login : " << route << std::endl;
+    //if (route)
+   // std::cout << "Protocol::Send and proxy=" << (int) route->second._slotType << std::endl;
 
     if (route && login != "")
     {
@@ -118,13 +118,13 @@ void Protocol::send(std::string const &login,
     {
         if (login == "")
         {
-            std::cout << "Send by gateway" << std::endl;
+           // std::cout << "Send by gateway" << std::endl;
             Protocol::sendPacket(_defaultGateway, type, data, length, packetReplyId, mutex);
         }
         else
         {
-            std::cout << "Send by PROXY (type=" << type << ") data=(" << data << ") length=(" << length << std::endl;
-            std::cout << "login=" << login << " mutex="  << mutex << std::endl;
+            //std::cout << "Send by PROXY (type=" << type << ") data=(" << data << ") length=(" << length << std::endl;
+            //std::cout << "login=" << login << " mutex="  << mutex << std::endl;
             Protocol::sendProxifiedPacket(_defaultGateway, type, data, length, login, packetReplyId, false, mutex);
             NetworkRouteSingleton::getInstance()->registerRoute(login, _defaultGateway, true);
         }
@@ -176,7 +176,7 @@ void Protocol::sendProxifiedPacket(Network *network, SlotType type, const void *
     packet._packetId = packetId;
     packet._checksum = 0x4242;
     //packet._checksum = CRC::getCRC16(&(packet), length);
-    std::cout << "Test::::" << network->getSocket()->isServerSock() << std::endl;
+    //std::cout << "Test::::" << network->getSocket()->isServerSock() << std::endl;
     network->getWriteBuffer()->append(reinterpret_cast<char *>(&packetProxyHeader), sizeof(NetworkPacket::NetworkHeader));
     network->getWriteBuffer()->append(login.c_str(), login.length());
     network->getWriteBuffer()->append("", 1);
@@ -184,7 +184,7 @@ void Protocol::sendProxifiedPacket(Network *network, SlotType type, const void *
     if (data)
         network->getWriteBuffer()->append(data, length);
     _packetCount++;
-    std::cout << "Protocol::Network->getWriteBufferSize(=>" << network->getWriteBuffer()->getReadSize() << std::endl;
+    //std::cout << "Protocol::Network->getWriteBufferSize(=>" << network->getWriteBuffer()->getReadSize() << std::endl;
 }
 
 
@@ -194,7 +194,7 @@ void Protocol::sendPacket(Network *network, SlotType type, const void *data, uns
     mutex = mutex;
 
     NetworkPacket::NetworkHeader packet;
-    std::cout << "Protocol::sendPacket() : net:" << network << std::endl;
+   // std::cout << "Protocol::sendPacket() : net:" << network << std::endl;
     ScopedLock s(&_m);
     if (!network)
           return ;
@@ -229,7 +229,7 @@ void Protocol::readEvent(Network *network)
 {
     if (!network)
         return ;
-    std::cout << "Protocol::readEvent() (" <<  network->getReadBuffer()->getReadSize() << std::endl;
+    //std::cout << "Protocol::readEvent() (" <<  network->getReadBuffer()->getReadSize() << std::endl;
     // not enough for the network header
     if (network->getReadBuffer()->getReadSize() < sizeof(Protocol::NetworkPacket::NetworkHeader))
         return ;
@@ -244,7 +244,7 @@ void Protocol::onReceivePacket(CircularBuffer *buf, Network *net)
 
     unsigned int size;
 
-    std::cout << "Protocol::onReceivePacket()" << std::endl;
+    //std::cout << "Protocol::onReceivePacket()" << std::endl;
     size = _header._len + sizeof(Protocol::NetworkPacket::NetworkHeader);
     if (size < 4096)
         buf->extract(_buffer, size);
@@ -253,8 +253,8 @@ void Protocol::onReceivePacket(CircularBuffer *buf, Network *net)
         size = 4096;
         buf->extract(_buffer, 4096);
     }
-    std::cout << "Protocol::onReceivePacket() : with login = " << AccountManagerSingleton::getInstance()->getLoginFromNetwork(net)
-               << "and net=" << net << " and id=" << (int) _header._slotType << std::endl;
+   // std::cout << "Protocol::onReceivePacket() : with login = " << AccountManagerSingleton::getInstance()->getLoginFromNetwork(net)
+     //          << "and net=" << net << " and id=" << (int) _header._slotType << std::endl;
 
     Protocol::dispatchPacket(net,
                              AccountManagerSingleton::getInstance()->getLoginFromNetwork(net),
@@ -286,7 +286,7 @@ void Protocol::dispatchPacket(Network *network, const std::string &login, void *
                               unsigned int len, Protocol::NetworkPacket::NetworkHeader *header)
 {
 
-    std::cout << "OnDispatch:" << (int) header->_slotType << std::endl;
+    //std::cout << "OnDispatch:" << (int) header->_slotType << std::endl;
     if (header && header->_slotType == PROXY_RECEIVED)
     {
         ProxyReceivedSlotSingleton::getInstance()->onCall(network, login, data, len, header);
