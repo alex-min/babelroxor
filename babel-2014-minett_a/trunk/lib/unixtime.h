@@ -11,7 +11,6 @@ class UNIXTime : public ITime
 public:
     UNIXTime();
     virtual void setToMsTimeOfDay();
-    virtual ITime & operator- (ITime const &);
     virtual unsigned long long getMs() const;
     virtual void setMs(unsigned long long ms);
 protected:
