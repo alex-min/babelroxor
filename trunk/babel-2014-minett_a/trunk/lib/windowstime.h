@@ -10,7 +10,6 @@ class Win32Time : public ITime
 public:
     Win32Time();
     virtual void setToMsTimeOfDay();
-    virtual ITime & operator- (ITime const &) const;
     virtual unsigned long long getMs() const;
     virtual void setMs(unsigned long long ms);
 protected:

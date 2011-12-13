@@ -51,13 +51,6 @@ void Win32Time::setToMsTimeOfDay()
     _timems = t.tv_sec * 1000 + t.tv_usec / 10000;
 }
 
-ITime & Win32Time::operator- (ITime const &c) const
-{
-    Win32Time t;
-
-    t.setMs(this->getMs() - c.getMs());
-    return (t);
-}
 
 unsigned long long Win32Time::getMs() const
 {
