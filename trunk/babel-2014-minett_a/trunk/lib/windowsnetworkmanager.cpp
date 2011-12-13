@@ -130,14 +130,14 @@ void Win32NetworkManager::run(long uTimeout)
         }
         else if ((*it)->getSocket() && FD_ISSET((*it)->getSocket()->Win32GetSocket(), &_writefs))
         {
-            std::cout << "Win32NetworkManager::writing..." << std::endl;
+            //std::cout << "Win32NetworkManager::writing..." << std::endl;
 
             size = (*it)->getWriteBuffer()->extract(_mainBuffer, 512);
-            std::cout << "Win32NetworkManager::after_extract" << std::endl;
+            //std::cout << "Win32NetworkManager::after_extract" << std::endl;
             if ((*it)->getSocket()) {
              (*it)->getSocket()->send(_mainBuffer, size);
             }
-            std::cout << "Win32NetworkManager::after_send" << std::endl;
+            //std::cout << "Win32NetworkManager::after_send" << std::endl;
 
         }
     }
