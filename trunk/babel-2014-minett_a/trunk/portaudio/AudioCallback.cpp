@@ -12,75 +12,6 @@ int PortaudioWrapper::SendEncode(const void *inputBuffer,
 					PaStreamCallbackFlags statusFlags,
 					void *userData)
 {
-<<<<<<< .mine
-=======
-    (void)userData;
-    (void)statusFlags;
-    (void)timeInfo;
-    short *ib = (short *)inputBuffer;
-    short *ob = (short *)outputBuffer;
-    
-    for(unsigned int i = 0; i < framesPerBuffer; i++)
-    {
-        *ob++ = *ib++;
-        *ob++ = *ib++;
-    }
-    return 0;
-}
-
-int PortaudioWrapper::MicroToBuffer(const void *inputBuffer,
-                                        void *,
-					unsigned long framesPerBuffer,
-                                        const PaStreamCallbackTimeInfo*,
-                                        PaStreamCallbackFlags,
-					void *userData)
-{
-	short *ib = (short *)inputBuffer;
-	SoundBuffer *b = (SoundBuffer *)userData;
-
-	for(unsigned int i = 0; i < framesPerBuffer; i++)
-    {
-		b->buffer[b->max_idx] = *ib++;
-		b->max_idx++;
-		b->buffer[b->max_idx] = *ib++;
-		b->max_idx++;
-    }
-
-	return (0);
-}
-
-int	PortaudioWrapper::BufferToSpeaker(const void *,
-					void *outputBuffer,
-					unsigned long framesPerBuffer,
-                                        const PaStreamCallbackTimeInfo*,
-                                        PaStreamCallbackFlags,
-					void *userData)
-{
-	short *ob = (short *)outputBuffer;
-	SoundBuffer *b = (SoundBuffer *)userData;
-    
-	for(unsigned int i = 0; i < framesPerBuffer; i++)
-    {
-		*ob++ = b->buffer[b->idx];
-		b->idx++;
-		*ob++ = b->buffer[b->idx];
-		b->idx++;
-    }
-	return (0);
-}
-
-#define ENCODING true
-#define DECODING false
-#define WAIT 3
-
-int PortaudioWrapper::MicroToSpeex(const void *inputBuffer,
-                                        void *,
-					unsigned long framesPerBuffer,
-                                        const PaStreamCallbackTimeInfo*,
-                                        PaStreamCallbackFlags,
-					void *userData)
-{
->>>>>>> .r101
 	SpeexBuffer		*s = (SpeexBuffer *)userData;
 	short			*tmp = new short[framesPerBuffer];
 	short			*ib = (short *)inputBuffer;
@@ -108,11 +39,7 @@ int PortaudioWrapper::MicroToSpeex(const void *inputBuffer,
 	return (0);
 }
 
-<<<<<<< .mine
 int PortaudioWrapper::ReceiveDecode(const void *inputBuffer,
-=======
-int PortaudioWrapper::SpeexToSpeaker(const void *,
->>>>>>> .r101
 					void *outputBuffer,
 					unsigned long framesPerBuffer,
                                         const PaStreamCallbackTimeInfo*,
@@ -131,7 +58,7 @@ int PortaudioWrapper::SpeexToSpeaker(const void *,
 		{
                     *ob = tmp[i];
 		}
-                //ddelete s->buf;
+                //delete s->buf;
                 s->state = ENCODING;
         }
 
