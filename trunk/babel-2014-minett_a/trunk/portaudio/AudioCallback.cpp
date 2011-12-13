@@ -4,16 +4,16 @@
 
 
 using namespace Audio2;
-using namespace PortaudioWrapper;
-int grooo = 0;
 
-int	PortaudioWrapper::MicroToSpeaker(const void *inputBuffer,
+int PortaudioWrapper::SendEncode(const void *inputBuffer,
 					void *outputBuffer,
 					unsigned long framesPerBuffer,
 					const PaStreamCallbackTimeInfo* timeInfo,
 					PaStreamCallbackFlags statusFlags,
 					void *userData)
 {
+<<<<<<< .mine
+=======
     (void)userData;
     (void)statusFlags;
     (void)timeInfo;
@@ -80,6 +80,7 @@ int PortaudioWrapper::MicroToSpeex(const void *inputBuffer,
                                         PaStreamCallbackFlags,
 					void *userData)
 {
+>>>>>>> .r101
 	SpeexBuffer		*s = (SpeexBuffer *)userData;
 	short			*tmp = new short[framesPerBuffer];
 	short			*ib = (short *)inputBuffer;
@@ -107,7 +108,11 @@ int PortaudioWrapper::MicroToSpeex(const void *inputBuffer,
 	return (0);
 }
 
+<<<<<<< .mine
+int PortaudioWrapper::ReceiveDecode(const void *inputBuffer,
+=======
 int PortaudioWrapper::SpeexToSpeaker(const void *,
+>>>>>>> .r101
 					void *outputBuffer,
 					unsigned long framesPerBuffer,
                                         const PaStreamCallbackTimeInfo*,
